@@ -484,6 +484,11 @@ Internally, Bevy has these built-in [schedules][cb::schedule]:
  - [`Render`][bevy::Render]:
    runs after `ExtractSchedule`, to perform all rendering/graphics, in parallel with the next `Main` run
 
+在bevy内置了如下调度器:
+ - `Main`主调度器,每帧都会运行,用于执行app的一般逻辑.
+ - `ExtractSchedule`外部调度器,在Main之后运行,用于将Main世界的数据拷贝到Render世界.
+ - `Render`渲染调度器,在ExtractSchedule之后运行,执行巡染操作,与下一个Main并行执行.
+
 The `Main` schedule simply runs a sequence of other schedules:
 
 On the first run (first frame update of the app):
@@ -506,6 +511,27 @@ On every run (controlled via the [`MainScheduleOrder`][bevy::MainScheduleOrder] 
 [`OnEnter(...)`][bevy::OnEnter]/[`OnTransition(...)`][bevy::OnTransition]/[`OnExit(...)`][bevy::OnExit]
 schedules for your [states][cb::state], when you want to change state.
 
+Main调度器的工作仅仅是按顺序调用以下调度器:
+
+首帧运行:
+ - PreStartup
+ - Startup
+ - PostStartup
+
+每帧运行:
+ - First: 帧初始化
+ - PreUpdate: 引擎内部的前置处理,会先于用户逻辑执行
+ - StateTransition: 执行挂起状态的转换
+ - RunFixedUpdateLoop: 按需执行多次FixedUpdate调度器
+ - Update: 所有用户逻辑(我们编写的system)
+ - PostUpdate: 引擎内部的后置处理
+ - Last: 帧清理
+
+`FixedUpdate`调度器适合这种system:不依赖显示器刷新率,而是有自己固定的频率,
+app如果执行快,就可能跳过FixedUpdate,如果执行慢,就可能执行多次FixedUpdate.
+
+当你想要改变状态时,StateTransition会运行OnEnter/OnTransition/OnExit调度器.
+
 []:#(ANCHOR_END: schedules)
 
 []:#(ANCHOR: render-sets)
@@ -518,4 +544,15 @@ The [`Render`][bevy::Render] schedule is organized using [sets][cb::systemset] (
  - `Cleanup`/`CleanupFlush`: clear any data from the render World that should not persist to the next frame
 
 The `*Flush` variants are just to apply any [deferred][cb::deferred] buffers after every step, if needed.
+
+Render调度器是使用RenderSet组织的:
+ - ExtractCommands: 外部命令, 从ExtractSchedule外部调度器中获取buffer
+ - Prepare/PrepareFlush: 在GPU上设置数据(buffer/纹理等)
+ - Queue/QueueFlush: 生成渲染任务
+ - PhaseSort/PhaseSortFlush: 分阶段处理, 为了更有效的渲染做必要的排序和分批次处理
+ - Render/RenderFlush: 触发GPU开始工作
+ - Cleanup/CleanupFlush: 在渲染世界中,清除下一帧不需要的持久化的数据
+
+`Flush`系列操作是在每步中,延时对buffer进行处理.
+
 []:#(ANCHOR_END: render-sets)
