@@ -40,4 +40,4 @@ jobs:
           target_branch: main_zh
           build_dir: ./book
         env:
-          GITHUB_TOKEN: ${{ secrets.BOOK_DEPLOY_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
