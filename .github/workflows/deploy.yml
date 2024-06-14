@@ -2,7 +2,7 @@ name: build & deploy book
 
 on:
   push:
-    branches: [main]
+    branches: [main_zh]
 
 env:
   CARGO_TERM_COLOR: always
@@ -28,5 +28,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           deploy_key: ${{ secrets.BOOK_DEPLOY_KEY }}
-          external_repository: bevy-cheatbook/bevy-cheatbook.github.io
+          # external_repository: bevy-cheatbook/bevy-cheatbook.github.io
           publish_dir: ./book
