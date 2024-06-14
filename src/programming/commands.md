@@ -10,6 +10,8 @@ Relevant official examples:
 Use [`Commands`] to spawn/despawn entities, add/remove components on existing
 entities, manage resources, from your [systems][cb::system].
 
+Commands可以增删实体;从实体中增删组件;管理资源.
+
 ```rust,no_run,noplayground
 {{#include ../code014/src/programming/commands.rs:example-commands}}
 ```
