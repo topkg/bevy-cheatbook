@@ -27,15 +27,17 @@ jobs:
       - run: cp ./robots.txt ./book/
 
       # - name: Deploy to Github pages
-      #   uses: peaceiris/actions-gh-pages@v2
+      #   uses: peaceiris/actions-gh-pages@v3
       #   with:
       #     deploy_key: ${{ secrets.BOOK_DEPLOY_KEY }}
       #     publish_branch: main_zh
       #     publish_dir: ./book
       #
-      - name: Deploy to Github pages
-        uses: peaceiris/actions-gh-pages@v2
+      #
+      - name: Deploy to GitHub Pages
+        uses: crazy-max/ghaction-github-pages@v4
+        with:
+          target_branch: main_zh
+          build_dir: ./book
         env:
-          ACTIONS_DEPLOY_KEY: ${{ secrets.BOOK_DEPLOY_KEY }}
-          PUBLISH_BRANCH: main_zh
-          PUBLISH_DIR: ./book
+          GITHUB_TOKEN: ${{ secrets.BOOK_DEPLOY_KEY }}
