@@ -29,4 +29,5 @@ jobs:
         with:
           deploy_key: ${{ secrets.BOOK_DEPLOY_KEY }}
           # external_repository: bevy-cheatbook/bevy-cheatbook.github.io
+          publish_branch: main_zh
           publish_dir: ./book
