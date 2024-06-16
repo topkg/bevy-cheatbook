@@ -34,6 +34,27 @@
    (internal use for text rendering)
  - [`SkinnedMeshInverseBindposes`][bevy::SkinnedMeshInverseBindposes]:
    (internal use for skeletal animation)
+
+目前资源asset类型包含以下:
+
+ - `Image`: 像素数据,在2d/3d渲染中用作纹理,也包含纹理过滤的GPU采样描述
+ - `TextureAtlas`: 纹理图集,多个对象可以从一个大图中取Image,这样可以减少纹理切换的开销
+ - `Mesh`: 3D Mesh对象是一种几何数据,包含顶点属性(eg:位置/UV/法线)
+ - `Shader`: 着色器,支持WGSL/SPIRV/GLSL语法
+ - `ColorMaterial`: 基础的2d材质,包含Image中的颜色/透明度
+ - `StandardMaterial`: 支持基于物理渲染的3d材质
+ - `AnimationClip`: 单个动画序列帧, 由`AnimationPlayer`使用
+ - `Font`: 文本渲染使用到的字体数据
+ - `Scene`: 一组实体/组件/资源的几何,world可复用的一部分
+ - `DynamicScene`: 可序列资源和动态实体的集合
+ - `Gltf`: gltf主要资源,gltf文件全部内容的索引.gltf是opengl传递格式,用于传输和加载3d场景和模型
+ - `GltfNode`: scene中的逻辑gltf对象
+ - `GltfMesh`: gltf 3d模型
+ - `GltfPrimitive`: gltf原语,单个可渲染单元,包括Mesh和Material
+ - `AudioSource`: bevy_audio使用的音频数据
+ - `FontAtlasSet`: 内部使用的,用于文本渲染
+ - `SkinnedMeshInverseBindposes`: 内部使用的,骨骼动画
+
 []:#(ANCHOR_END: assets)
 
 []:#(ANCHOR: file-formats)
@@ -55,6 +76,18 @@ Image formats (loaded as [`Image`][bevy::Image] assets):
 |KTX2+zlib |`"ktx2", "zlib"`   |No      |`.ktx2`                       |
 |Basis     |`"basis-universal"`|No      | `.basis`                     |
 
+常见的图片格式包括:png/jpeg/webp/bmp.
+
+- hdr是高动态范围图像（High-Dynamic Range Image）的文件格式,能存储更多亮度和色彩信息
+- ktx2是(Khronos Texture Container)格式的第二代版本，专为高校存储和传输纹理数据而设计,特别是3d和有效开发领域
+- exr是一种高动态范围(HDR)图像格式,是OpenEXR标准的一部分
+- tga的全称为Tagged Image File Format或Tagged Graphics，一家美国公司开发的,在图形设计/视频编辑/游戏开发有广泛应用
+- pnm是Netpbm（Network Portable Graphics）图像文件格式家族的一部分,使用简单便携的方式来存储和交换图像数据
+- dds全称为DirectDraw Surface,微软开发的一种图像文件格式,主要用于directX程序,可优化3d图形渲染的性能
+- basis是google开发的Basis Universal贴图格式,转为webgl和其他3d实时应用设计,保持高质量的同时还减少了文件大小,适合游戏/vr/网络场景,可作为jpeg/png的代替品,存储效率和跨平台兼容性都非常优秀
+
+***KTX2格式由Khronos Group开发，这个组织也负责维护OpenGL、Vulkan和Gltf等图形API标准。***
+
 Audio formats (loaded as [`AudioSource`][bevy::AudioSource] assets):
 
 |Format    |Cargo feature|Default?|Filename extensions    |
@@ -64,11 +97,19 @@ Audio formats (loaded as [`AudioSource`][bevy::AudioSource] assets):
 |WAV       |`"wav"`      |No      |`.wav`                 |
 |MP3       |`"mp3"`      |No      |`.mp3`                 |
 
+音频格式,默认启用的ogg.
+ - ogg: 开源,音质比mp3好;兼容性不好. 在网络流媒体场景下特别能打
+ - flac: 无损;文件体积大. 在音乐库,高质量流媒体场景下特别能打
+ - wav: 无损; 未压缩体积非常大. 专业录音,音频编辑场景下特别能打
+ - mp3: 体积小; 有损音质差. 音乐下载,在线音乐服务场景下特别能打
+
 3D asset (model or scene) formats:
 
 |Format|Cargo feature|Default?|Filename extensions|
 |------|-------------|--------|-------------------|
 |GLTF  |`"bevy_gltf"`|Yes     |`.gltf`, `.glb`    |
+
+3d资源格式只支持gltf.
 
 Shader formats (loaded as [`Shader`][bevy::Shader] assets):
 
@@ -78,6 +119,13 @@ Shader formats (loaded as [`Shader`][bevy::Shader] assets):
 |GLSL  |`"shader_format_glsl"` |No      |`.vert`, `.frag`, `.comp`|
 |SPIR-V|`"shader_format_spirv"`|No      |`.spv`                   |
 
+着色器默认支持wgsl.
+ - wgsl: WebGPU Shading Language, 是WebGPU编写着色器的语法
+ - glsl: 是OpenGL 着色器语法
+ - spir-v: 是khronos group 为vulkan设计的,是一种着色器的低级中间件表示(ir格式),跨平台,高性能
+
+其中vert是顶点着色器,frag是段着色器,geom是几何着色器.
+
 Font formats (loaded as [`Font`][bevy::Font] assets):
 
 |Format  |Cargo feature|Default?|Filename extensions|
@@ -85,11 +133,18 @@ Font formats (loaded as [`Font`][bevy::Font] assets):
 |TrueType|n/a          |Yes     |`.ttf`             |
 |OpenType|n/a          |Yes     |`.otf`             |
 
+字体ttf/otf两种都是默认支持的.
+
 Bevy Scenes:
 
 |Format              |Filename extensions|
 |--------------------|-------------------|
 |RON-serialized scene|`.scn`,`.scn.ron`  |
+
+场景格式支持scn,scn通常是游戏场景文件,包含了场景必要的信息,
+如地形/单位位置/胜利条件,最初被实时策略游戏使用,现在使用非常广泛.
+`.scn.ron`是使用rust对象标记格式进行编码的,ron是一种类似json的格式,
+rust原生支持ron.
 
 []:#(ANCHOR_END: file-formats)
 
@@ -517,6 +572,33 @@ The following asset labels are supported (`{}` is the numerical index):
   - `DefaultMaterial`: as above, if the GLTF file contains a default material with no index
   - `Animation{}`: GLTF Animation as Bevy [`AnimationClip`][bevy::AnimationClip]
   - `Skin{}`: GLTF mesh skin as Bevy [`SkinnedMeshInverseBindposes`][bevy::SkinnedMeshInverseBindposes]
+
+GLTF (Graphics Library Transmission Format)资源中使用的标签主要涉及以下几方面:
+描述3D模型、场景结构、材质、纹理等元素的元数据。
+这些标签帮助组织和定义了GLTF文件中的不同组件，
+使得它们能够在不同的平台和应用程序间有效传输和渲染。
+以下是一些关键的GLTF资源标签及其用途概述： 
+
+- asset: 包含了GLTF文件的基本元数据，如版本号、版权信息、生成工具等。
+- scene: 定义场景的基本构成，一个GLTF文件可以包含多个场景，每个场景可以引用不同的节点集合。
+- scenes: 场景列表，每个场景定义了场景的根节点，以及初始默认场景。
+- nodes: 节点列表，定义了3D空间中的对象（如模型、灯光、相机等）及其变换（位置、旋转、缩放）。
+- meshes: 网格列表，描述了3D对象的几何形状，包括顶点、索引和顶点属性（如法线、UV坐标）。
+- materials: 材质列表，定义了如何渲染网格表面，包括颜色、纹理、光照模型等属性。
+- textures: 纹理列表，存储图像数据，用于材质贴图、环境映射等。
+- images: 图像数据列表，可以是图片文件的引用或直接嵌入的图像数据。
+- samplers: 定义了如何采样纹理，如过滤和环绕方式。
+- accessors: 数据访问器，描述如何从缓冲区视图中读取和解释数组数据（如顶点坐标、颜色数据等）。
+- bufferViews: 缓冲区视图，指定缓冲区中数据的偏移量和长度，以及数据的字节排列方式。
+- buffers: 缓冲区，存储大量的原始二进制数据，如顶点坐标、索引等。
+- cameras: 相机定义，描述了如何从3D场景渲染到2D图像，包括透视相机和正交相机。
+- animations: 动画列表，定义了场景中节点或材质随时间变化的动画序列。
+- skins: 皮肤信息，用于绑定网格顶点到骨骼，实现蒙皮动画。
+- extensions: 扩展，允许在GLTF规范基础上添加额外的功能或特定平台的支持。
+- extras: 附加数据，用于存储不被GLTF规范直接定义的信息，通常供特定应用程序或工具使用。
+
+bevy中使用到了: scene/node/mesh/mesh原语/变形动画数据/纹理/材质/默认材质/动画/皮肤.
+
 []:#(ANCHOR_END: gltf-asset-labels)
 
 []:#(ANCHOR: schedules)

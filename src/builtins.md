@@ -42,6 +42,8 @@ system参数,这里列出的都是特定的system参数.
 
 These are the Asset types registered by Bevy by default.
 
+这里的asset类型(资源类型)都是bevy默认注册的.
+
 {{#include ./include/builtins.md:assets}}
 
 ## File Formats
@@ -50,9 +52,13 @@ These are the asset file formats (asset loaders) supported by Bevy. Support
 for each one can be enabled/disabled using [cargo features][cb::features]. Some
 are enabled by default, many are not.
 
+以下是bevy支持的asset资源文件格式,默认启用了一批,通过`功能`开启其他的.
+
 {{#include ./include/builtins.md:file-formats}}
 
 There are unofficial plugins available for adding support for even more file formats.
+
+还有非官方的插件支持了不少其他文件格式.
 
 ## GLTF Asset Labels
 
