@@ -429,6 +429,38 @@ In regular [systems][cb::system]:
    Helper for generic system abstractions, to avoid lifetime annotations
  - tuples containing any of these types, with up to 16 members
 
+常规system,不独占ecs world.
+ - `Commands`: 命令,维护ecs最常用的方式
+ - `Query<T, F= ()>`: 访问实体和组件的方式,最多可以访问15个组件,system最常使用的参数
+ - `Res<T>`: 共享访问资源的方式
+ - `ResMut<T>`: 独占访问资源的方式
+ - `Option<Res<T>>`: 共享访问资源的方式,资源可能不存在
+ - `Option<ResMut<T>>`: 独占访问资源的方式,资源可能不存在
+ - `Local<T>`: system自己的数据,local不保存在world中,而是在system中,在system后续运行中也存在
+ - `EventReader<T>`: 接收事件
+ - `EventWriter<T>`: 发送事件
+ - `&world`: 直接访问world的方式,共享的
+ - `ParamSet<...>`: 解决system参数不兼容的方式,rust在编译期不知道bevy的ecs,运行时ecs要遵循rust的规则,通过此参数可以告诉bevy要处理不兼容
+ - `Deferred<T>`: 延时变更,Commands底层也是使用这个,有需要可以直接使用
+ - `RemovedComponents<T>`: 删除组件
+ - `Gizmos`: 在调试或开发时绘制的一些小玩意儿,线条或形状
+ - `Diagnostics`: 跟踪或显示bevy的诊断数据
+ - `SystemName`: 在调试可能用作识别system
+ - `ParallelCommands`: 并行命令
+ - `WorldId`: world id 标识
+ - `ComponentIdFor<T>`: 从组件类型获取组件ID
+ - `Entities`: ecs底层元数据: 所有实体
+ - `Components`: ecs底层元数据: 所有组件
+ - `Bundles`: ecs底层元数据: 所有bundle信息
+ - `Archetypes`: ecs底层元数据: 所有原型.一个原型表示共享同一组组件的实体集
+ - `SystemChangeTick`: ecs底层元数据: `变更检测`使用到的tick
+ - `NonSend<T>`: 共享访问Non-Send数据. Non-Send数据只能在主线程中访问,eg:窗口/图形/音频/和OS底层接口交互的.
+ - `NonSendMut<T>`: 独占访问Non-Send数据.
+ - `Option<NonSend<T>>`: 共享访问Non-Send数据, 数据可能不存在.
+ - `Option<NonSendMut<T>>`: 独占访问Non-Send数据, 数据可能不存在.
+ - `StaticSystemParam`: 简化生命周期写法的辅助器
+ - 元组,最多16个类型
+
 []:#(ANCHOR_END: systemparam-regular)
 
 In [exclusive systems][cb::exclusive]:
@@ -449,15 +481,27 @@ In [exclusive systems][cb::exclusive]:
  
 []:#(ANCHOR: systemparam-limits)
 
+独占system的参数(此类system在执行时会独占world):
+ - `&mut world`: 直接访问world的方式,独占的
+ - `Local<T>`: system自己的数据,local不保存在world中,而是在system中,在system后续运行中也存在
+ - `&mut SystemState<P>` `SystemState`: 模拟普通system,可以简单从world访问数据,P就是system参数
+ - `&mut QueryState<Q, F= ()>` `QueryState`: 从world执行查询,类似普通system的Query
+
 Your function can have a maximum of 16 total parameters. If you need more,
 group them into tuples to work around the limit. Tuples can contain up to
 16 members, but can be nested indefinitely.
+
+函数最多有16个参数,如果需要更多,就使用元组来突破限制.
+元组同样最多只能有16个参数,但没有嵌套限制.
 
 []:#(ANCHOR_END: systemparam-limits)
 
 Systems running during the [Extract schedule][cb::render::extract] can also use
 [`Extract<T>`][bevy::Extract], to access data from the Main World instead of the
 Render World. `T` can be any read-only system parameter type.
+
+在外部调度器中的system也可以使用`Extract<T>`从Main(不是Render)中访问数据,
+T可以是任意system 参数类型.
 
 []:#(ANCHOR_END: systemparams)
 

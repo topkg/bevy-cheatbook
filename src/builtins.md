@@ -26,9 +26,13 @@ by Bevy.
  - [Events (System/Control)](#system-and-control-events)
  - [Components](#components)
 
+ 这里是对bevy重要概念的简要描述.
+
 ## SystemParams
 
 These are all the special types that can be used as [system][cb::system] parameters.
+
+system参数,这里列出的都是特定的system参数.
 
 {{#include ./include/builtins.md:systemparams}}
 
