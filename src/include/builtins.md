@@ -163,6 +163,17 @@ rust原生支持ron.
 On GLES3 and WebGL2, some renderer features are unsupported and performance is worse.
 
 WebGPU is experimental and few browsers support it.
+
+`wgpu`是rust编写的图形库,实现了WebGPU规范,为web和原生应用提供了跨平台一致的api,
+性能很高,相比WebGL,WebGPU更加底层,对于GPU是直接访问,性能和灵活性都高很多.
+跨平台是wgpu的特点,目前安卓到linux/web/macOS/windows都是支持的.
+是下一代图形处理技术.复杂图形渲染/三维实时可视化场景下是强项,
+适用于游戏开发/数据可视化/科学计算.`可以说bevy能起飞,wgpu就是核心基石之一`.
+wgpu跨平台,Vulkan(通用跨平台图像库,下一代的技术)/Metal(Apple)/D3D12(windows)/
+OpenGL/WebGL2和WebGPU(wasm),所以可以跨平台.
+
+从上面的表格上看各个平台都有了支持.未来不知道是否可以支持主机平台.
+
 []:#(ANCHOR_END: wgpu-backends)
 
 []:#(ANCHOR: bundles)
