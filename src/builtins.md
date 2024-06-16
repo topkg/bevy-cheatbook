@@ -93,6 +93,9 @@ TODO
 Bevy's built-in [bundle][cb::bundle] types, for spawning different common
 kinds of entities.
 
+bundle是bevy内置的类型,用于生成实体,生成实体时需要指定绑定的组件,
+这个bundle里保存的就是各种组件.
+
 {{#include ./include/builtins.md:bundles}}
 
 ## Resources

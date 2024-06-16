@@ -191,6 +191,11 @@ General:
  - [`VisibilityBundle`][bevy::VisibilityBundle]:
    Contains only the visibility types, subset of `SpatialBundle`
 
+bundle类型时元组,最多能指定15个组件,通用bundle包含以下类型:
+ - `SpatialBundle`:
+ - `TransformBundle`:
+ - `VisibilityBundle`:
+
 Scenes:
  - [`SceneBundle`][bevy::SceneBundle]:
    Used for spawning scenes
