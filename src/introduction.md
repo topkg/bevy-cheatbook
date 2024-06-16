@@ -27,6 +27,9 @@ resource to you!
 the book's [GitHub repository][project::cb],
 and consider [donating](https://github.com/sponsors/inodentry) 🙂)
 
+这是bevy的参考书,作者的目的是用简单的方式教授bevy的概念,提高我们的生产力,
+快速发现所需知识.这里包含的大多是官方文档未提及,由社区已解决的问题.
+
 ## How to use this book
 
 The pages in this book are not designed to be read in order. Each page covers
@@ -49,6 +52,8 @@ an order that makes sense for learning, from beginner to advanced topics.
 The [Bevy Builtins][chapter::builtins] page is a concise cheatsheet of useful
 information about types and features provided by Bevy.
 
+本书是按主题分类,并无阅读顺序要求.
+
 ## Recommended Additional Resources
 
 Bevy has a rich collection of [official code
@@ -62,6 +67,8 @@ Discord][bevy::discord] to chat, ask questions, or get involved in the project!
 If you want to see some games made with Bevy, see [itch.io][itchio::bevy]
 or [Bevy Assets][bevyassets::games].
 
+学习bevy推荐的其他资料: 官方文档/社区资源/itch.io的比赛.
+
 ## Is this book up to date?
 
 Bevy has a very rapid pace of development, with new major releases roughly every
@@ -74,6 +81,8 @@ on the same page is not allowed.
 
 At the top of every page, you will see the version it was last updated for.
 All content on that page must be relevant for the stated Bevy version.
+
+bevy开发非常快,一个季度会发一个主版本, 本书也会即时更新.
 
 ## Support Me
 

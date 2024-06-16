@@ -16,6 +16,17 @@ In such situations, the order is *nondeterministic* by default. Bevy takes
 no regard for when each system will run, and the order could even change
 every frame!
 
+system的执行顺序
+
+bevy的调度算法设计的目标是最高性能,做法是让每个CPU线程都运行一个system.
+如果system访问的数据不存在冲突,那么调度算法就达到了目的.
+如果一个system对某个数据是可变访问时(独占),那么其他依赖此数据的system就不能并行执行,
+至于system要访问哪些数据,bevy可以从函数签名中了解信息.
+
+默认情况下(未指定顺序),顺序是不确定的,bevy也不会主动干预,每帧system的执行顺序都可能不同.
+
+即要提高性能,又要避免数据竞争导致的性能损失,最好的方式就是明确system的执行顺序.
+
 ## Explicit System Ordering
 
 If a specific system must always run before or after some other systems,

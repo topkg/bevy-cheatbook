@@ -32,6 +32,9 @@ You could conceivably make something like a simple game-jam game or prototype,
 using just this knowledge. Though, as your project grows, you will likely
 quickly need to learn more.
 
+基础部分,每个bevy项目都会包含的,利用这些知识可以快速做出一个原型,
+如果项目要增长,还需要额外的知识.
+
  - [Bevy Setup Tips][chapter::setup]
    - [Getting Started][cb::getting-started]
  - [Bevy Programming Framework][chapter::programming]
@@ -68,6 +71,8 @@ quickly need to learn more.
 You will likely need to learn most of these topics to make a non-trivial Bevy
 project. After you are confident with the basics, you should learn these.
 
+要想卓越,在熟悉了基础知识的基础上,还需要学习以下知识.
+
  - [Bevy Programming Framework][chapter::programming]
    - [Events][cb::event]
    - [System Order of Execution][cb::system-order]
@@ -98,6 +103,8 @@ project. After you are confident with the basics, you should learn these.
 These are more specialized topics. You may need some of them, depending on your
 project.
 
+更多具体场景下的主题,不是每个项目都需要,看实际需要.
+
  - [Bevy Programming Framework][chapter::programming]
    - [Direct World Access][cb::world]
    - [Exclusive Systems][cb::exclusive]
@@ -126,6 +133,8 @@ project.
 These topics are for niche technical situations. You can learn them, if you want
 to know more about how Bevy works internally, extend the engine with custom
 functionality, or do other advanced things with Bevy.
+
+一些技术方案主题,可以了解bevy内部的工作机制,方便自定义功能或做些高级事情.
 
  - [Bevy Programming Framework][chapter::programming]
    - [Non-Send][cb::nonsend]
