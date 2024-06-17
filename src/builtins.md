@@ -102,6 +102,8 @@ Bundle是bevy内置的类型,用于生成实体,生成实体时需要指定绑�
 
 [(more info about working with resources)][cb::res]
 
+资源主要分配置资源/引擎资源/渲染资源/wgpu资源/输入处理资源,以下逐个分析.
+
 ### Configuration Resources
 
 These resources allow you to change the settings for how various parts of Bevy work.
@@ -113,6 +115,9 @@ These may be inserted at the start, but should also be fine to change at runtime
 
 Settings that are not modifiable at runtime are not represented using resources. Instead,
 they are configured via the respective [plugins](#plugins).
+
+配置影响了bevy各个模块的运行方式.配置资源应该在程序启动时添加,在运行期间也要支持修改(通过system).
+`运行时不修改的设置不要用资源表示,而应该使用插件表示`.
 
 ### Engine Resources
 

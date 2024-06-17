@@ -414,6 +414,25 @@ ui Bundle.
    Stores all [schedules][cb::schedule], letting you register additional functionality at runtime
  - [`MainScheduleOrder`][bevy::MainScheduleOrder]:
    The sequence of [schedules][cb::schedule] that will run every frame update
+
+以下是一个常用的配置资源.
+ - `ClearColor` 背景色
+ - `GlobalVolume` 音量大小
+ - `AmbientLight` 环境光(有了环境光,阴影就不会太暗或直接是黑色)
+ - `Msaa` 多重采样抗锯齿,部分平台只支持1-4个样本.bevy默认是4个样本
+ - `UiScale` UI缩放值,可影响所有UI
+ - `GizmoConfig` 小玩意的配置
+ - `WireframeConfig` 网格线框是否显示
+ - `GamepadSettings` 手柄设置(eg:摇杆死区和按钮灵敏度)
+ - `WinitSettings` 窗口后端设置,包括更新循环/电源管理设置(winit封装了各个平台窗口的功能)
+ - `TimeUpdateStrategy` 时间更新策略.默认的`自动策略`就很好了;在测试/网络处理,可以手动设置下一个时间.(每个游戏系统都有一个时间系统的)
+ - `Schedules` 存储了所有的调度器,在运行时可以注册附加逻辑
+ - `MainScheduleOrder` 指定每帧调度器执行顺序(当然是在Main调度器中的,因为每帧逻辑更新就是在Main调度器中)
+
+多重采样抗锯齿（Multisample Anti-Aliasing，`MSAA`）是一种图形处理技术，
+用于减少在渲染3D图形时出现的锯齿边缘（aliasing）。
+锯齿边缘是由于有限的分辨率和像素数量在描绘斜线或曲线时造成的。
+MSAA通过在每个像素内采样多个位置并平均这些样本的颜色来平滑这些锯齿边缘。
 []:#(ANCHOR_END: resources-config)
 
 []:#(ANCHOR: resources-main)
