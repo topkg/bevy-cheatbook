@@ -497,6 +497,12 @@ MSAA通过在每个像素内采样多个位置并平均这些样本的颜色来�
    Handle to the physical GPU hardware
  - [`RenderAdapterInfo`][bevy::RenderAdapterInfo]:
    Information about the GPU hardware that Bevy is running on
+
+以下是一个常用的wgpu资源.
+ - `RenderDevice` GPU设备,用于创建渲染/计算的硬件资源
+ - `RenderQueue` 提交任务给硬件的GPU队列
+ - `RenderAdapter` 物理GPU硬件句柄
+ - `RenderAdapterInfo` bevy正在使用的GPU硬件信息
 []:#(ANCHOR_END: resources-wgpu)
 
 []:#(ANCHOR: resources-render)
@@ -529,7 +535,6 @@ MSAA通过在每个像素内采样多个位置并平均这些样本的颜色来�
  - `RenderAssets<T>` 渲染资产
  - `DefaultImageSampler` Image资产问题的默认采样器
  - `FallbackImage` 1x1的虚拟白色纹理,对于着色器来说,需要纹理但没有纹理时,使用这个
-
 []:#(ANCHOR_END: resources-render)
 
 []:#(ANCHOR: resources-input)
@@ -547,6 +552,15 @@ MSAA通过在每个像素内采样多个位置并平均这些样本的颜色来�
    The state of all fingers currently touching the touchscreen
  - [`Gamepads`][bevy::Gamepads]:
    Registry of all the connected [`Gamepad`][bevy::Gamepad] IDs
+
+以下是一个常用的输入资源.
+ - `Input<KeyCode>` 键盘按键状态(KeyCode表示某个键,状态为已按下/刚刚按下/刚刚释放)
+ - `Input<MouseButton>` 鼠标按键
+ - `Input<GamepadButton>` 手柄按键
+ - `Axis<GamepadAxis>` 手柄摇杆方向
+ - `Axis<GamepadButton>` 手柄遥感按键
+ - `Touches` 触摸状态
+ - `Gamepads` 已连接手柄的ID列表
 []:#(ANCHOR_END: resources-input)
 
 []:#(ANCHOR: events-input)

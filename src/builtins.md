@@ -152,6 +152,9 @@ render world中的资源,在render system中访问.
 Using these resources, you can have direct access to the `wgpu` APIs for controlling the GPU.
 These are available in both the Main World and the Render World.
 
+使用wgpu资源,可以直接访问wgpu的API,这样就可以直接控制GPU了,
+在main world和render world都能使用.
+
 {{#include ./include/builtins.md:resources-wgpu}}
 
 ### Input Handling Resources
