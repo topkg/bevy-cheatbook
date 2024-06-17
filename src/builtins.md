@@ -144,6 +144,9 @@ here, either because they are internal to Bevy's rendering algorithms, or
 because they are just extracted copies of the equivalent resources in the Main
 World.
 
+render world中的资源,在render system中访问.
+还有很多渲染资源没列出来,要么是因为bevy内部的渲染算法用到,要么是Main world中拷贝过来的副本.
+
 #### Low-Level `wgpu` Resources
 
 Using these resources, you can have direct access to the `wgpu` APIs for controlling the GPU.

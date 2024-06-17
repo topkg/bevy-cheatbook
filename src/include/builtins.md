@@ -486,7 +486,6 @@ MSAA通过在每个像素内采样多个位置并平均这些样本的颜色来�
  - `IoTaskPool` 后台IO任务池(eg:资产加载)
  - `WinitWindows` (non-send),窗口的原始状态
  - `NonSendMarker` 确保system运行在main线程的虚拟资源
-
 []:#(ANCHOR_END: resources-main)
 
 []:#(ANCHOR: resources-wgpu)
@@ -520,6 +519,17 @@ MSAA通过在每个像素内采样多个位置并平均这些样本的颜色来�
  - [`FallbackImage`][bevy::FallbackImage]:
    Dummy 1x1 pixel white texture. Useful for shaders that normally need a texture, when
    you don't have one available.
+
+以下是一个常用的渲染资源.
+ - `MainWrold` **仅提取调度器**, 访问Main world的数据
+ - `RenderGraph` 渲染图
+ - `PipelineCache` 渲染管道,要避免重复创建
+ - `TextureCache` 临时纹理管理,渲染时非常有用
+ - `DrawFunctions` 绘制函数, 存储指定阶段元素的类型对应的绘制函数
+ - `RenderAssets<T>` 渲染资产
+ - `DefaultImageSampler` Image资产问题的默认采样器
+ - `FallbackImage` 1x1的虚拟白色纹理,对于着色器来说,需要纹理但没有纹理时,使用这个
+
 []:#(ANCHOR_END: resources-render)
 
 []:#(ANCHOR: resources-input)
