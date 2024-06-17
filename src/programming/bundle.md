@@ -19,6 +19,15 @@ the fields of a struct, thus helping you make sure your code is correct.
 Bevy provides many [built-in bundle types][builtins::bundle] that you can use
 to spawn common kinds of entities.
 
+bundle可翻译为一捆一包,将多个组件划分为一包,再参与实体的构造,
+简单点说就是构造实体打造出的特殊类型,为什么要bundle,自然是为了api的统一.
+
+bundle还有个好处,将部分组件划分为一包,这样在构造实体时就不会意外少了某个组件,
+ecs架构中少一个组件,运行结果将大大不同.rust编译器会检查bundle的每个字段,
+这也是变相保证了代码的正确性(这有点硬扯了).
+
+bevy提供了多种内置的bundle,方便生成不同类型的实体.
+
 ## Creating Bundles
 
 To create your own bundle, derive [`Bundle`] on a `struct`:
@@ -30,6 +39,8 @@ To create your own bundle, derive [`Bundle`] on a `struct`:
 When you have nested bundles, everything gets flattened.
 You end up with an entity that has all the included component
 types. If a type appears more than once, that's an error.
+
+不管bundle嵌套多少,最终都是扁平化处理,实体会拥有所有的组件类型,如果重复会出错.
 
 ### Using Bundles
 
@@ -51,6 +62,9 @@ Now you can do this:
 {{#include ../code014/src/programming/bundle.rs:bundle-spawn-default}}
 ```
 
+具体实现Bundle特型的类型,在Commands.spawn()中可以传入具体的实例,
+具体类型还可以实现Default来简化写法.
+
 ### Bundles for Removal
 
 Bundles can also be useful to represent a set of components that you
@@ -66,6 +80,9 @@ want to be able to easily remove from an entity.
 
 The component types included in the bundle will be removed from the
 entity, if any of them exist on the entity.
+
+实体删除Bundle的套路是:
+`commands.entity(实体id).remove::<具体的Bundle类型>();`
 
 ## Loose components as bundles
 
@@ -86,6 +103,12 @@ well-defined `struct` gives you.
 
 You should strongly consider creating proper `struct`s, especially if you are
 likely to spawn many similar entities. It will make your code easier to maintain.
+
+bevy设计的Bundle是一个非常灵活的类型,无限嵌套让Bundle的表现力非常强大,
+也复用rust编译器的正确性检查功能.仅凭这一点,
+最好还是使用结构体将松散的组件列表维护起来, 特别是要构造很多相似的实体时,代码更容易维护.
+
+所以说尽量使用Bundle来组织组件.
 
 ## Querying
 
@@ -110,4 +133,6 @@ fn my_system(query: Query<(&Transform, &Handle<Image>)>) {
 ```
 
 (or whatever specific components you need in that system)
+
+ECS查询时使用组件,因为Bundle设计的使用场景是构造实体,不是这儿的查询.
 
