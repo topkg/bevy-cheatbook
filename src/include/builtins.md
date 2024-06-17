@@ -240,6 +240,31 @@ Scenes:
  - [`DynamicSceneBundle`][bevy::DynamicSceneBundle]:
    Used for spawning dynamic scenes
 
+场景Bundle.
+
+```rust
+pub struct SceneBundle {
+    pub scene: Handle<Scene>,
+    pub transform: Transform,
+    pub global_transform: GlobalTransform,
+    pub visibility: Visibility,
+    pub computed_visibility: ComputedVisibility,
+}
+
+pub struct DynamicSceneBundle {
+    pub scene: Handle<DynamicScene>,
+    pub transform: Transform,
+    pub global_transform: GlobalTransform,
+    pub visibility: Visibility,
+    pub computed_visibility: ComputedVisibility,
+}
+```
+
+scene是描述场景的数据,主要是实体/组件的数据,可以进行序列号和反序列,
+有了场景数据,就能进行存盘或从磁盘加载.关卡设计都可以用到scene.
+静态场景常表示静态的,在设计时就定义好的场景;动态场景则是动态生成,运行时更新的场景.
+动态场景提供了更加灵活的更新和增量修改能力.
+
 Audio:
  - [`AudioBundle`][bevy::AudioBundle]:
    Play [audio][cb::audio] from an [`AudioSource`][bevy::AudioSource] asset
@@ -249,6 +274,20 @@ Audio:
    Play audio from a [custom data source/stream][cb::audio-custom]
  - [`SpatialAudioSourceBundle`][bevy::SpatialAudioSourceBundle]:
    Play positional audio from a [custom data source/stream][cb::audio-custom]
+
+音频Bundle.
+ - `AudioBundle` 从AudioSource资源播放音频
+ - `SpatialAudioBundle` 从AudioSource资源播放空间音频
+ - `AudioSourceBundle` 从`自定义源/自定义流`播放音频
+ - `SpatialAudioSourceBundle` 从`自定义源/自定义流`播放空间音频
+
+```rust
+pub struct AudioSource {
+    // 音频的原始数据,格式为wav/ogg/flac/mp3中的一种,
+    // bevy默认开启支持的ogg,其他格式需要在功能出开启支持.
+    pub bytes: Arc<[u8]>,
+}
+```
 
 Bevy 3D:
  - [`Camera3dBundle`][bevy::Camera3dBundle]:
