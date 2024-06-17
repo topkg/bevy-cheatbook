@@ -116,7 +116,7 @@ These may be inserted at the start, but should also be fine to change at runtime
 Settings that are not modifiable at runtime are not represented using resources. Instead,
 they are configured via the respective [plugins](#plugins).
 
-配置影响了bevy各个模块的运行方式.配置资源应该在程序启动时添加,在运行期间也要支持修改(通过system).
+bevy内置的配置影响了bevy各个模块的运行方式.配置资源应该在程序启动时添加,在运行期间也要支持修改(通过system).
 `运行时不修改的设置不要用资源表示,而应该使用插件表示`.
 
 ### Engine Resources
@@ -128,6 +128,9 @@ parts of Bevy. These resources are in the [Main World][cb::render-architecture].
 resources in the Render World](#render-world).
 
 {{#include ./include/builtins.md:resources-main}}
+
+bevy内置的引擎资源可以访问不同的功能,通过system访问这些资源,
+这些资源都是在Main world中.
 
 #### Render World Resources
 

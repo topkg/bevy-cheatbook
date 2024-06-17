@@ -468,6 +468,25 @@ MSAA通过在每个像素内采样多个位置并平均这些样本的颜色来�
    Raw state of the `winit` backend for each window
  - [`NonSendMarker`][bevy::NonSendMarker]:
    Dummy resource to ensure a system always runs on the main thread
+
+以下是一个常用的引擎资源.
+ - `Time` 全局和时间相关的信息(当前帧的增量时间,启动到现在的时间等)
+ - `FixedTime` 跟踪到下一次FixedUpdate的剩余时间
+ - `AssetServer` Asset资产服务,控制着asset资产的加载/检查加载状态等
+ - `Assets<T>` 指定资产的实际数据
+ - `State<T>` 状态类型的当前值
+ - `NextState<T>` 要转换到另一个状态,就将转换进行排队
+ - `Gamepads` 跟踪当前已连接的手柄设备ID列表(ebiten中还需要自己查,这个就直接自己处理了,棒)
+ - `SceneSpawner` 场景生成,直接生成场景到main world
+ - `FrameCount` 总帧数
+ - `ScreenshotManager` 窗口截屏(目前大部分游戏都支持截屏), 此资源是开关控制
+ - `AppTypeRegistry` 访问注册类型
+ - `AsyncComputeTaskPool` 异步GPU任务池
+ - `ComputeTaskPool` Main调度中system运行的任务池
+ - `IoTaskPool` 后台IO任务池(eg:资产加载)
+ - `WinitWindows` (non-send),窗口的原始状态
+ - `NonSendMarker` 确保system运行在main线程的虚拟资源
+
 []:#(ANCHOR_END: resources-main)
 
 []:#(ANCHOR: resources-wgpu)
