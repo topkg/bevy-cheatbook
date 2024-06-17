@@ -380,6 +380,13 @@ Bevy UI:
    Image element ([`TextureAtlas`][bevy::TextureAtlas] asset type)
  - [`TextBundle`][bevy::TextBundle]:
    Text element
+
+ui Bundle.
+ - `NodeBundle` 空Node元素,可包含各种子node的容器,是最基础的ui元素
+ - `ButtonBundle` 按钮
+ - `ImageBundle` Image图像
+ - `AtlasImageBundle` TextureAtlas图像.(包含多个纹理图集)
+ - `TextBundle` 文本
 []:#(ANCHOR_END: bundles)
 
 []:#(ANCHOR: resources-config)
