@@ -32,7 +32,7 @@ fn my_system(
 
 // ANCHOR: fromworld
 #[derive(Resource)]
-struct MyFancyResource { /* stuff */ }
+struct MyFancyResource {/* stuff */}
 
 impl FromWorld for MyFancyResource {
     fn from_world(world: &mut World) -> Self {
@@ -74,19 +74,27 @@ impl Default for StartingLevel {
 #[derive(Resource, Default)]
 enum GameMode {
     Tutorial,
-    #[default]
+    #[default] // 这个default标识如果GameMode::default()时,默认会返回SinglePlayer::default()
     Singleplayer,
     Multiplayer,
 }
 // ANCHOR_END: default
 
 // ANCHOR: commands
-fn my_setup(mut commands: Commands, /* ... */) {
+fn my_setup(mut commands: Commands /* ... */) {
     // add (or overwrite if existing) a resource, with the given value
-    commands.insert_resource(GoalsReached { main_goal: false, bonus: 100 });
+    // 对于同一类型调用insert_resource(),会覆盖资源的值.
+    commands.insert_resource(GoalsReached {
+        main_goal: false,
+        bonus: 100,
+    });
     // ensure resource exists (create it with its default value if necessary)
+    // 如果资源已存在,直接返回;如果资源不存在,使用`FromWorld`特型初始化值.
+    // 任何资源,只要实现了Default特型,就自动实现了FromWorld特型.
+    // 所以使用init_resource()的类型,一般要实现Default特型.
     commands.init_resource::<MyFancyResource>();
     // remove a resource (if it exists)
+    // 如果资源不存在,直接返回.
     commands.remove_resource::<MyOtherResource>();
 }
 // ANCHOR_END: commands
@@ -99,22 +107,25 @@ fn my_setup2(world: &mut World) {
     // Check if resource exists
     if !world.contains_resource::<MyFancyResource>() {
         // Get access to a resource, inserting a custom value if unavailable
-        let _bonus = world.get_resource_or_insert_with(
-            || GoalsReached { main_goal: false, bonus: 100 }
-        ).bonus;
+        let _bonus = world
+            .get_resource_or_insert_with(|| GoalsReached {
+                main_goal: false,
+                bonus: 100,
+            })
+            .bonus;
     }
 }
 // ANCHOR_END: exclusive
 
 fn main() {
-// ANCHOR: app
-App::new()
-    .add_plugins(DefaultPlugins)
-    .insert_resource(StartingLevel(3))
-    .init_resource::<MyFancyResource>()
-    // ...
-// ANCHOR_END: app
-    .add_systems(Startup, (my_setup, my_setup2))
-    .add_systems(Update, my_system)
-    .run();
+    // ANCHOR: app
+    App::new()
+        .add_plugins(DefaultPlugins)
+        .insert_resource(StartingLevel(3))
+        .init_resource::<MyFancyResource>()
+        // ...
+        // ANCHOR_END: app
+        .add_systems(Startup, (my_setup, my_setup2))
+        .add_systems(Update, my_system)
+        .run();
 }
