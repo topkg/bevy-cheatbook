@@ -32,6 +32,14 @@ You need to register your custom event types via the [app builder][cb::app]:
 {{#include ../code014/src/programming/events.rs:events-appbuilder}}
 ```
 
+Event用于system传递数据.derive中指定Event就可以声明事件了.
+
+任何system都可以发送事件,任何sytem都可以接收事件.
+`EventWriter<T>`发送事件,`EventReader<T>`接收事件.
+每个reader都是单独消费事件的.
+
+如上面的例子,事件收发都在system入参中明确了.
+
 ## Usage Advice
 
 Events should be your go-to data flow tool. As events can be sent from any
@@ -49,6 +57,11 @@ update UI, or anything else, we can just add more systems that read the events
 and do their respective things. If the `player_level_up` system had simply
 checked the player XP and managed the player level directly, without going via
 events, it would be unwieldy for future development of the game.
+
+system之间交互的,推荐使用事件,在绝大部分场景下,事件都是优先选项.
+和消息系统类似,bevy的事件系统具有强大的解耦能力.
+
+只有解耦之后,才能在一个事件发生时才能触发更多逻辑,从工程化和协作的角度来看,这点是非常重要的.
 
 ## How it all works
 
@@ -79,6 +92,19 @@ events is equivalent to just pushing to a [`Vec`]. It is very fast,
 low overhead. Events are often the most performant way to implement things
 in Bevy, better than using [change detection][cb::change-detection].
 
+当我们注册一个事件类型时,bevy会创建一个`Event<T>`资源,事件队列就存储在这个资源中.
+bevy还添加了一个定期清理事件的`事件维护system`,防止内存泄漏.
+
+bevy保证事件至少保留两帧,或两个Fixed周期(不按帧走的sytem,就是按Fixed time走的).
+之后就默默被丢弃.如果system一直在运行,那么捕获事件的概率就很高了.
+所以指定system的`运行条件`要非常注意,一不小心就会错过事件.
+当然也可以手动清除事件,只是如果忘了清理就会造成内存泄漏.
+
+`EventWriter<T>`参数是一个mut的语法糖,用于将事件添加到事件队列;
+`EventReader<T>`参数虽然不会修改事件队列,但会更新接收事件的数量,所以同样使用了mut.
+
+`Event<T>`内部使用`Vec`实现的,发送事件就是push,效率很高,比`变更检测`的效率还高.
+
 ## Possible Pitfalls
 
 Beware of frame delay / 1-frame-lag. This can occur if Bevy runs the
@@ -96,3 +122,13 @@ If you want events to persist for longer than that, you can [implement a
 custom cleanup/management strategy][cb::event-manual]. However, you can
 only do this for your own event types. There is no solution for Bevy's
 [built-in][builtins::event] types.
+
+可能的失败.
+
+注意部分场景下是有1帧的滞后的. eg:bevy先执行了接收system再执行发送system.
+如果要确保在同帧中处理事件,那需要显示指定system的执行顺序.
+
+使用条件运行的system,有可能会丢失事件.
+
+如果想事件持久一些,可以自己实现事件清理策略,但这种方式只能用于自定事件,
+bevy内置的事件无法修改清理策略.
