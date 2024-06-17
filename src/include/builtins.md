@@ -415,7 +415,7 @@ ui Bundle.
  - [`MainScheduleOrder`][bevy::MainScheduleOrder]:
    The sequence of [schedules][cb::schedule] that will run every frame update
 
-以下是一个常用的配置资源.
+以下是常用的配置资源.
  - `ClearColor` 背景色
  - `GlobalVolume` 音量大小
  - `AmbientLight` 环境光(有了环境光,阴影就不会太暗或直接是黑色)
@@ -469,7 +469,7 @@ MSAA通过在每个像素内采样多个位置并平均这些样本的颜色来�
  - [`NonSendMarker`][bevy::NonSendMarker]:
    Dummy resource to ensure a system always runs on the main thread
 
-以下是一个常用的引擎资源.
+以下是常用的引擎资源.
  - `Time` 全局和时间相关的信息(当前帧的增量时间,启动到现在的时间等)
  - `FixedTime` 跟踪到下一次FixedUpdate的剩余时间
  - `AssetServer` Asset资产服务,控制着asset资产的加载/检查加载状态等
@@ -498,7 +498,7 @@ MSAA通过在每个像素内采样多个位置并平均这些样本的颜色来�
  - [`RenderAdapterInfo`][bevy::RenderAdapterInfo]:
    Information about the GPU hardware that Bevy is running on
 
-以下是一个常用的wgpu资源.
+以下是常用的wgpu资源.
  - `RenderDevice` GPU设备,用于创建渲染/计算的硬件资源
  - `RenderQueue` 提交任务给硬件的GPU队列
  - `RenderAdapter` 物理GPU硬件句柄
@@ -526,7 +526,7 @@ MSAA通过在每个像素内采样多个位置并平均这些样本的颜色来�
    Dummy 1x1 pixel white texture. Useful for shaders that normally need a texture, when
    you don't have one available.
 
-以下是一个常用的渲染资源.
+以下是常用的渲染资源.
  - `MainWrold` **仅提取调度器**, 访问Main world的数据
  - `RenderGraph` 渲染图
  - `PipelineCache` 渲染管道,要避免重复创建
@@ -553,7 +553,7 @@ MSAA通过在每个像素内采样多个位置并平均这些样本的颜色来�
  - [`Gamepads`][bevy::Gamepads]:
    Registry of all the connected [`Gamepad`][bevy::Gamepad] IDs
 
-以下是一个常用的输入资源.
+以下是常用的输入资源.
  - `Input<KeyCode>` 键盘按键状态(KeyCode表示某个键,状态为已按下/刚刚按下/刚刚释放)
  - `Input<MouseButton>` 鼠标按键
  - `Input<GamepadButton>` 手柄按键
@@ -588,6 +588,20 @@ MSAA通过在每个像素内采样多个位置并平均这些样本的颜色来�
    Pinch-to-zoom gesture on laptop touchpad (macOS)
  - [`TouchpadRotate`][bevy::TouchpadRotate]:
    Two-finger rotate gesture on laptop touchpad (macOS)
+
+以下是常用的输入事件.
+ - `MouseButtonInput` 鼠标事件
+ - `MouseWheel` 鼠标滚轮事件
+ - `MouseMotion` 鼠标的相对(上帧)移动事件
+ - `CursorMoved` 光标移动事件
+ - `KeyboardInput` 键盘事件(按键不是输入)
+ - `ReceivedCharacter` 输入Unicode文本事件
+ - `Ime` 输入法输入Unicode文本事件
+ - `TouchInput` 触摸板事件
+ - `GamepadEvent` 手柄事件
+ - `GamepadRumbleRequest` 控制手柄震动的事件
+ - `TouchpadMagnify` 触摸板捏合缩放事件(macOS支持)
+ - `TouchpadRotate` 触摸板二指旋转事件(macOS支持)
 []:#(ANCHOR_END: events-input)
 
 []:#(ANCHOR: events-system)
@@ -617,6 +631,22 @@ MSAA通过在每个像素内采样多个位置并平均这些样本的颜色来�
    One of our windows has changed its DPI scaling factor
  - [`WindowBackendScaleFactorChanged`][bevy::WindowBackendScaleFactorChanged]:
    OS reports change in DPI scaling factor for a window
+
+以下是常用的OS/窗口/控制事件.
+ - `RequestRedraw` 在不连续刷新的app中,在sleep之前请求1次或多次更新的事件
+ - `FileDragAndDrop` 文件拖拽事件
+ - `CursorEntered` 光标移入窗口的事件
+ - `CursorLeft` 光标移出窗口的事件
+ - `WindowCloseRequested` OS想要关闭一个窗口的事件
+ - `WindowCreated` 新窗口已打开事件
+ - `WindowClosed` 窗口已关闭事件
+ - `WindowDestroyed` 窗口关闭后,OS已释放窗口的事件
+ - `WindowFocused` 窗口聚焦事件
+ - `WindowMoved` 窗口移动事件
+ - `WindowResized` 窗口resize事件
+ - `WindowScaleFactorChanged` DPI缩放因子修改导致窗口变更事件
+ - `WindowBackendScaleFactorChanged` 系统报告的窗口DPI缩放因子改变事件
+
 []:#(ANCHOR_END: events-system)
 
 []:#(ANCHOR: events-engine)
@@ -626,6 +656,11 @@ MSAA通过在每个像素内采样多个位置并平均这些样本的颜色来�
    Sent by Bevy when entity [parents/children][cb::hierarchy] change
  - [`AppExit`][bevy::AppExit]:
    Tell Bevy to shut down
+
+以下是常用的引擎事件.
+ - `AssetEvent<T>` 资产增删改事件,可用于检测资产变化
+ - `HierarchyEvent` 实体父子关系变更事件
+ - `AppExit` 让bevy关闭的事件
 []:#(ANCHOR_END: events-engine)
 
 []:#(ANCHOR: systemparams)

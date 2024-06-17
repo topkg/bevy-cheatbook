@@ -168,11 +168,15 @@ These resources represent the current state of different input devices. Read the
 
 [(more info about working with events)][cb::event]
 
+事件用于system传递数据,主要有输入事件/引擎事件/OS和控制事件.
+
 ### Input Events
 
 These [events][cb::event] fire on activity with input devices. Read them to [handle user input][cb::input].
 
 {{#include ./include/builtins.md:events-input}}
+
+输入事件由输入设备触发,从input回调中读取.
 
 ### Engine Events
 
@@ -181,11 +185,15 @@ normal runtime of a Bevy app.
 
 {{#include ./include/builtins.md:events-engine}}
 
+bevy程序正常运行过程中会产生的各种内部事件.
+
 ### System and Control Events
 
 Events from the OS / windowing system, or to control Bevy.
 
 {{#include ./include/builtins.md:events-system}}
+
+OS/窗口系统产生的事件,或控制bevy程序的事件.
 
 ## Components
 
