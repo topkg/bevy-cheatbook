@@ -307,6 +307,35 @@ Bevy 3D:
  - [`SpotLightBundle`][bevy::SpotLightBundle]: 
    3D spot light (like a projector or flashlight)
 
+bevy 3d Bundle.
+ - `Camera3dBundle` 3d摄像头,用于透视投影(默认)或正交投影
+ - `TemporalAntiAliasBundle` taa(抗锯齿),可用于3d摄像头
+ - `ScreenSpaceAmbientOcclusionBundle` ssao(屏幕空间环境光遮蔽),可用于3d摄像头
+ - `MaterialMeshBundle` 网格和材质,3d原语
+ - `PbrBundle` 是`MaterialMeshBundle`的一种,材质是`StandardMaterial`(一种基于pbr的材质,可从Color/Image中直接生成)
+ - `DirectionalLightBundle` 3d定向光(eg:阳光).(定向光在现实中并不存在,但近似为很远的光,月光就属于定向光)
+ - `PointLightBundle` 3d点光源(eg:蜡烛/台灯).(点光源是从中心点向各个方向发射光的灯)
+ - `SpotLightBundle` 3d聚光灯(eg:投影仪/手电筒).
+
+透视投影（Perspective Projection）和3D正交投影（Orthographic Projection）是计算机图形学中两种基本的投影方式，
+用于将三维场景投影到二维平面上。它们在视觉效果和应用场景上有显著的区别。  
+`透视投影`模拟了人类眼睛和相机的视角特性，即远处的物体看起来会更小，近处的物体会更大。
+这种投影方式能够提供逼真的深度感。  
+`正交投影`不会根据物体距离相机的远近而缩放物体大小。
+它适合于需要精确测量和对比的场景，如CAD软件、2D游戏和某些类型的策略游戏。
+
+Temporal Anti-Aliasing(`TAA`)是一种抗锯齿技术，用于计算机图形学中，以减少动态场景中出现的锯齿状边缘。
+TAA 利用多帧信息来平滑对象边缘，从而在运动中保持高质量的视觉效果。
+
+屏幕空间环境光遮蔽 (Screen Space Ambient Occlusion, `SSAO`) 是一种在实时渲染中常用的技术，
+用于模拟环境光遮蔽（Ambient Occlusion, AO）的效果。
+AO 是一种全局光照效果，用于模拟光线在物体之间反弹时被遮挡的情况，
+通常用于增强物体之间的阴影和细节，使场景看起来更加真实和立体。
+
+物理基础渲染（Physically Based Rendering, `PBR`）
+是一种通过模拟光与物体表面交互的物理现象来实现更逼真和一致视觉效果的渲染方法。
+PBR广泛应用于游戏、电影和虚拟现实等领域，它能在各种光照条件下生成一致且逼真的图像。
+
 Bevy 2D:
  - [`Camera2dBundle`][bevy::Camera2dBundle]:
    2D camera, uses orthographic projection + other special configuration for 2D
@@ -318,6 +347,27 @@ Bevy 2D:
    2D shape, with custom Mesh and Material (similar to 3D objects)
  - [`Text2dBundle`][bevy::Text2dBundle]:
    Text to be drawn in the 2D world (not the UI)
+
+bevy 2d Bundle.
+ - `Camera2dBundle` 2d摄像头,用于正交投影和其他2D的特殊配置
+ - `SpriteBundle` 精灵.Image asset资源表示
+ - `SpriteSheetBundle` 精灵. TextureAtlas asset资源表示. TextureAtlas(包含多个纹理图集,eg: spritesheet 精灵表,tilemap 瓦片图)
+ - `MaterialMesh2dBundle` 2d形状,带网格和材质.(和3d的MaterialMeshBundle类似)
+ - `Text2dBundle` 2d世界要渲染的文本(通过2d Camera2dBundle在2d scene要渲染的文本)
+
+`sprite` 精灵,一个独立的图像元素,通常用于表示游戏中的角色、道具、背景元素等。
+精灵可以在屏幕上移动、旋转、缩放，并且可以进行动画以展现各种效果。
+
+```rust
+pub struct SpriteBundle {
+    pub sprite: Sprite,
+    pub transform: Transform,
+    pub global_transform: GlobalTransform,
+    pub texture: Handle<Image>,
+    pub visibility: Visibility,
+    pub computed_visibility: ComputedVisibility,
+}
+```
 
 Bevy UI:
  - [`NodeBundle`][bevy::NodeBundle]:
