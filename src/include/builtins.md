@@ -191,10 +191,48 @@ General:
  - [`VisibilityBundle`][bevy::VisibilityBundle]:
    Contains only the visibility types, subset of `SpatialBundle`
 
-bundle类型时元组,最多能指定15个组件,通用bundle包含以下类型:
- - `SpatialBundle`:
- - `TransformBundle`:
- - `VisibilityBundle`:
+bevy提供了实现Bundle的具体类型,都是元组类型,最多能指定15个组件,
+bevy依据不同的场景内置了一些Bundle实现,下面看看具体有哪些实现.
+
+通用Bundle包含以下类型:
+
+`SpatialBundle`: 空间Bundle. (如果要继承,需要包含下面4个组件),下列组件应包含在内:
+ - `Visibility` 实体是否要显示
+ - `ComputedVisibility` 由算法决定实体是否要显示或提取出来做渲染
+ - `Transform` 放置或移动实体,表示实体基于父对象的的位置.(如果没有父对象,就是基于帧的位置)
+ - `GlobalTransform` 实体的全局变换,表示实体基于帧的位置
+
+***在Main调度中Update之后是PostUpdate,在PostUpdate中会执行TransformPropagate(这是一个system集合),
+TransformPropagate集合中有个system是Transform,在这个Transform system中会执行GlobalTransform的处理.***
+
+`Main调度` -- `PostUpdate调度` -- `TransformPropagate系统集` -- `Transform系统` -- `处理GlobalTransform`.
+
+```rust
+pub struct SpatialBundle {
+    pub visibility: Visibility,
+    pub transform: Transform,
+    pub computed: ComputedVisibility,
+    pub global_transform: GlobalTransform,
+}
+```
+
+`TransformBundle`: 变换Bundle,是`SpatialBundle`的变换子集.
+
+```rust
+pub struct TransformBundle {
+    pub local: Transform,
+    pub global: GlobalTransform,
+}
+```
+
+`VisibilityBundle`: 可视Bundle,是`SpatialBundle`的可视子集.
+
+```rust
+pub struct VisibilityBundle {
+    pub visibility: Visibility,
+    pub computed: ComputedVisibility,
+}
+```
 
 Scenes:
  - [`SceneBundle`][bevy::SceneBundle]:
