@@ -79,7 +79,7 @@ Image formats (loaded as [`Image`][bevy::Image] assets):
 常见的图片格式包括:png/jpeg/webp/bmp.
 
 - hdr是高动态范围图像（High-Dynamic Range Image）的文件格式,能存储更多亮度和色彩信息
-- ktx2是(Khronos Texture Container)格式的第二代版本，专为高校存储和传输纹理数据而设计,特别是3d和有效开发领域
+- ktx2是(Khronos Texture Container)格式的第二代版本，专为高效存储和传输纹理数据而设计,特别是3d和有效开发领域
 - exr是一种高动态范围(HDR)图像格式,是OpenEXR标准的一部分
 - tga的全称为Tagged Image File Format或Tagged Graphics，一家美国公司开发的,在图形设计/视频编辑/游戏开发有广泛应用
 - pnm是Netpbm（Network Portable Graphics）图像文件格式家族的一部分,使用简单便携的方式来存储和交换图像数据

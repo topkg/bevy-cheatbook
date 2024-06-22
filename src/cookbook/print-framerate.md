@@ -11,6 +11,8 @@ To enable it, add Bevy's diagnostic plugin to your [app][cb::app]:
 {{#include ../code013/src/cookbook/print_framerate.rs:setup}}
 ```
 
+为了监控性能,可以使用bevy内置的诊断系统来测量FPS.
+
 ## Print to Console / Log
 
 The simplest way to use it is to print the diagnostics to the console

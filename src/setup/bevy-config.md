@@ -10,6 +10,11 @@ be disabled or replaced with alternatives.
 The lower-level core crates (like the Bevy ECS) can also be used completely
 standalone, or integrated into otherwise non-Bevy projects.
 
+bevy是模块化和配置化的,由很多单独的crate组成,可按需移除.
+高层次功能依赖低层次功能,均可以替换或disable.
+
+ECS就是bevy底层的功能,可单独拿出来使用,甚至在非bevy项目中使用.
+
 ## Bevy Cargo Features
 
 In Bevy projects, you can enable/disable various parts of Bevy using cargo features.
@@ -109,6 +114,82 @@ features = [
 
 (See [here][bevy::features] for a full list of Bevy's cargo features.)
 
+bevy的思想是crate组合,这就让bevy提供的功能能按需启用,默认的plugin包含了大量常用功能,
+也可以自己按需包含.
+
+下面是默认启用的功能,可以在Cargo.toml中通过`default-features = false`进行disable.
+功能主要分类为: bevy功能,文件格式,具体平台绑定值.
+
+默认支持的bevy功能:
+ - `multi-threaded`: 多线程
+ - `bevy_asset`: 资产管理
+ - `bevy_audio`: 内置音频
+ - `bevy_gilrs`: 手柄输入支持
+ - `bevy_scene`: scene管理
+ - `bevy_winit`: 窗口管理(跨平台)
+ - `bevy_render`: 渲染框架核心
+ - `bevy_core_pipeline`: 通用渲染抽象层
+ - `bevy_gizmos`: 调试用,绘制线条和形状的小玩意
+ - `bevy_sprite`: 2d 精灵渲染
+ - `bevy_pbr`: 3d(基于物理的)的渲染
+ - `bevy_gltf`: gltf 3d资产格式支持. (gltf是免费3d传输存储格式,跨平台,对GL图形api友好)
+ - `bevy_text`: 文本/字体渲染
+ - `bevy_ui`: ui工具包
+ - `animation`: 动画
+ - `tonemapping_luts`: 支持不同的相机色调映射模式(支持启动ktx2+zstd)
+ - `default_font`: 内嵌一个最小字体,用于支持text/ui
+
+默认支持的文件格式:
+ - `png`: 简单2d图
+ - `hdr`: 高分辨率图
+ - `ktx2`: GPU纹理推荐格式
+ - `zstd`: 支持zstd压缩的ktx2文件
+ - `vorbis`: 音频ogg格式(vorbis ogg)
+
+默认支持的具体平台绑定值:
+ - `x11`: linux默认支持的窗口后端
+ - `android_shared_stdcxx`: android默认后端
+ - `webgl2`: web端默认使用WebGL2代替WebGPU
+
+非默认支持的bevy功能:
+ - `asset_processor`: 资产处理
+ - `filesystem_watcher` 资产热加载
+ - `subpixel_glyph_atlas` 文本字体的`子像素抗锯齿`
+ - `serialize`: serder序列化(serder是rust中的一个序列化/反序列化库)
+ - `async-io`: 使用async-io代替futures-lite
+ - `pbr_transmission_textures` : 在bpr物料中启用传输纹理(bpr是基于物理的渲染,让物料在各种光照下都能呈现逼真效果)
+
+非默认支持的文件格式:
+ - `dds`: GPU纹理,代替directx格式,不是ktx2
+ - `jpeg`: 有损2d图片
+ - `webp`: webp图片格式
+ - `bmp`: 未压缩bmp图片格式
+ - `tga`: 一家美国公司开发的图片格式
+ - `exr`: OpenEXR标准中的高动态范围图片
+ - `pnm`: 便携且简单存储的图片格式
+ - `basis-universal`: google开发的贴图格式
+ - `zlib`: ktx2,外加zlib压缩
+ - `flac`: 有损音频格式
+ - `mp3`: 适用于音乐下载和存储,游戏场景不推荐
+ - `wav`: 未压缩音频格式
+ - `symphonia-all`: rust音频库,支持多种音频格式的编解码库
+ - `shader_format_glsl`: glsl着色器
+ - `shader_format_spirv` spri-着色器(默认支持的着色器是wgsl)
+
+非默认支持的具体平台绑定值:
+ - `wayland`: linux支持的窗口后端(sway/hyprland均是基于wayland的)
+ - `accesskit_unix`: unix-like ui无障碍交互工具包
+ - `bevy_dynamic_plugin`: 桌面,支持动态插件加载
+
+非默认支持的开发/调试功能:
+ - `dynamic_linking`: 动态链接: 编译会更快
+ - `trace`: 开启性能观测跟踪
+ - `detailed_trace`: 更详细的跟踪数据
+ - `trace_tracy`: 跟踪使用tracy(tracy是一个可视化帧分析和性能调试工具)
+ - `trace_chrome`: 跟踪数据使用chrome格式(rust跟踪数据可导出到chrome中查看)
+ - `wgpu_trace`: 开启 wgpu/渲染 跟踪
+ - `embedded_watcher`: bevy内部资产/内置资产的热加载
+
 ### Graphics / Rendering
 
 For a graphical application or game (most Bevy projects), you can include
@@ -134,6 +215,22 @@ If you want to draw debug lines and shapes on-screen, add `bevy_gizmos`.
 If you don't need any graphics (like for a dedicated game server, scientific
 simulation, etc.), you may remove all of these features.
 
+对于带界面的程序,需要带`bevy_winit`.如果是linux,`x11`和`wayland`至少选一个.
+
+只要是渲染的,都需要`bevy_render`和`bevy_core_pipeline`.
+
+如果只是2d不包含3d的,`bevy_sprite`要包含;
+如果只是3d而不是2d的,`bevy_pbr`要包含,如果3d资产是通过gltf文件加载的,
+`bevy_gltf`要包含.
+
+如果使用bevy ui,`bevy_text`和`bevy_ui`是需要的,
+`default_font`内嵌了一个简单的字体,原型开发很用,
+真实项目中,还需要将其替换成自己的字体,那时就不需要`default_font`了.
+
+如果要画一些调试的线或形状,`bevy_gizmos`有帮助.
+
+如果不需要图像(eg:只是一个游戏服务器),上面这些都可以移除.
+
 ### File Formats
 
 You can use the relevant cargo features to enable/disable support for loading
@@ -145,6 +242,8 @@ See [here][builtins::file-formats] for more information.
 
 If you do not care about [gamepad (controller/joystick)][input::gamepad]
 support, you can disable `bevy_gilrs`.
+
+`bevy_gilrs`是手柄支持,默认是支持的,可依需求去掉.
 
 ### Platform-specific
 
@@ -160,6 +259,11 @@ extra transitive dependencies to your project.
 Some Linux distros or platforms might struggle with X11 and work better with
 Wayland. You should enable both for best compatibility.
 
+linux下默认启用的是x11,虽然是老一代的产物,但稳定性和兼容性依然最强.
+大多数发行版都安装了x11,能让程序小很多.wayland是新标准,需要额外的依赖.
+
+并不是说wayland一定好于x11,看发行版对窗口后端的兼容性.
+
 #### WebGPU vs WebGL2
 
 On [Web/WASM][platform::web], you have a choice between these two rendering backends.
@@ -173,9 +277,17 @@ and some limitations on what kinds of graphics features you can use in Bevy.
 
 The `webgl2` cargo feature selects WebGL2 if enabled. If disabled, WebGPU is used.
 
+web/wasm上能打的就WebGPU和WebGL2.
+WebGPU是高性能,且功能支持全面,但只有最近几个版本的chrome/firefox才支持.
+WebGL2对所有浏览器都兼容的非常好,但性能差了不少.
+
+虽然webgl2是默认开启的,但可以按需替换.
+
 ### Development Features
 
 While you are developing your project, these features might be useful:
+
+开发中以下几个功能可能非常有用.
 
 #### Asset hot-reloading and processing
 
@@ -185,6 +297,10 @@ assets][cb::asset-hotreload], supported on desktop platforms.
 The `asset_processor` feature enables support for [asset
 processing][cb::asset-processor], allowing you to automatically convert and
 optimize assets during development.
+
+资产的热加载和处理.
+桌面平台,`filesystem_watcher`支持资产的热加载.
+`asset_processor`允许自动转换和优化资产.
 
 #### Dynamic Linking
 
@@ -211,6 +327,13 @@ cargo run --features bevy/dynamic_linking
 
 You could also add this to your [IDE/editor configuration][cb::ide].
 
+`动态链接`只在桌面系统支持,运行最好的是linux,至于windows和macOS刚刚60分.
+release版本不推荐开启`动态链接`,要开启这个功能,只能从命令行操作,Cargo.toml是不行的.
+
+```shell
+cargo run --features bevy_dynamic_plugin
+```
+
 #### Tracing
 
 The features `trace` and `wgpu_trace` may be useful for profiling and
@@ -220,3 +343,6 @@ diagnosing performance issues.
 visualize the traces.
 
 See [Bevy's official docs on profiling][bevy::profiling] to learn more.
+
+跟踪,主要是在性能剖析和诊断上非常有效.
+`trace`和`wgpu_trace`可开启跟踪,`trace_chrome`和`trace_tracy`是可选的跟踪可视化后端,用一个就行.
