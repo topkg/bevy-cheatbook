@@ -14,6 +14,9 @@ you should [contribute a link to be added to that page][project::bevyassets].
 Beware that some 3rd-party plugins may use unusual licenses! Be sure to
 check the license before using a plugin in your project.
 
+bevy的生态中有很多插件,在[这里](https://bevyengine.org/assets/).
+***使用第三方插件,需要注意许可证***.
+
 ---
 
 Other pages in this book with valuable information when using 3rd-party plugins:
