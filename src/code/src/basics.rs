@@ -5,14 +5,11 @@ use bevy::prelude::*;
 use bevy::window::WindowId;
 use bevy::winit::WinitWindows;
 
-#[derive(Default)]
-#[derive(Component)]
+#[derive(Default, Component)]
 struct ComponentA;
-#[derive(Default)]
-#[derive(Component)]
+#[derive(Default, Component)]
 struct ComponentB;
-#[derive(Default)]
-#[derive(Component)]
+#[derive(Default, Component)]
 struct ComponentC;
 
 #[derive(Resource)]
@@ -26,40 +23,39 @@ struct ResourceC;
 
 #[allow(dead_code)]
 mod derive_systemparam {
-use bevy::prelude::*;
-#[derive(Resource)]
-pub struct UserKeybindings;
-#[derive(Resource)]
-pub struct GameSaveSettings;
-#[derive(Resource)]
-pub struct GraphicsSettings;
-// ANCHOR: derive-system-param
-use bevy::ecs::system::SystemParam;
+    use bevy::prelude::*;
+    #[derive(Resource)]
+    pub struct UserKeybindings;
+    #[derive(Resource)]
+    pub struct GameSaveSettings;
+    #[derive(Resource)]
+    pub struct GraphicsSettings;
+    // ANCHOR: derive-system-param
+    use bevy::ecs::system::SystemParam;
 
-#[derive(SystemParam)]
-/// Define a common set of system parameters.
-/// 'w: the World lifetime, needed for resources and queries (anything fetching data from the ECS).
-/// 's: the system lifetime, needed for Locals and queries (anything with per-system state).
-pub struct MyCommonSettings<'w, 's> {
-    keys: Res<'w, UserKeybindings>,
-    save: Res<'w, GameSaveSettings>,
-    gfx: Res<'w, GraphicsSettings>,
-    extra: Local<'s, bool>,
-    q_transforms: Query<'w, 's, &'static Transform>,
-}
+    #[derive(SystemParam)]
+    /// Define a common set of system parameters.
+    /// 'w: the World lifetime, needed for resources and queries (anything fetching data from the ECS).
+    /// 's: the system lifetime, needed for Locals and queries (anything with per-system state).
+    pub struct MyCommonSettings<'w, 's> {
+        keys: Res<'w, UserKeybindings>,
+        save: Res<'w, GameSaveSettings>,
+        gfx: Res<'w, GraphicsSettings>,
+        extra: Local<'s, bool>,
+        q_transforms: Query<'w, 's, &'static Transform>,
+    }
 
-fn read_all_settings(
-    // we can just access our stuff from here now
-    settings: MyCommonSettings,
-) {
-    // ...
-}
-// ANCHOR_END: derive-system-param
+    fn read_all_settings(
+        // we can just access our stuff from here now
+        settings: MyCommonSettings,
+    ) {
+        // ...
+    }
+    // ANCHOR_END: derive-system-param
 
-fn main() {
-    App::new().add_system(read_all_settings).run();
-}
-
+    fn main() {
+        App::new().add_system(read_all_settings).run();
+    }
 }
 
 // ANCHOR: component-storage
@@ -153,26 +149,26 @@ struct PlayerBundle {
 // ANCHOR_END: bundle
 
 // ANCHOR: propagation
-fn spawn_toplevel_entity(
-    mut commands: Commands,
-) {
+fn spawn_toplevel_entity(mut commands: Commands) {
     // this can be a top-level entity that controls a hierarchy of children
-    let parent = commands.spawn(SpatialBundle {
-        transform: Transform::from_scale(Vec3::splat(3.0)),
-        visibility: Visibility {
-            is_visible: false,
-        },
-        ..Default::default()
-    }).id();
+    let parent = commands
+        .spawn(SpatialBundle {
+            transform: Transform::from_scale(Vec3::splat(3.0)),
+            visibility: Visibility { is_visible: false },
+            ..Default::default()
+        })
+        .id();
 
     // Child transforms behave relative to the parent.
     // For visibility: if the parent is hidden, that also hides the children.
-    let child = commands.spawn(SpatialBundle {
-        transform: Transform::from_xyz(1.0, 2.0, 3.0),
-        ..Default::default()
-    }).id();
+    let child = commands
+        .spawn(SpatialBundle {
+            transform: Transform::from_xyz(1.0, 2.0, 3.0),
+            ..Default::default()
+        })
+        .id();
 
-   commands.entity(parent).push_children(&[child]);
+    commands.entity(parent).push_children(&[child]);
 }
 // ANCHOR_END: propagation
 
@@ -215,22 +211,19 @@ fn process_squad_damage(
 }
 // ANCHOR_END: query-child
 
-fn despawn_child(
-    mut commands: Commands,
-) {
+fn despawn_child(mut commands: Commands) {
     let parent_entity = Entity::from_raw(0);
     let child_entity = Entity::from_raw(0);
-// ANCHOR: despawn-child
-    commands.entity(parent_entity).remove_children(&[child_entity]);
+    // ANCHOR: despawn-child
+    commands
+        .entity(parent_entity)
+        .remove_children(&[child_entity]);
     commands.entity(child_entity).despawn();
-// ANCHOR_END: despawn-child
+    // ANCHOR_END: despawn-child
 }
 
 // ANCHOR: despawn-recursive
-fn close_menu(
-    mut commands: Commands,
-    query: Query<Entity, With<MainMenuUI>>,
-) {
+fn close_menu(mut commands: Commands, query: Query<Entity, With<MainMenuUI>>) {
     for entity in query.iter() {
         // despawn the entity and its children
         commands.entity(entity).despawn_recursive();
@@ -257,9 +250,7 @@ fn use_sprites(
 // ANCHOR_END: asset-access
 
 // ANCHOR: asset-add
-fn add_material(
-    mut materials: ResMut<Assets<StandardMaterial>>,
-) {
+fn add_material(mut materials: ResMut<Assets<StandardMaterial>>) {
     let new_mat = StandardMaterial {
         base_color: Color::rgba(0.25, 0.50, 0.75, 1.0),
         unlit: true,
@@ -314,10 +305,7 @@ fn fixup_images(
 #[derive(Resource)]
 struct UiFont(Handle<Font>);
 
-fn load_ui_font(
-    mut commands: Commands,
-    server: Res<AssetServer>
-) {
+fn load_ui_font(mut commands: Commands, server: Res<AssetServer>) {
     let handle: Handle<Font> = server.load("font.ttf");
 
     // we can store the handle in a resource:
@@ -328,10 +316,7 @@ fn load_ui_font(
 // ANCHOR_END: asset-server
 
 // ANCHOR: asset-path-labels
-fn load_gltf_things(
-    mut commands: Commands,
-    server: Res<AssetServer>
-) {
+fn load_gltf_things(mut commands: Commands, server: Res<AssetServer>) {
     // get a specific mesh
     let my_mesh: Handle<Mesh> = server.load("my_scene.gltf#Mesh0/Primitive0");
 
@@ -348,10 +333,7 @@ fn load_gltf_things(
 #[derive(Resource)]
 struct ExtraAssets(Vec<HandleUntyped>);
 
-fn load_extra_assets(
-    mut commands: Commands,
-    server: Res<AssetServer>,
-) {
+fn load_extra_assets(mut commands: Commands, server: Res<AssetServer>) {
     if let Ok(handles) = server.load_folder("extra") {
         commands.insert_resource(ExtraAssets(handles));
     }
@@ -359,10 +341,7 @@ fn load_extra_assets(
 // ANCHOR_END: asset-folder
 
 // ANCHOR: spawn-gltf-simple
-fn spawn_gltf(
-    mut commands: Commands,
-    ass: Res<AssetServer>,
-) {
+fn spawn_gltf(mut commands: Commands, ass: Res<AssetServer>) {
     // note that we have to include the `Scene0` label
     let my_gltf = ass.load("my.glb#Scene0");
 
@@ -383,10 +362,7 @@ use bevy::gltf::Gltf;
 #[derive(Resource)]
 struct MyAssetPack(Handle<Gltf>);
 
-fn load_gltf(
-    mut commands: Commands,
-    ass: Res<AssetServer>,
-) {
+fn load_gltf(mut commands: Commands, ass: Res<AssetServer>) {
     let gltf = ass.load("my_asset_pack.glb");
     commands.insert_resource(MyAssetPack(gltf));
 }
@@ -442,10 +418,7 @@ fn gltf_manual_entity(
 // ANCHOR_END: gltf-manual-pbr
 
 // ANCHOR: gltf-assetpath
-fn use_gltf_things(
-    mut commands: Commands,
-    ass: Res<AssetServer>,
-) {
+fn use_gltf_things(mut commands: Commands, ass: Res<AssetServer>) {
     // spawn the first scene in the file
     let scene0 = ass.load("my_asset_pack.glb#Scene0");
     commands.spawn(SceneBundle {
@@ -464,37 +437,34 @@ fn use_gltf_things(
 // ANCHOR_END: gltf-assetpath
 
 fn commands_catchall(mut commands: Commands) {
+    // ANCHOR: commands-current-entity
+    let e = commands.spawn(()).id();
+    // ANCHOR_END: commands-current-entity
 
-// ANCHOR: commands-current-entity
-let e = commands.spawn(()).id();
-// ANCHOR_END: commands-current-entity
+    // ANCHOR: parenting
+    // spawn the parent and get its Entity id
+    let parent = commands.spawn(MyParentBundle::default()).id();
 
-// ANCHOR: parenting
-// spawn the parent and get its Entity id
-let parent = commands.spawn(MyParentBundle::default()).id();
+    // do the same for the child
+    let child = commands.spawn(MyChildBundle::default()).id();
 
-// do the same for the child
-let child = commands.spawn(MyChildBundle::default()).id();
+    // add the child to the parent
+    commands.entity(parent).push_children(&[child]);
 
-// add the child to the parent
-commands.entity(parent).push_children(&[child]);
-
-// you can also use `with_children`:
-commands.spawn(MyParentBundle::default())
-    .with_children(|parent| {
-        parent.spawn(MyChildBundle::default());
-    });
-// ANCHOR_END: parenting
+    // you can also use `with_children`:
+    commands
+        .spawn(MyParentBundle::default())
+        .with_children(|parent| {
+            parent.spawn(MyChildBundle::default());
+        });
+    // ANCHOR_END: parenting
 }
 
 #[derive(Component)]
 struct Asteroid;
 
 // ANCHOR: time-delta
-fn asteroids_fly(
-    time: Res<Time>,
-    mut q: Query<&mut Transform, With<Asteroid>>,
-) {
+fn asteroids_fly(time: Res<Time>, mut q: Query<&mut Transform, With<Asteroid>>) {
     for mut transform in q.iter_mut() {
         // move our asteroids along the X axis
         // at a speed of 10.0 units per second
@@ -511,11 +481,9 @@ use std::time::Instant;
 #[derive(Component)]
 struct SpawnedTime(Instant);
 
-fn spawn_my_stuff(
-    mut commands: Commands,
-    time: Res<Time>,
-) {
-    commands.spawn((/* ... */))
+fn spawn_my_stuff(mut commands: Commands, time: Res<Time>) {
+    commands
+        .spawn((/* ... */))
         // we can use startup time and elapsed duration
         .insert(SpawnedTime(time.startup() + time.elapsed()))
         // or just the time of last update
@@ -532,11 +500,7 @@ struct FuseTime {
     timer: Timer,
 }
 
-fn explode_bombs(
-    mut commands: Commands,
-    mut q: Query<(Entity, &mut FuseTime)>,
-    time: Res<Time>,
-) {
+fn explode_bombs(mut commands: Commands, mut q: Query<(Entity, &mut FuseTime)>, time: Res<Time>) {
     for (entity, mut fuse_timer) in q.iter_mut() {
         // timers gotta be ticked, to work
         fuse_timer.timer.tick(time.delta());
@@ -555,11 +519,7 @@ struct BombsSpawnConfig {
 }
 
 /// Spawn a new bomb in set intervals of time
-fn spawn_bombs(
-    mut commands: Commands,
-    time: Res<Time>,
-    mut config: ResMut<BombsSpawnConfig>,
-) {
+fn spawn_bombs(mut commands: Commands, time: Res<Time>, mut config: ResMut<BombsSpawnConfig>) {
     // tick the timer
     config.timer.tick(time.delta());
 
@@ -575,9 +535,7 @@ fn spawn_bombs(
 }
 
 /// Configure our bomb spawning algorithm
-fn setup_bomb_spawning(
-    mut commands: Commands,
-) {
+fn setup_bomb_spawning(mut commands: Commands) {
     commands.insert_resource(BombsSpawnConfig {
         // create the repeating timer
         timer: Timer::new(Duration::from_secs(10), TimerMode::Repeating),
@@ -605,6 +563,9 @@ fn jump_duration(
         jump.time.reset();
     }
 
+    // 这个例子非常有意思,按下空格表秒重置,
+    // 持续按下,持续累积时间.
+    // 这个和跳格子游戏非常像.有意思.
     if kbd.pressed(KeyCode::Space) {
         println!("Jumping for {} seconds.", jump.time.elapsed_secs());
         // stopwatch has to be ticked to progress
@@ -615,7 +576,7 @@ fn jump_duration(
 
 #[allow(dead_code)]
 mod app9 {
-use bevy::prelude::*;
+    use bevy::prelude::*;
 
     fn server_session() {}
     fn server_updates() {}
@@ -625,87 +586,79 @@ use bevy::prelude::*;
     fn player_movement() {}
     fn smoke_particles() {}
 
-// ANCHOR: systemset-labels
-fn main() {
-    App::new()
-        .add_plugins(DefaultPlugins)
-
-        // group our input handling systems into a set
-        .add_system_set(
-            SystemSet::new()
-                .label("input")
-                .with_system(keyboard_input)
-                .with_system(gamepad_input)
-        )
-
-        // our "net" systems should run before "input"
-        .add_system_set(
-            SystemSet::new()
-                .label("net")
-                .before("input")
-                // individual systems can still have
-                // their own labels (and ordering)
-                .with_system(server_session.label("session"))
-                .with_system(server_updates.after("session"))
-        )
-
-        // some ungrouped systems
-        .add_system(player_movement.after("input"))
-        .add_system(session_ui.after("session"))
-        .add_system(smoke_particles)
-
-        .run();
-}
-// ANCHOR_END: systemset-labels
+    // ANCHOR: systemset-labels
+    fn main() {
+        App::new()
+            .add_plugins(DefaultPlugins)
+            // group our input handling systems into a set
+            .add_system_set(
+                SystemSet::new()
+                    .label("input")
+                    .with_system(keyboard_input)
+                    .with_system(gamepad_input),
+            )
+            // our "net" systems should run before "input"
+            .add_system_set(
+                SystemSet::new()
+                    .label("net")
+                    .before("input")
+                    // individual systems can still have
+                    // their own labels (and ordering)
+                    .with_system(server_session.label("session"))
+                    .with_system(server_updates.after("session")),
+            )
+            // some ungrouped systems
+            .add_system(player_movement.after("input"))
+            .add_system(session_ui.after("session"))
+            .add_system(smoke_particles)
+            .run();
+    }
+    // ANCHOR_END: systemset-labels
 }
 
 #[allow(dead_code)]
 mod app14 {
-use super::*;
-// ANCHOR: removal-detection
-/// Some component type for the sake of this example.
-#[derive(Component)]
-struct Seen;
+    use super::*;
+    // ANCHOR: removal-detection
+    /// Some component type for the sake of this example.
+    #[derive(Component)]
+    struct Seen;
 
-fn main() {
-    App::new()
-        .add_plugins(DefaultPlugins)
-        // we could add our system to Bevy's `PreUpdate` stage
-        // (alternatively, you could create your own stage)
-        .add_system_to_stage(CoreStage::PreUpdate, remove_components)
-        // our detection system runs in a later stage
-        // (in this case: Bevy's default `Update` stage)
-        .add_system(detect_removals)
-        .run();
-}
+    fn main() {
+        App::new()
+            .add_plugins(DefaultPlugins)
+            // we could add our system to Bevy's `PreUpdate` stage
+            // (alternatively, you could create your own stage)
+            .add_system_to_stage(CoreStage::PreUpdate, remove_components)
+            // our detection system runs in a later stage
+            // (in this case: Bevy's default `Update` stage)
+            .add_system(detect_removals)
+            .run();
+    }
 
-fn remove_components(
-    mut commands: Commands,
-    q: Query<(Entity, &Transform), With<Seen>>,
-) {
-    for (e, transform) in q.iter() {
-        if transform.translation.y < -10.0 {
-            // remove the `Seen` component from the entity
-            commands.entity(e)
-                .remove::<Seen>();
+    fn remove_components(mut commands: Commands, q: Query<(Entity, &Transform), With<Seen>>) {
+        for (e, transform) in q.iter() {
+            if transform.translation.y < -10.0 {
+                // remove the `Seen` component from the entity
+                commands.entity(e).remove::<Seen>();
+            }
         }
     }
-}
 
-// ANCHOR_END: removal-detection
+    // ANCHOR_END: removal-detection
 }
 
 #[allow(dead_code)]
 mod app20 {
-use super::*;
-// ANCHOR: asset-watch
-fn main() {
-    App::new()
-        .add_plugins(DefaultPlugins.set(AssetPlugin {
-            watch_for_changes: true,
-            ..Default::default()
-        }))
-        .run();
-}
-// ANCHOR_END: asset-watch
+    use super::*;
+    // ANCHOR: asset-watch
+    fn main() {
+        App::new()
+            .add_plugins(DefaultPlugins.set(AssetPlugin {
+                watch_for_changes: true,
+                ..Default::default()
+            }))
+            .run();
+    }
+    // ANCHOR_END: asset-watch
 }
