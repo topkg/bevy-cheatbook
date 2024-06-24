@@ -30,6 +30,10 @@ is inverted.
 
 (graphic modifed and used with permission; original by [@FreyaHolmer](https://twitter.com/FreyaHolmer))
 
+bevy中的坐标系统和中学数学的坐标系是一致的,
+对于2d来说,原点位于屏幕中心,背景图的z为他,其他精灵的z依次增加,意味着前后的差别.
+对于3d来说,xyz分别表示3各轴向,前进方向为-z.
+
 ## UI
 
 For UI, Bevy follows the same convention as most other UI toolkits, the Web, etc.
@@ -42,7 +46,16 @@ The units represent logical (compensated for DPI scaling) screen pixels.
 
 UI layout flows from top to bottom, similar to a web page.
 
+对于UI,bevy遵循的规则和大多数UI工具/web遵循的规则一致.
+ - 原点位于屏幕左上角
+ - y轴指向下方
+ - x轴是沿着屏幕边缘从左到右,最大数值为屏幕像素值
+
+单位是逻辑像素值, UI布局是从上到下,类似web页面.
+
 ## Cursor and Screen
 
 The cursor position and any other window (screen-space) coordinates follow the same
 conventions as UI, as described above.
+
+光标和屏幕的坐标和UI的坐标体系保持一致.
