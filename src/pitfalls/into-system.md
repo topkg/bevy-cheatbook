@@ -5,6 +5,8 @@
 You can get scary-looking compiler errors when you try to add [systems][cb::system]
 to your Bevy [app][cb::app].
 
+向app添加system可能遇到以下错误.
+
 ## Common beginner mistakes
 
   - Using `commands: &mut Commands` instead of `mut commands: Commands`.
@@ -18,6 +20,15 @@ to your Bevy [app][cb::app].
 
 Note that `Query<Entity>` is correct, because the Entity ID is special;
 it is not a component.
+
+新手常见错误主要在system参数上:
+ - 错将`mut commands: Commands` 写成`commands: &mut Commands`, mut是修饰变量的,而不是修饰类型的
+ - 错写为`Query<MyStuff>`, 应该用引用或可变引用,不然查一次就变更了所有权,下一次查就会出错
+ - 错写为`Query<&A,&B>`, 应该写为(&A,&B),作为元组来过滤实体
+ - 资源需要使用Res/ResMut来访问
+ - 组件需要通过Query封装来访问实体
+ - Query中不能使用Bundle,Bundle只能在实体构造的逻辑中使用
+ - 在system函数中使用其他任意类型(system是游戏逻辑,所有的数据均自函数入参)
 
 ## Error adding function as system
 
@@ -59,6 +70,8 @@ but in reality, the problem is actually in the `fn` function definition!
 
 This is caused by your function having invalid parameters. [Bevy can
 only accept special types as system parameters!][builtins::systemparam]
+
+上面的错误意思是system函数有无效参数.
 
 ## Error on malformed queries
 
@@ -131,3 +144,5 @@ To access your components, you need to use reference syntax (`&` or `&mut`).
 
 When you want to query for multiple components, you need to put them in a tuple:
 `Query<(&mut Transform, &Camera, &MyComponent)>`.
+
+这个就是Query里的参数不是引用类型.
