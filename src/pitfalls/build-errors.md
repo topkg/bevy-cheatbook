@@ -5,6 +5,8 @@
 Sometimes, you can get strange and confusing build errors when trying to
 compile your project.
 
+编译出现奇怪的错误,可按以下方式尝试解决.
+
 ## Update your Rust
 
 First, make sure your Rust is up-to-date. Bevy only supports the latest
@@ -16,6 +18,8 @@ can run:
 ```shell
 rustup update
 ```
+
+更新rust版本,因为bevy只支持最新rust版本.
 
 ## Clear the cargo state
 
@@ -44,3 +48,35 @@ the problem, your errors might be caused by 3rd-party plugins. See [this
 page](../setup/bevy-git.md#how-to-use-bleeding-edge-bevy) for solutions.
 
 {{#include ../include/resolver2.md}}
+
+很多编译错误都是因为cargo内部状态导致的,清理之后重新生成可解决大部分问题.
+`rm -rf target Cargo.lock` 之后重新编译即可.
+如果这步还不行,就需要排除多bevy版本的问题,特别是使用第三方插件时,
+需要注意多bevy版本的问题.
+
+如果到这步还不能解决问题,需要到社区寻找方法.
+
+---
+
+新的cargo解析器
+
+Cargo 最近添加了一种新的依赖解析器算法，该算法与旧算法不兼容。 Bevy 需要新的解析器。
+如果要新建项目,使用cargo new, 这样就启用了新的解析算法.
+
+如果项目是单包项目(项目中只有一个Cargo.toml),下面两个设置都会自动使用新的解析算法:
+
+```toml
+[package]
+edition = "2021"
+
+# 或是,二选一即可.
+[package]
+resolver = "2"
+```
+
+如果项目是多包项目工作空间,在workspace的顶级Cargo.toml中要添加:
+
+```toml
+[workspace]
+resolver = "2"
+```
