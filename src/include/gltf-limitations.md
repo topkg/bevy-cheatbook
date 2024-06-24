@@ -13,3 +13,10 @@ Commonly-encountered limitations:
 
 This list is not exhaustive. There may be other unsupported scenarios that I
 did not know of or forgot to include here. :)
+
+bevy只支持gltf的部分功能,并不是所有的gltf文件都能加载进bevy.
+在部分场景下,还得不到任何错误的诊断信息:
+ - gltf文件中,纹理经过了base64编码,这种文件无法加载
+ - mip贴图之在ktx2/dds纹理文件中支持
+
+这个列表并不全,还有些错误未包含进来.
