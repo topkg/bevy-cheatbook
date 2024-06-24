@@ -14,10 +14,12 @@ struct MyThing {
 
 fn my_system(mut q: Query<&mut MyThing>) {
     for thing in q.iter_mut() {
+        // 只有在这里重新借用,才不会引用规则冲突(同时出现共享引用和独占可变引用).
         helper_func(&thing.a, &mut thing.b); // ERROR!
     }
 }
 
+// 如果这两个参数引用同一个结构体的多各字段,那么会出现冲突
 fn helper_func(foo: &Foo, bar: &mut Bar) {
     // do something
 }
@@ -48,6 +50,9 @@ let thing = thing.into_inner();
 Note that this line triggers [change detection][cb::change-detection]. Even if
 you don't modify the data afterwards, the component gets marked as changed.
 
+通过重新引用来绕开`变更检测`,
+重新引用本身就是为了在不同的作用域内使用同一个对象，而无需放弃当前的借用。
+
 ## Explanation
 
 Bevy typically gives you access to your data via special wrapper types (like
@@ -65,3 +70,9 @@ The "reborrow" trick shown above, effectively converts the wrapper into a
 regular Rust reference. `*thing` dereferences the wrapper via [`DerefMut`], and
 then `&mut` borrows it mutably. You now have `&mut MyStuff` instead of
 `Mut<MyStuff>`.
+
+bevy是通过不同的封装类型来访问不同的数据的.
+这些封装类型有点向智能指针,会自动解引用.
+
+上面的重新引用就是将封装类型转换成rust引用类型.
+rust的是允许结构体的字段被单独引用的.bevy的封装类型使用时就需要注意了.
