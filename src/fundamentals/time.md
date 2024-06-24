@@ -109,3 +109,6 @@ It will just keep accumulating time, which you can check with
 ```rust,no_run,noplayground
 {{#include ../code/src/basics.rs:stopwatch}}
 ```
+
+秒表可以用来跟踪某个时间点到现在过了多长时间.
+秒表会一直累积时间.
