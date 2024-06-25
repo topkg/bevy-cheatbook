@@ -8,6 +8,8 @@ rendering.
 This page will teach you about the specifics of 2D cameras. If you want to learn about
 general non-2D specific functionality, see the [general page on cameras][cb::camera].
 
+bevy中的相机就是用来看东西的.
+
 ## Creating a 2D Camera
 
 Bevy provides a [bundle][cb::bundle] ([`Camera2dBundle`][bevy::Camera2dBundle])
@@ -19,6 +21,8 @@ You might want to set the [transform][cb::transform], to position the camera.
 ```rust,no_run,noplayground
 {{#include ../code012/src/d2/camera.rs:basic-setup}}
 ```
+
+`Camera2dBundle`就是用于生成2d相机实体的,构造时就能指定相机的位置和变换.
 
 ## Projection
 
@@ -44,6 +48,15 @@ making a library or some other code that should be able to handle both 2D and
 cameras. You should create separate [systems][cb::system], or at least two
 separate queries, to handle each kind of camera. This makes sense, as you will
 likely need different logic for 2D vs. 3D anyway.
+
+投影决定了世界的坐标系统如何映射到视窗(通常是屏幕或窗口).
+2d游戏总是使用正交投影.Camera2dBundle中自动包含了OrthographicProjection,
+如果要在过程中访问正交投影的值,直接在query中访问`OrthographicProjection`即可.
+
+3d中的处理有些差异.具体说如果我们写一个lib,需要处理好2d/3d的不同,
+主要是没法通过单个query查到2d/3d相机中的正交投影,
+要么是分成不同的system,要么是使用两个单独的query.
+这是有道理的,因为无论如何您可能需要不同的 2D 与 3D 逻辑.
 
 ### Caveat: near/far values
 
@@ -71,6 +84,20 @@ to worry about the exact values or getting anything wrong:
 ```rust,no_run,noplayground
 {{#include ../code012/src/d2/camera.rs:projection-mut}}
 ```
+
+远近.正价投影不会应为远近有大小之分.投影的near/far值仅仅表示z轴的值,
+表示离相机的距离.Camera2dBundle将这两个值设置为-1000.0和1000.0,
+在这个范围内的实体都可以参与渲染.
+(之前说的渲染过滤超过1000个单位就不显示了,这个阈值来至这里.)
+
+如果是自己创建正交投影组件,就需要注意这些值的设置,
+正交投影是为3d相机而设计的,这个结构体的near字段默认值是0,
+也就是说如果在2d相机中,如果不设置near,就不会看到任何实体.
+
+如果怕丢, 就将正交投影组件的值放在一个临时变量中,所有的2d相机都使用这个,
+这样就不用担心在相机内部设置时少了设置.
+
+
 
 ### Scaling Mode
 
