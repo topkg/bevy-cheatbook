@@ -97,8 +97,6 @@ to worry about the exact values or getting anything wrong:
 如果怕丢, 就将正交投影组件的值放在一个临时变量中,所有的2d相机都使用这个,
 这样就不用担心在相机内部设置时少了设置.
 
-
-
 ### Scaling Mode
 
 You can set the [`ScalingMode`][bevy::ScalingMode] according to how you want to
@@ -120,6 +118,44 @@ be upscaled/downscaled as appropriate to fit the window size.
 
 ```rust,no_run,noplayground
 {{#include ../code012/src/d2/camera.rs:scalingmode}}
+```
+
+根据对窗口大小/分辨率的处理,可以设置`ScalingMode`缩放模式.
+2d相机默认1屏幕像素对应1个世界单位,这样窗口大小的改变会直接影响看到世界的大小.
+
+如果想在改变窗口大小的同时还是能看到同样的世界,
+`ScalingMode::WindowSize(x)`中的x就不能设置为1.0.
+`ScalingMode::FixedVertical`或`ScalingMode::AutoMax`能保持原窗口看到的世界.
+也可以直接指定要看到的世界的尺寸,或者将内容进行缩放到时和窗口大小.
+
+---
+
+正交投影下的缩放模式.
+
+```rust
+pub enum ScalingMode {
+    // Fixed 手动直接投影大小,忽略窗口resize,图像拉伸,参数为世界单位.
+    Fixed {
+        width: f32,
+        height: f32,
+    },
+    // 指定视窗大小,参数是一个世界单位等于多少像素.
+    WindowSize(f32),
+    // 保持宽高比,要满足最小限制,单位是世界单位.
+    AutoMin {
+        min_width: f32,
+        min_height: f32,
+    },
+    // 和AutoMin类似,要满足最大限制.
+    AutoMax {
+        max_width: f32,
+        max_height: f32,
+    },
+    // 保持宽高比,宽度调整,高度不变,参数是投影所需的高度,世界单位.
+    FixedVertical(f32),
+    // 高度调整.
+    FixedHorizontal(f32),
+}
 ```
 
 ### Zooming
@@ -155,3 +191,15 @@ to appear crisp instead of blurry:
 However, when *downscaling*, Linear (the default) filtering is preferred
 for higher quality. So, for games with high-res assets, you want to leave
 it unchanged.
+
+聚焦,通过正交投影的scale来改变,在2d相机中,可以将所有事物按同样的缩放因子进行缩放.
+zoom和ScalingMode互不影响.两者都对缩放有影响,选择其中一种即可.
+
+使用zoom可以有效防止2d资产在缩放过程产生残影.
+
+在游戏中设置一个预定义的缩放表,游戏看起来会更好.
+
+如果您正在制作像素艺术游戏,并且希望像素显得清晰而不是模糊,
+则需要确保将默认纹理过滤模式设置为`最近`(而不是`线性`).
+但是,在缩小尺寸时,首选线性(默认)过滤以获得更高的质量.
+因此,对于具有高分辨率资源的游戏,您希望保持其不变.
