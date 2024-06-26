@@ -25,6 +25,9 @@ parameter (which we provide as `Y`) is the "up" direction. If you want the camer
 to be tilted sideways, you can use something else there. If you want to make a
 top-down camera, looking straight down, you need to use something other than `Y`.
 
+构造3d相机和2d相机类似,推荐使用Camera3dBundle来构造实体.
+`looking_at()`的第二个参数是角度.
+
 ## Projection
 
 The [projection][cb::camera-projection] is what determines how coordinates map to the
@@ -54,6 +57,48 @@ making a library or some other code that should be able to handle both 2D and
 cameras. You should create separate [systems][cb::system], or at least two
 separate queries, to handle each kind of camera. This makes sense, as you will
 likely need different logic for 2D vs. 3D anyway.
+
+投影决定了从窗口看到的东西,默认是透视投影,3d游戏大部分场合下都使用这个.
+
+```rust
+#[derive(Component, Debug, Clone, Reflect)]
+#[reflect(Component, Default)]
+pub enum Projection {
+    Perspective(PerspectiveProjection),
+    Orthographic(OrthographicProjection),
+}
+
+// 默认是透视投影.
+impl Default for Projection {
+    fn default() -> Self {
+        Projection::Perspective(Default::default())
+    }
+}
+
+impl Default for Camera3dBundle {
+    fn default() -> Self {
+        Self {
+            camera_render_graph: CameraRenderGraph::new(Core3d),
+            camera: Default::default(),
+            projection: Default::default(),  // Camera3dBundle 的默认投影
+            visible_entities: Default::default(),
+            frustum: Default::default(),
+            transform: Default::default(),
+            global_transform: Default::default(),
+            camera_3d: Default::default(),
+            tonemapping: Default::default(),
+            color_grading: Default::default(),
+            exposure: Default::default(),
+            main_texture_usages: Default::default(),
+            deband_dither: DebandDither::Enabled,
+        }
+    }
+}
+```
+
+如果要在system中访问投影,query中查Projection即可.
+和2d类似,如果同时存在2d相机和3d相机,一个查询是无法查到两个相机的,
+需要2个query.
 
 ### Perspective Projections
 
@@ -89,6 +134,24 @@ Internally, Bevy's perspective projection uses an [infinite reversed
 Z][nvidia::infinite-reverse-z] configuration. This allows for good numeric
 precision for both nearby and far away objects, avoiding visual artifacts.
 
+透视投影,在3d游戏中更加逼真:远小近大.(和人眼看到的类似).
+
+透视投影中重要的概念是FOV(视野,包含水平视野HFOV/垂直视野VFOV,常用VFOV),
+FOV 是摄像机视锥体的一个角度,表示在摄像机镜头前方能够看到的最大视野范围.
+FOV定义了相机能看到的空间范围.
+
+bevy中的FOV就是指垂直视野.
+
+FOV越大就越像广角镜头,这让一切显得更加遥远/拉长/缩小,这样可以看到更多东西.  
+FOV越小就越像长焦镜头,这样一起显得更加近/平坦/方法,看到的东西也越少.
+
+bevy默认是45度(良好),60度属于较宽,90度很宽,30度非常窄.
+
+上图一个是45度+单位距离,一个是90度(45度的2倍)+半个单位距离,后者的3d效果更加明显.
+
+在内部,Bevy 的透视投影使用(无限反向Z配置)(这是一个显卡技术).
+这使得附近和远处的物体都具有良好的数值精度,避免了视觉伪影.
+
 #### Zooming
 
 To "zoom", change the perspective projection's FOV.
@@ -112,6 +175,12 @@ same:
 
 In some applications (such as 3D editors), moving the camera might be preferable,
 instead of changing the FOV.
+
+聚焦,就是改变透视投影的FOV值.
+如果相机不移动,则减小 FOV 会使一切看起来更近,而增加 FOV 会使一切看起来更远.
+bevy的透视聚焦和真实相机的焦距是一个效果.
+
+真实相机聚焦是因为现实距离限制,但在软件中,距离不再是限制,有时移动比聚焦的效果会更好.
 
 ### Orthographic Projections
 
@@ -147,3 +216,12 @@ how much of the scene is visible.
 ```
 
 ![Side-by-side comparison of different orthographic projection scale in 3D](../img/camera-3d-orthographic-zoom.png)
+
+正交投影下,不管距离如何,东西看起来都是一样大.可以准备表示对象尺寸.
+非常适合CAD领域(精确测量/工程图纸/零件设计等).
+
+正交投影对于某些人来说可能令人困惑且不直观,因为它不会产生任何 3D 空间感.
+您无法分辨任何事物的距离.它会产生完美的平面外观.
+当从上到下的对角线角度显示时,这种艺术风格有时被称为等距.
+
+和在2d相机时一样,需要制定缩放模式ScalingMode,或通过scale进行缩放.
