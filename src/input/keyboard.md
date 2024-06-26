@@ -17,6 +17,8 @@ as a [`ButtonInput`] [resource][cb::res], [events][cb::event], and [run
 conditions][cb::rc] ([see list][bevy::input::common_conditions]). Use
 whichever pattern feels most appropriate to your use case.
 
+和鼠标按键一样,键盘按键也可作为ButtonInput资源/事件/运行条件, 选择一种合适的即可.
+
 ## Checking Key State
 
 Most commonly for games, you might be interested in specific known keys and
@@ -38,6 +40,10 @@ To iterate over any keys that are currently held, or that have been pressed/rele
 {{#include ../code014/src/input/keyboard.rs:res-iter}}
 ```
 
+大多数游戏都会选择检查资源,直接查资源保存的按键状态.  
+`.pressed()/.released()`,检查某个键是否已经被按下或释放.只要状态对,每帧都返回true.  
+`.just_pressed()/.just_released()`,只要状态对,只在当前帧返回true.
+
 ## Run Conditions
 
 Another workflow is to add [run conditions][cb::rc] to your systems,
@@ -52,6 +58,12 @@ For prototyping, Bevy offers some [built-in run conditions][input::rc]:
 {{#include ../code014/src/input/keyboard.rs:run-conditions}}
 ```
 
+条件运行,仅在某些事发生时才执行system.
+
+强烈推荐自己编写自己的运行条件,这样可以追求更大的灵活性,也支持配置按键绑定等.
+
+上面的例子是bevy内置的运行条件.
+
 ## Keyboard Events
 
 To get all keyboard activity, you can use [`KeyboardInput`] [events][cb::event]:
@@ -59,6 +71,8 @@ To get all keyboard activity, you can use [`KeyboardInput`] [events][cb::event]:
 ```rust,no_run,noplayground
 {{#include ../code014/src/input/keyboard.rs:events}}
 ```
+
+捕获所有键盘事件,使用事件.
 
 ### Physical [`KeyCode`] vs. Logical [`Key`]
 
@@ -77,6 +91,16 @@ will allow your users to type just like they do in other applications.
 
 If you'd like to handle special function keys or media keys on keyboards that
 have them, that can also be done via the logical [`Key`].
+
+当一个键按下时,事件会包含两部分信息:
+ - KeyCode,键盘上哪个键被按下了,和OS为不同语言的布局无关
+ - Key,OS对按键的解释
+
+当实现游戏逻辑时,需要使用Keycode,这样你可以始终提供可靠的绑定.  
+当实现文本/字符输入时,使用Key,这可以为您提供Unicode字符,您可以将其附加到文本字符串中,
+并允许您的用户像在其他应用程序中一样进行键入。
+
+如果您想处理具有特殊功能键或媒体键的键盘,也可以通过逻辑键来完成.
 
 ## Text Input
 
@@ -100,6 +124,11 @@ with complex scripts (such as East Asian languages), or users who use
 assistive methods like handwriting recognition, you also need to support
 [IME input][input::ime], in addition to keyboard input.
 
+文本输入,上面的例子中对回退和enter键做了特殊处理,常见的特殊处理还有Esc/方向键.
+
+注意:为了支持使用复杂脚本的语言(CJK)的国际用户或使用手写识别等辅助方法的用户的文本输入,
+除了键盘输入之外,您还需要支持 IME 输入.
+
 ## Keyboard Focus
 
 If you are doing advanced things like caching state to detect multi-key
@@ -114,3 +143,9 @@ know when you should reset your state.
 ```rust,no_run,noplayground
 {{#include ../code014/src/input/keyboard.rs:focus-lost}}
 ```
+
+如果您正在执行高级操作,例如缓存状态以检测多键序列或键组合,
+如果 Bevy OS 窗口在键盘输入过程中失去焦点(例如使用 Alt-Tab 或类似的 OS 窗口切换机制),
+您可能会陷入不一致的状态.
+
+`KeyboardFocusLost`事件会上清除一些按键缓存.
