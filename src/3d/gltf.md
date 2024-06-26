@@ -12,6 +12,8 @@ Bevy uses the GLTF 2.0 file format for 3D assets.
 
 (other formats may be unofficially available via 3rd-party plugins)
 
+bevy使用gltf2.0文件格式来表示3d资产.
+
 ## Quick-Start: Spawning 3D Models into your World
 
 The simplest use case is to just load a "3D model" and spawn it into the game world.
@@ -36,6 +38,13 @@ one "default scene". GLTF is a very flexible file format. A single file can
 contain many "models" or more complex "scenes". To get a better understanding
 of GLTF and possible workflows, read the rest of this page. :)
 
+3d游戏有个常见的操作就是加载3d模型.
+一个3d模型可以包含很多东西,一个桌子有桌面和桌柱,
+bevy表示桌子是需要多个ECS实体才能渲染一个桌子.
+
+通常一个3d模型就称为一个scene,bevy可以基于scene构造出所有依赖的实体.
+可以通过一个gltf文件加载一系列实体.
+
 ## Introduction to GLTF
 
 GLTF is a modern open standard for exchanging 3D assets between different
@@ -50,6 +59,13 @@ A GLTF file can contain many objects (sub-assets): meshes, materials,
 textures, scenes, animation clips. When loading a GLTF file, Bevy will load
 all of the assets contained inside. They will be mapped to the [appropriate
 Bevy-internal asset types][builtins::asset].
+
+GLTF是现代的一个交换3d资产的标准,让不同软件的3d资产可以进行交互,
+eg:3d建模软件blender可以输出3d资产,游戏引擎可以加载这些内容.
+
+gltf有两种格式:人类阅读友好的(*.gltf),和二进制(*.glb).
+
+一个gltf文件可以有很多子资产:网格/材质/纹理/scene/动画.
 
 ## The GLTF sub-assets
 
@@ -110,6 +126,45 @@ GLTF **Animations** describe animations that interpolate various values,
 such as transforms or mesh skeletons, over time. In Bevy, these are loaded
 as [`AnimationClip`][bevy::AnimationClip] assets.
 
+gltf资产是有标准名称的,这个是统一的.但bevy并没有完全按gltf标准来.
+
+GLTF场景是您在游戏世界中生成的内容.
+这通常是您在3D建模软件的屏幕上看到的内容.
+场景结合了游戏引擎所需的所有数据,以创建所有必要的实体来表示您想要的内容.
+从概念上讲,将场景视为一个“单元”.
+根据您的用例,这可能是一个“3D模型”,甚至是整个地图或游戏级别.
+在Bevy中,这些表示为包含所有子ECS实体的Bevy场景.
+
+GLTF场景由GLTF节点组成.这些节点描述了场景中的“对象”,通常是GLTF网格,
+但也可以是其他东西,如相机和灯光.每个GLTF节点都有一个变换来将其定位在场景中.
+GLTF节点没有核心Bevy等效项；Bevy仅使用此数据在场景内创建ECS实体.
+如果您需要访问此数据,Bevy有一个特殊的GltfNode资源类型.
+
+GLTF网格代表一个概念上的“3D对象”.它们对应于3D建模软件中的“对象”.
+GLTF网格可能很复杂,由多个较小的部分组成,称为GLTF基元,
+每个基元可能使用不同的材质.GLTF网格没有核心Bevy等效项,
+但有一个特殊的GltfMesh资源类型,用于描述基元.
+
+GLTF基元是单独的“3D几何单元”,用于渲染.
+它们包含实际的几何/顶点数据,并引用绘制时要使用的材质.
+在Bevy中,每个GLTFPrimitive都表示为BevyMesh资源,
+并且必须生成为单独的ECS实体才能进行渲染.
+
+GLTF材质描述3D模型表面的着色参数.它们完全支持基于物理的渲染(PBR).
+它们还引用要使用的纹理.在Bevy中,它们表示为StandardMaterial资源,
+由BevyPBR3D渲染器使用.
+
+GLTF纹理(图像)可以嵌入GLTF文件中,也可以存储在外部单独的图像文件中.
+例如,您可以将纹理作为单独的PNG/JPEG/KTX2文件以方便开发,
+或者将它们全部打包到GLTF文件中以方便分发.
+在Bevy中,GLTF纹理作为Bevy图像资源加载.
+
+GLTF采样器描述了GPU应如何使用给定纹理的设置.Bevy不会将这些分开保存；
+这些数据存储在Bevy图像资产(SamplerDescriptor类型的采样器字段)中.
+
+GLTF动画描述了随时间插入各种值(例如变换或网格骨架)的动画.
+在Bevy中,这些被加载为AnimationClip资产.
+
 ## GLTF Usage Patterns
 
 A single GLTF file can contain any number of sub-assets of any of the above
@@ -128,6 +183,15 @@ A single GLTF file might be used:
     This lets you load and manage the whole collection at once and spawn them individually as needed.
   - … others?
 
+单个 GLTF 文件可以包含任意数量的上述任何类型的子资源, 并以任意方式相互引用.
+
+gltf可以用在以下场景:
+ - 表示单个3D 模型
+ - 将整个关卡表示为 GLTF 场景,可能还包括相机.这让您可以一次加载和生成整个关卡/地图.
+ - 将关卡/地图的各个部分(例如房间)表示为单独的 GLTF 场景.如果需要,它们可以共享网格和纹理.
+ - 包含一组许多不同的3D 模型,每个模型都是一个单独的 GLTF 场景.这让您可以一次加载和管理整个集合,并根据需要单独生成它们.
+ - …其他？
+
 ## Tools for Creating GLTF Assets
 
 If you are using a recent version of Blender (2.8+) for 3D modeling, GLTF
@@ -145,6 +209,11 @@ everything you expect.
 If you need Tangents for normal maps, it is recommended that you include them
 in your GLTF files. This avoids Bevy having to autogenerate them at runtime.
 Many 3D editors do not enable this option by default.
+
+创建gltf资产的工具,推荐使用开源的blender.
+
+如果您需要法线贴图的切线,建议您将它们包含在 GLTF 文件中.
+这避免了 Bevy 必须在运行时自动生成它们.许多 3D 编辑器默认不启用此选项.
 
 ### Textures
 
@@ -172,6 +241,20 @@ compression of your choice.
 ```
 TODO: show an example workflow for converting textures into the "optimal" format
 ```
+
+对于您的纹理/图像数据,GLTF格式规范正式将支持的格式限制为PNG、JPEG或Basis.
+但是,Bevy不会强制执行这种“人为限制”.您可以使用Bevy支持的任何图像格式.
+
+您的3D编辑器可能会使用PNG纹理导出您的GLTF.这将“正常工作”,并且非常适合简单的用例.
+
+但是,mipmap和压缩纹理对于获得良好的GPU性能、内存(VRAM)使用率和视觉质量非常重要.
+只有使用支持这些功能的KTX2或DDS等格式,您才能获得这些好处.
+
+我们建议您使用KTX2,它原生支持所有GPU纹理功能+顶部的额外zstd压缩,以减小文件大小.
+如果您这样做,请不要忘记为Bevy启用ktx2和zstd货物功能.
+
+您可以使用klafsa工具将GLTF文件中使用的所有纹理从PNG/JPEG转换为KTX2,
+并选择mipmap和GPU纹理压缩.
 
 ## Using GLTF Sub-Assets in Bevy
 
