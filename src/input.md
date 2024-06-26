@@ -22,6 +22,21 @@ The following notable input devices are ***not*** supported:
  - Microphones and other audio input devices
  - MIDI (musical instruments), but there is an unofficial plugin: [`bevy_midi`][project::bevy_midi].
 
+bevy支持以下输入:
+ - 键盘按键的按下和释放,文本输入
+ - 鼠标移动,光标位置,鼠标按键,鼠标滚轮
+ - 多指触摸,触摸板手势(仅限与mac系列),触摸滚动
+ - 手柄
+ - 文件拖拽
+ - IME 高级文本输入
+
+bevy还不支持以下设备:
+ - 加速计和陀螺仪
+ - 传感器(eg:温度计)
+ - 多点触控板跟踪手指
+ - 麦克风和其他音频输入设备
+ - 乐器MIDI, (有个非官方的bevy_midi)
+
 ---
 
 For most input types (where it makes sense), Bevy provides two ways of
@@ -43,6 +58,15 @@ their current state is.
 more all-encompassing approach. Use them if you want to get all activity
 from that class of input device, rather than only checking for specific inputs.
 
+对于大多数输入,bevy提供了两种处理方式:资源和事件.
+部分输入只有事件.
+
+检查资源的状态(ButtonInput的按键;Axis的遥感方向;Touches的触摸)等.
+这种处理输入的方式对实现游戏逻辑来说非常方便.
+
+事件输入是一个低级别的处理方式,处理也更加全面.
+如果想从该类输入设备获取所有活动,而不是仅检查特定输入,请使用它们.
+
 ## Input Mapping
 
 Bevy does not yet offer a built-in way to do input mapping (configure key
@@ -60,6 +84,14 @@ have a system for reading inputs and converting them to your own internal
 "movement intent/action events", and then another system acting on those
 custom events, to actually move the player. Make sure to use [explicit
 system ordering][cb::system-order] to avoid lag / frame delays.
+
+bevy没有内置输入映射(eg:绑定组合键),这个应该由游戏逻辑来自定义.
+社区有些插件可以实现这些功能,本书作者推荐使用[这个插件](https://github.com/leafwing-studios/leafwing-input-manager),
+这个插件在某些场景下非常有用(潜在意思是,没有银弹,没有万灵丹).
+
+在游戏中维护一个抽象层非常有必要.
+如果需要处理角色移动,需要在system中读取输入,并转换成自己内部的事件,
+其他system就能基于内部事件继续搭积木完善游戏逻辑.
 
 ## Run Conditions
 
@@ -79,3 +111,11 @@ that check your keybindings from your user preferences.
 
 If you are using the [LWIM plugin][project::lwim], it also provides support for
 [a similar run-condition-based workflow][lwim::common_conditions].
+
+bevy为system提供了运行条件,可以利用这个机制让system只在某些键被按下时运行.
+
+可以通过"调度/配置"(后面章节中提到)来避免非必要的代码占用cpu资源.
+
+这种方式是将硬编码key写在代码中了,用户无法重新绑定,所以不推荐在真实游戏中使用.
+
+插件(LWIM,就是上面推荐的input管理插件)同样提供了一个小型的基于运行条件的工作流.

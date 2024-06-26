@@ -267,6 +267,8 @@ To get handles to the respective assets in Bevy, you can use the
 [`Gltf`][bevy::Gltf] ["master asset"](#gltf-master-asset), or alternatively,
 [AssetPath with Labels](#assetpath-with-labels).
 
+在bevy中访问这些资产有两种方式:索引或名称.
+
 ### `Gltf` master asset
 
 If you have a complex GLTF file, this is likely the most flexible and useful
