@@ -8,7 +8,7 @@ rendering.
 This page will teach you about the specifics of 2D cameras. If you want to learn about
 general non-2D specific functionality, see the [general page on cameras][cb::camera].
 
-bevy中的相机就是用来看东西的.
+bevy中, 必须使用相机来看一切东西, 因为相机配置着渲染
 
 ## Creating a 2D Camera
 
