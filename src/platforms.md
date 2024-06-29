@@ -47,7 +47,7 @@ All Bevy features are fully supported on each of the above.
 You can also build Windows EXEs for your Windows users, if you are working
 in [Linux][cross::linux-windows] or [macOS][cross::macos-windows].
 
-如果你工作在linux活MacOS上, 你也可以为Windows用户构建Windows EXEs.
+如果你工作在linux或MacOS上, 你也可以为Windows用户构建Windows EXEs.
 
 ### Web
 
@@ -62,7 +62,8 @@ API, meaning worse performance and limitations like only supporting a maximum
 of 256 lights in 3D scenes. These limitations can be lifted by enabling the
 new WebGPU support, but then you will have limited browser compatibility.
 
-不支持多线程, 所以你只有限定的性能, 和可能的audio glitches.
+不支持多线程, 所以你只有限定的性能, 和可能的audio glitches(音频故障audio glitch通常指
+音频播放或录制过程中出现的短暂、不正常的声音干扰).
 
 渲染受限于WebGL2 API的特性, 这意味着更糟的性能和限制, 比如在3D场景中, 最大只支持256 lights.
 启用新的WebGPU支持后, 这些限制能被改善, 但这也意味着你将拥有有限的浏览器兼容性.
