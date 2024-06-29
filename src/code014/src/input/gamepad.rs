@@ -2,30 +2,32 @@ use bevy::prelude::*;
 use bevy::utils::Duration;
 
 fn plugin(app: &mut App) {
-    app.add_systems(Update, (
-        gamepad_connections,
-        gamepad_input,
-        gamepad_input_events,
-        gamepad_rumble,
-        list_gamepads,
-    ));
-// ANCHOR: gamepad-settings-app
-app.add_systems(Update,
-    configure_gamepads
-        .run_if(resource_exists_and_changed::<MyGamepad>)
-);
-// ANCHOR_END: gamepad-settings-app
+    app.add_systems(
+        Update,
+        (
+            gamepad_connections,
+            gamepad_input,
+            gamepad_input_events,
+            gamepad_rumble,
+            list_gamepads,
+        ),
+    );
+    // ANCHOR: gamepad-settings-app
+    app.add_systems(
+        Update,
+        configure_gamepads.run_if(resource_exists_and_changed::<MyGamepad>),
+    );
+    // ANCHOR_END: gamepad-settings-app
 }
 
 // ANCHOR: gamepads
-fn list_gamepads(
-    gamepads: Res<Gamepads>,
-) {
+fn list_gamepads(gamepads: Res<Gamepads>) {
     println!("Currently connected gamepads:");
     for gamepad in gamepads.iter() {
         println!(
             "ID: {:?}; Name: {}",
-            gamepad, gamepads.name(gamepad).unwrap_or("unknown")
+            gamepad,
+            gamepads.name(gamepad).unwrap_or("unknown")
         );
     }
 }
@@ -76,22 +78,30 @@ fn gamepad_connections(
 
 // ANCHOR: gamepad-input
 fn gamepad_input(
-    axes: Res<Axis<GamepadAxis>>,
+    axes: Res<Axis<GamepadAxis>>, // 手柄输入可以通过事件或资源获取,这里是通过资源
     buttons: Res<ButtonInput<GamepadButton>>,
     my_gamepad: Option<Res<MyGamepad>>,
 ) {
+    // 手柄输入的处理流程是标准的: 先处理连接,再处理输入,两者独立处理.
     let Some(&MyGamepad(gamepad)) = my_gamepad.as_deref() else {
         // no gamepad is connected
+        // 这里可以只处理感兴趣的手柄,在多手柄连接的场景非常必要.
+        // ns主界面,红蓝手柄都能控制,就是没有处理过滤.
         return;
     };
 
     // The joysticks are represented using a separate axis for X and Y
     let axis_lx = GamepadAxis {
-        gamepad, axis_type: GamepadAxisType::LeftStickX
+        gamepad,
+        axis_type: GamepadAxisType::LeftStickX,
     };
     let axis_ly = GamepadAxis {
-        gamepad, axis_type: GamepadAxisType::LeftStickY
+        gamepad,
+        axis_type: GamepadAxisType::LeftStickY,
     };
+
+    // pub struct Axis<T>, T为输入设备类型,struct存储的是位置信息.
+    // Axis.get()获取有限制范围,使用get_unclamped()获取无限制范围.
 
     if let (Some(x), Some(y)) = (axes.get(axis_lx), axes.get(axis_ly)) {
         // combine X and Y into one vector
@@ -100,15 +110,19 @@ fn gamepad_input(
         // Example: check if the stick is pushed up
         if left_stick.length() > 0.9 && left_stick.y > 0.5 {
             // do something
+            // 自定义遥感逻辑.
         }
     }
 
     // In a real game, the buttons would be configurable, but here we hardcode them
+    // 遥感按钮,和普通按钮的处理方式一致.
     let jump_button = GamepadButton {
-        gamepad, button_type: GamepadButtonType::South
+        gamepad,
+        button_type: GamepadButtonType::South,
     };
     let heal_button = GamepadButton {
-        gamepad, button_type: GamepadButtonType::East
+        gamepad,
+        button_type: GamepadButtonType::East,
     };
 
     if buttons.just_pressed(jump_button) {
@@ -122,9 +136,7 @@ fn gamepad_input(
 // ANCHOR_END: gamepad-input
 
 // ANCHOR: gamepad-input-events
-fn gamepad_input_events(
-    mut evr_gamepad: EventReader<GamepadEvent>,
-) {
+fn gamepad_input_events(mut evr_gamepad: EventReader<GamepadEvent>) {
     for ev in evr_gamepad.read() {
         match ev {
             GamepadEvent::Axis(ev_axis) => {
@@ -153,10 +165,7 @@ fn gamepad_input_events(
 // ANCHOR: gamepad-settings
 use bevy::input::gamepad::{AxisSettings, ButtonSettings, GamepadSettings};
 
-fn configure_gamepads(
-    my_gamepad: Option<Res<MyGamepad>>,
-    mut settings: ResMut<GamepadSettings>,
-) {
+fn configure_gamepads(my_gamepad: Option<Res<MyGamepad>>, mut settings: ResMut<GamepadSettings>) {
     let Some(&MyGamepad(gamepad)) = my_gamepad.as_deref() else {
         // no gamepad is connected
         return;
@@ -183,20 +192,32 @@ fn configure_gamepads(
 
     // set these settings for the gamepad we use for our player
     settings.axis_settings.insert(
-        GamepadAxis { gamepad, axis_type: GamepadAxisType::RightStickX },
-        right_stick_settings.clone()
+        GamepadAxis {
+            gamepad,
+            axis_type: GamepadAxisType::RightStickX,
+        },
+        right_stick_settings.clone(),
     );
     settings.axis_settings.insert(
-        GamepadAxis { gamepad, axis_type: GamepadAxisType::RightStickY },
-        right_stick_settings.clone()
+        GamepadAxis {
+            gamepad,
+            axis_type: GamepadAxisType::RightStickY,
+        },
+        right_stick_settings.clone(),
     );
     settings.axis_settings.insert(
-        GamepadAxis { gamepad, axis_type: GamepadAxisType::LeftZ },
-        trigger_settings.clone()
+        GamepadAxis {
+            gamepad,
+            axis_type: GamepadAxisType::LeftZ,
+        },
+        trigger_settings.clone(),
     );
     settings.axis_settings.insert(
-        GamepadAxis { gamepad, axis_type: GamepadAxisType::RightZ },
-        trigger_settings.clone()
+        GamepadAxis {
+            gamepad,
+            axis_type: GamepadAxisType::RightZ,
+        },
+        trigger_settings.clone(),
     );
 
     // for buttons (or axes treated as buttons):

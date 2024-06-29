@@ -85,6 +85,46 @@ your game needs to have a way for your users to configure their input bindings.
 通过`Axis`和`GamepadAxis`可获取遥感的方向和模拟的Z轴.
 遥感按钮是通过`ButtonInput<GamepadButton>`获取的.
 
+```rust
+#[derive(Debug, Resource)]
+pub struct Axis<T> {
+    /// The position data of the input devices.
+    axis_data: HashMap<T, f32>,
+}
+
+// 如何从资源中获取输入,下面分析一下.起点就是system的资源参数`Res<Axis<GamepadAxis>>`.
+// Axis用hashmap来维护输入的值,key为输入类型,value为输入的值;获取值就使用get().
+// 从使用的流程上讲,只需要构造一个GamepadAxis来能获取到对应手柄对应的输入事件的值了.
+
+// GamepadAxis设计的如此暴力(简单有效)
+pub struct GamepadAxis {
+    pub gamepad: Gamepad, // 哪个手柄的
+    pub axis_type: GamepadAxisType, // 哪个类型的输入
+}
+
+// 左右手柄的xyz是在这儿区分的.
+pub enum GamepadAxisType {
+    LeftStickX,
+    LeftStickY,
+    LeftZ,
+    RightStickX,
+    RightStickY,
+    RightZ,
+    Other(u8),
+}
+
+// 遥感按钮.
+// GamepadButtonType枚举, 在bevy中重新取了名字,按键的数量和w3c的标准手柄按钮是能对上的.
+pub struct GamepadButton {
+    pub gamepad: Gamepad,
+    pub button_type: GamepadButtonType,
+}
+```
+
+bevy中的手柄按钮是贴近某些手柄厂商的,不是贴近w3c标准的.
+部分设备还支持非标输入,eg:开车游戏中的方向盘和踏板,飞行游戏中的飞行棒,
+这些都用`Other(u8)`来处理.游戏需要提供一种方法让用户来绑定按键.
+
 ### Events
 
 Alternatively, if you want to detect all activity as it comes in, you
@@ -93,6 +133,8 @@ can also handle gamepad inputs using [`GamepadEvent`] [events][cb::event]:
 ```rust,no_run,noplayground
 {{#include ../code014/src/input/gamepad.rs:gamepad-input-events}}
 ```
+
+如果要捕获手柄的所有事件,用`GamepadEvent`.
 
 ## Gamepad Settings
 
@@ -118,6 +160,8 @@ selected to be used:
 {{#include ../code014/src/input/gamepad.rs:gamepad-settings-app}}
 ```
 
+每个遥感都可以设置`死区`,也可以全局配置.
+
 ## Gamepad Rumble
 
 To cause rumble/vibration, use the [`GamepadRumbleRequest`] event. Every
@@ -135,3 +179,13 @@ on different hardware.
 ```rust,no_run,noplayground
 {{#include ../code014/src/input/gamepad.rs:gamepad-rumble}}
 ```
+
+手柄振动.`GamepadRumbleRequest`事件.
+您发送的每个事件都会添加具有给定强度并持续给定时间的震动.
+当您发送多个事件时,每个请求的震动都会被单独跟踪,
+实际的硬件振动强度将是当前正在进行的所有震动的总和.
+
+`Stop`事件会立马终止振动.
+振动有时长,有强弱.
+
+强弱能设置为渐进的.
