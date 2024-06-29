@@ -17,21 +17,37 @@ platforms, with differences only in the build process and environment setup.
 However, that vision is not fully met yet. Currently, support for non-desktop
 platforms is limited, and requires more complex configuration.
 
+Bevy的目的是针对不同的平台, 让其操作简单, 比如不同的台式操作系统、 web浏览器(通过WebAssembly)、
+移动端(Android和iOS), 以及游戏控制台
+
+所有的平台上, 你的Bevy代码可以是一样的, 除了构建过程及环境启动时的差异.
+
+然而, 目前版本还没有完全满足上面情况. 现在, 对非台式机平台的支持时有限的, 并且还要求更复杂的配置.
+
 ### Desktop
 
 Bevy trivially works out-of-the-box on the three major desktop operating
 systems: Linux, macOS, Windows. No special configuration is required.
 
+Bevy工作在三种主流的台式机操作系统: Linux, macOS, Windows. 不需要特别的配置.
+
 See the following pages for specific tips/advice when developing for the
 desktop platforms:
+
+针对不同操作系统开发时, 请查看如下说明
+
  - [Linux][platform::linux]
  - [macOS][platform::macos]
  - [Windows][platform::windows]
 
 All Bevy features are fully supported on each of the above.
 
+以上系统, Bevy的全部特性均被支持.
+
 You can also build Windows EXEs for your Windows users, if you are working
 in [Linux][cross::linux-windows] or [macOS][cross::macos-windows].
+
+如果你工作在linux活MacOS上, 你也可以为Windows用户构建Windows EXEs.
 
 ### Web
 
