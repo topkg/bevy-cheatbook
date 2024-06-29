@@ -5,13 +5,20 @@
 Cameras drive all rendering in Bevy. They are responsible for configuring what
 to draw, how to draw it, and where to draw it.
 
+Cameras驱动着Bevy内的全部渲染. 这些相机负责配置: 绘制什么, 如何绘制, 以及在哪里绘制.
+
 You must have at least one camera entity, in order for anything to be displayed
 at all! If you forget to spawn a camera, you will get an empty black screen.
+
+你至少需要一个相机实体, 为了显示任何东西! 如果你忘记spawn一个相机, 那么你将会得到一个空空的黑色屏幕.
 
 In the simplest case, you can create a camera with the default settings. Just
 spawn an entity using [`Camera2dBundle`][bevy::Camera2dBundle] or
 [`Camera3dBundle`][bevy::Camera3dBundle]. It will simply draw all renderable
 entities that are [visible][cb::visibility].
+
+最简单的例子是, 你能用默认的配置创建一个相机. 比如使用Camera2dBundle或Camera3dBundle, 
+它将会绘制任何可见的实体.
 
 This page gives a general overview of cameras in Bevy. Also see the dedicated
 pages for [2D cameras][cb::camera-2d] and [3D cameras][cb::camera-3d].
