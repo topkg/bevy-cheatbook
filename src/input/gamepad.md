@@ -13,6 +13,8 @@ console controllers, joysticks, etc. Many different kinds of hardware should
 work, but if your device is not supported, you should file an issue with the
 [gilrs][project::gilrs] project.
 
+bevy利用gilrs库来实现手柄的输入.
+
 ## Gamepad IDs
 
 Bevy assigns a unique ID ([`Gamepad`]) to each connected gamepad. For local
@@ -26,6 +28,10 @@ currently connected gamepad devices, or to check the status of a specific one.
 {{#include ../code014/src/input/gamepad.rs:gamepads}}
 ```
 
+bevy给每个连接的手柄都分配了唯一id,这个id是用于区分输入源的.
+
+上面的例子是通过Gamepads资源显示所有已连接的手柄.
+
 ### Handling Connections / Disconnections
 
 To detect when gamepads are connected or disconnected, you can use
@@ -36,6 +42,18 @@ Example showing how to remember the first connected gamepad ID:
 ```rust,no_run,noplayground
 {{#include ../code014/src/input/gamepad.rs:gamepad-connect-disconnect}}
 ```
+
+使用`GamepadEvent`事件来检测手柄的连接状态.
+
+```rust
+pub enum GamepadEvent {
+    Connection(GamepadConnectionEvent),
+    Button(GamepadButtonChangedEvent),
+    Axis(GamepadAxisChangedEvent),
+}
+```
+
+上面维护手柄连接状态的例子,用资源保存了一个手柄信息,并未支持多手柄.
 
 ## Handling Gamepad Inputs
 
@@ -62,6 +80,10 @@ on a standard controller, for example:
 These are represented by the `Other(u8)` variant in [`GamepadButton`]/[`GamepadAxis`].
 The `u8` value is hardware-specific, so if you want to support such devices,
 your game needs to have a way for your users to configure their input bindings.
+
+手柄输入的第一类就是遥感.
+通过`Axis`和`GamepadAxis`可获取遥感的方向和模拟的Z轴.
+遥感按钮是通过`ButtonInput<GamepadButton>`获取的.
 
 ### Events
 
