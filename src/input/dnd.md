@@ -18,6 +18,8 @@ of the file that was dropped in.
 {{#include ../code014/src/input/dnd.rs:dnd-file}}
 ```
 
+拖拽,在桌面平台,且只支持文件.通过`FileDragAndDrop`事件捕获.
+
 ## Detecting the Position of the Drop
 
 You may want to do different things depending on where the cursor was when the
@@ -35,6 +37,10 @@ Systems that use cursor events to respond to cursor movements will not work
 during a drag gesture. This includes Bevy UI's [`Interaction`] detection,
 which is the usual way of detecting when a UI element is hovered over.
 
+您可能想要根据放下手势结束时光标所在的位置执行不同的操作.
+例如,如果将文件拖放到特定的 UI 元素/面板上,则将文件添加到某个集合.
+因为winit功能缺失,这个功能还未实现.
+
 ### Workaround
 
 The only way to workaround this issue is to store the file path somewhere
@@ -46,3 +52,10 @@ update will happen whenever the user moves the cursor. If the user does not
 immediately move the mouse after dropping the file and leaves the cursor in the
 same place for a while, there will be no events and your app will have no way of
 knowing the cursor position.
+
+解决此问题的唯一方法是在收到放置事件后将文件路径临时存储在某处.
+然后,等待下一个 CursorMoved 事件,然后处理该文件.
+请注意,这甚至可能不是在下一帧更新时.
+只要用户移动光标,就会发生下一次光标更新.
+如果用户在放下文件后没有立即移动鼠标,而是将光标停留在同一位置一段时间,
+则不会发生任何事件,您的应用也无法知道光标的位置.
