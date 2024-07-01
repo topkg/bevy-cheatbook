@@ -14,6 +14,9 @@ who prefer alternative text input methods like handwriting recognition, you
 should support IMEs. This should be in addition to supporting [text input via
 the keyboard][input::keyboard-text], which is how most users will input text.
 
+复杂的输入需要使用IME支持,其中就包括汉字输入.
+支持IME就可以支持不同语言的玩家.
+
 ## How IMEs Work
 
 IMEs work by using a special "buffer", which shows the current in-progress
@@ -32,6 +35,15 @@ When the user confirms their desired input, you will get an
 [`Ime::Commit`][`Ime`] [event][cb::event] with the final text. You should
 then discard any previous "uncofirmed" text and append the new text to your
 actual text input string.
+
+IME的工作原理是利用一个特殊的缓冲,通过这个缓冲可以得到候选字,
+也可以将后来输入的和前面的合并形成新的候选字,用户在确认之前还可以预览.
+生成候选字是其他OS提供的,但app需要显示用户输入.
+
+在整个用户输入的过程中,app需要显示用户已确认的文本,并在最后显示光标.
+
+如果启用了IME,通过`Ime::Preedit`事件得到阻塞的文本.
+通过`Ime::Commit`事件得到用户确认的文本,加上之前确认的文本就是所有输入的文本.
 
 ## How to support IMEs in your Bevy app
 
@@ -60,3 +72,11 @@ For the sake of brevity, this example just prints the events to the console.
 In a real app, you will want to display the "pre-edit" text on-screen, and use
 different formatting to show the cursor. On "commit", you can append the
 provided text to the actual string where you normally accept text input.
+
+要在app中启用ime,按如下顺序操作:
+ - 系统安装需要的输入法
+ - 在窗口启用IME功能
+
+当app的IME开始生效时(接收Ime::Enabled事件后),就不会在接收到的KeyboardInput事件了.
+此时需要将pre-edit的文本显示在屏幕上,将已确认的文本显示在正确的位置,并在最后显示光标,
+在`Commit`之后意味着输入结束,接着走后续逻辑.
