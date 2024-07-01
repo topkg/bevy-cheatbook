@@ -5,6 +5,7 @@ use bevy::prelude::*;
 #[derive(Resource)]
 struct AssetsLoading(Vec<HandleUntyped>);
 
+// 在构造时将句柄全部收集起来.
 fn setup(server: Res<AssetServer>, mut loading: ResMut<AssetsLoading>) {
     // we can have different asset types
     let font: Handle<Font> = server.load("my_font.ttf");
@@ -20,10 +21,11 @@ fn setup(server: Res<AssetServer>, mut loading: ResMut<AssetsLoading>) {
 fn check_assets_ready(
     mut commands: Commands,
     server: Res<AssetServer>,
-    loading: Res<AssetsLoading>
+    loading: Res<AssetsLoading>,
 ) {
     use bevy::asset::LoadState;
 
+    // 监控一组资产的状态变更.
     match server.get_group_load_state(loading.0.iter().map(|h| h.id)) {
         LoadState::Failed => {
             // one of our assets had an error
