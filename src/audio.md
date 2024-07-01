@@ -27,3 +27,16 @@ to pick your poison.
 Audio is an area sorely in need of improvement. If you are an enthusiastic
 audio developer, consider joining [Discord][bevy::discord] and helping
 with development!
+
+bevy提供了一个基于ecs的音频框架(基于rodio),虽然还缺乏很多东西,但核心功能还是有的.
+
+基于这个框架,可以播放音效/音乐,音量调节,初级的空间音频,双声道.
+甚至可以实现自定义的音频数据源,以及音频数据合并.
+
+下面是几个优秀的第三方代替:
+ - `bevy_kira_audio`基于kira,提供丰富的功能和回放控制
+ - `bevy_oddio`基于oddio,提供高级的3d空间音频
+ - `bevy_fundsp`基于fundsp,提供高级的合并和音效
+
+bevy的音频生态很割裂,每种方案都是文档匮乏,部分场合更是智障,按需选择.
+这块继续进步.
