@@ -6,6 +6,8 @@ This page is an overview, to give you an idea of the big picture of how Bevy
 works. Click on the various links to be taken to dedicated pages where you can
 learn more about each concept.
 
+这里只是简介,详细内容还需要点击链接进一步查看.
+
 ---
 
 As mentioned in [the ECS Intro][cb::ecs-intro], Bevy stores all your data for
@@ -20,6 +22,13 @@ main World that Bevy sets up for your [App][cb::app].
 
 You can represent your data in two different ways:
 [Entities/Components](#entities--components), and [Resources](#resources).
+
+ECS的数据全部存在一个叫world的实例中,world管理和维护了所有的数据,
+对于部分高级场景,可能会存在多个world,每个world都是自己独立的ECS实例,
+通常app只有一个world,关心主world即可.
+
+数据只能依附于组件或资源出现.资源就是一个中特殊的组件`单例组件`,
+一个游戏中50%以上都是`单例组件`,这种特殊的组件在bevy中有个新名词:资源.
 
 ## Entities / Components
 
@@ -94,6 +103,36 @@ help you when you spawn new entities, so you don't accidentally forget anything.
 {{#include ../code014/src/programming/intro_data.rs:commands}}
 ```
 
+这里没有太多高深的理论,只是形象化描述了实体和组件的关系,
+如果想要了解为啥ECS性能高,为啥要这样设计数据结构的,可以查看ECS的几种实现.
+
+抛开设计只看表现形式,实体/组件就像一个表格(或数据库的表),
+不同的列是不同类型的数据(组件),可以有任意多行,每一行就是一个实体,
+实体的ID就是行号(这是一个形象化的比喻,很多ECS的Entity设计就是一个唯一整形,
+自增主键ID正好满足这个条件).
+
+如果组件类型是空结构体(没有具体的值),那么这种组件称为`标记组件`.
+标记特殊实体,启用特定的system,这非常有用.
+
+上图中在一个表中表示了不同类型的实体(具体bevy实现是不是这样,需要分析源码再说).
+
+一般是用实体来表示游戏/场景中出现的对象,eg:相机/敌人/光线/界面,但可以表示更多,
+使用ECS并没有什么限制.
+
+数据存储在实体/组件中,访问方式是query,在增量开发中,新增一个游戏机制,
+在实现system时只需要通过query将符合条件的实体找出来,并应用新机制即可,
+这点可以让多人并行协作,是一个很大的突破.
+出了通过query-遍历实体,还可以直接通过实体ID来访问数据.
+
+bevy通过调度机制+system的顺序机制,尽量保证每个cpu核上都跑着system,
+这样的好处是开发者友好,开发者不必再自己维护多线程了.
+
+system运行时,bevy不能修改内存布局,如果要增删实体或组件,该怎么办?
+通过Commands进行延时处理,这样就可以保证安全了.
+当然如果要立马生效,也可以直接通过world直接访问数据和独占system来实现.
+
+bevy提供了很多Bundle来辅助构造实体.
+
 ### Comparison with Object-Oriented Programming
 
 Object-Oriented programming teaches you to think of everything as "objects",
@@ -133,6 +172,23 @@ However, if some data always makes sense to be accessed together, then you
 should put it in a single `struct`. For example, Bevy's [`Transform`].
 With these types, the fields are not likely to be useful independently.
 
+oo和反oo虽然是两种思想,但最终的目的都是一个:解决问题,达成目标,降低开发和维护成本.
+oo是继承体系,ecs是组合思想.
+
+oo是对象拥有数据,并拥有某些行为; ecs是数据和行为分离,每个system都是一个小的功能点,
+组合不同的system同样可以实现逻辑,因为system都是碎片化的小功能点,她只关注自己的需求,
+如果是oo的行为,会看到很多当前逻辑不需要的数据,整体的实现看要看整个继承体系
+(这点在前几个版本不是问题), 但在后期维护的成本看,这会是个大问题.
+
+ecs推荐小颗粒度的组件,这样方便复用.其实编成范式一直在演变,
+oo如日中天时出现了ecs,并且`组合优于继承`基本深入人心了,
+这是从无数个完整的项目生命周期得到的教训.
+
+如果只想对某几个实体进行处理,便捷的方法是增加一个空的结构体组件充当标记组件,
+同样走query机制.
+
+如果某些数据一起访问时是有意义的,可以考虑放在同一个struct中.
+
 ### Additional Internal Details
 
 The set / combination of components that a given entity has is called the
@@ -151,6 +207,18 @@ two integers: the ID and a "generation". After you despawn some entities,
 their IDs can be reused for newly-spawned entities, but Bevy will increase
 the generation value.
 
+在bevy中,实体拥有的组件列表成为原型,bevy内部会跟踪所有原型,
+在内存中组织这些数据.(这是因为ECS为了迎合CPU的io特性,转换设计的,
+只有要访问的数据是连续存放的,那么cpu在io时一次就可以读到未来几次需要的数据,
+减少cpu的io次数,就是性能巨大提升的关键),同一个原型的实体时连续存放的,
+方便cpu的缓存可以快速命中.
+
+实体可以被销毁,但实体的id时可以复用的,一个实体内部由两个id表示:
+一个是实体ID,一个是复用次数(也可以成为版本,代数,都是一个意思).
+这里面还隐藏了一个关键技术:实体id复用机制.go语言有个arche也是ecs库,
+实体的实现和bevy是一样的,底层有个链表来跟踪所有可复用的实体id,
+不知道bevy是不是同样的实现.
+
 ## Resources
 
 If there is only one global instance (singleton) of something, and it is
@@ -165,3 +233,5 @@ flexibility of Entities/Components.
 ```rust,no_run,noplayground
 {{#include ../code014/src/programming/intro_data.rs:res}}
 ```
+
+单例组件:资源.一个游戏,大部分都是资源,少部分灵活的才是组件.

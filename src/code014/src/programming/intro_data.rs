@@ -34,6 +34,7 @@ struct Player;
 /// with all the correct components:
 #[derive(Bundle)]
 struct PlayerBundle {
+    // 非常经典的自己定义Bundle
     marker: Player,
     health: Health,
     xp: Xp,
@@ -77,9 +78,7 @@ struct GameSettings {
     max_time_seconds: u32,
 }
 
-fn setup_game(
-    mut commands: Commands,
-) {
+fn setup_game(mut commands: Commands) {
     // Add the GameSettings resource to the ECS
     // (if one already exists, it will be overwritten)
     commands.insert_resource(GameSettings {
