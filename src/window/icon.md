@@ -30,3 +30,12 @@ and they must be the same versions as used by Bevy. As of Bevy 0.13, that
 should be `winit = "0.29"` and `image = "0.24"`. If you don't know which
 version to use, you can use `cargo tree` or check `Cargo.lock` to see which
 is the correct version.
+
+窗口设置的图标会显示在标题栏和任务栏.
+在bevy中只能通过winit API来实现.
+
+为了简化复杂度,不是通过资产来加载图片,而是直接使用image库来加载.
+
+在使用过程中有几点需要注意:
+ - `WinitWindows`资源要指定为NonSend(只在主线程上运行)
+ - 需要依赖`winit`和`image`,且版本还要和bevy最新版保持一致
