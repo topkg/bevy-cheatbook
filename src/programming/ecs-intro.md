@@ -38,3 +38,16 @@ is conceptually very similar to a lightweight in-memory database.
 [Read more about how to represent your data.][cb::ecs-intro-data]
 
 [Read more about how to represent your functionality.][cb::ecs-intro-code]
+
+bevy最核心的是ECS,ECS是一种将数据和逻辑完全分离的编程范式.
+有很多称号,其中反oo和数据驱动开发用的比较多.
+
+ECS的优势是逻辑解耦,小颗粒的组合提高了重用的可能.一定规模的项目比其他范式要简单很多.
+
+- 生命值和伤害的工作方式,在一个游戏内对所有对象都是一样的.玩家/npc/boss/车辆等
+- 物理中的引力和碰撞对所有物品,包括玩家,都是一样的
+- 界面中按钮的音效和动画,这些运行原理都是一样的
+
+只要是一样的,就可以单独成system.如果一个实体有多个逻辑,组合即可.
+
+总之,ECS类似于内存中存储的轻量级数据库.

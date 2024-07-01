@@ -18,3 +18,6 @@ Patterns][chapter::patterns] chapter.
 
 If you are also interested in GPU programming, see the [Bevy GPU
 Framework][chapter::gpu] chapter.
+
+这部分是bevy核心框架,并不仅仅能用来做游戏引擎,ECS也可以单独拿出来用的,
+涉及对象较多的科学模拟大多使用ECS.
