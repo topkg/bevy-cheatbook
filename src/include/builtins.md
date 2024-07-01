@@ -35,7 +35,7 @@
  - [`SkinnedMeshInverseBindposes`][bevy::SkinnedMeshInverseBindposes]:
    (internal use for skeletal animation)
 
-目前资源asset类型包含以下:
+目前资产asset类型包含以下:
 
  - `Image`: 像素数据,在2d/3d渲染中用作纹理,也包含纹理过滤的GPU采样描述
  - `TextureAtlas`: 纹理图集,多个对象可以从一个大图中取Image,这样可以减少纹理切换的开销
@@ -45,9 +45,9 @@
  - `StandardMaterial`: 支持基于物理渲染的3d材质
  - `AnimationClip`: 单个动画序列帧, 由`AnimationPlayer`使用
  - `Font`: 文本渲染使用到的字体数据
- - `Scene`: 一组实体/组件/资源的几何,world可复用的一部分
- - `DynamicScene`: 可序列资源和动态实体的集合
- - `Gltf`: gltf主要资源,gltf文件全部内容的索引.gltf是opengl传递格式,用于传输和加载3d场景和模型
+ - `Scene`: 一组实体/组件/资产的几何,world可复用的一部分
+ - `DynamicScene`: 可序列资产和动态实体的集合
+ - `Gltf`: gltf主要资产,gltf文件全部内容的索引.gltf是opengl传递格式,用于传输和加载3d场景和模型
  - `GltfNode`: scene中的逻辑gltf对象
  - `GltfMesh`: gltf 3d模型
  - `GltfPrimitive`: gltf原语,单个可渲染单元,包括Mesh和Material

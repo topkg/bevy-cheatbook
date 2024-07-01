@@ -42,7 +42,7 @@ system参数,这里列出的都是特定的system参数.
 
 These are the Asset types registered by Bevy by default.
 
-这里的asset类型(资源类型)都是bevy默认注册的.
+这里的asset类型(资产类型)都是bevy默认注册的.
 
 {{#include ./include/builtins.md:assets}}
 

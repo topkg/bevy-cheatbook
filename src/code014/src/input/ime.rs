@@ -1,4 +1,11 @@
-use bevy::{input::{keyboard::{Key, KeyboardInput}, ButtonState}, prelude::*, window::PrimaryWindow};
+use bevy::{
+    input::{
+        keyboard::{Key, KeyboardInput},
+        ButtonState,
+    },
+    prelude::*,
+    window::PrimaryWindow,
+};
 
 // ANCHOR: ime
 // for this simple example, we will just enable/disable IME mode on mouse click
@@ -6,6 +13,7 @@ fn ime_toggle(
     mousebtn: Res<ButtonInput<MouseButton>>,
     mut q_window: Query<&mut Window, With<PrimaryWindow>>,
 ) {
+    // 这里非常人性化的显示了鼠标左键单击就开始输入(可以换成enter输入,enter结束输入)
     if mousebtn.just_pressed(MouseButton::Left) {
         let mut window = q_window.single_mut();
 
@@ -19,9 +27,7 @@ fn ime_toggle(
     }
 }
 
-fn ime_input(
-    mut evr_ime: EventReader<Ime>,
-) {
+fn ime_input(mut evr_ime: EventReader<Ime>) {
     for ev in evr_ime.read() {
         match ev {
             Ime::Commit { value, .. } => {
