@@ -29,3 +29,9 @@ All of these locations (the components on specific cameras, the global default
 resource) can be mutated at runtime, and bevy will use your new color. Changing
 the default color using the resource will apply the new color to all existing
 cameras that do not specify a custom color, not just newly-spawned cameras.
+
+`ClearColor`资源可用于设置相机默认背景色,默认对所有相机都生效.
+如果没有相机,窗口默认是黑色的.
+
+更改这个资源,会影响到所有相机,已有实体和即将新建的实体.
+
