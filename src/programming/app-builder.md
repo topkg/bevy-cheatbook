@@ -37,12 +37,28 @@ control individual systems using [run conditions][cb::rc]. You can also
 dynamically enable/disable entire schedules using the [`MainScheduleOrder`]
 [resource][cb::res].
 
+app是组织项目的起点,通过app可以配置`插件`/`system(包括其运行条件/顺序/集合)`/
+`事件`/`状态`/`调度`等等.
+
+利用app可以按需添加功能,当项目增长时需要考虑如何组织代码,`插件`是最好的选择.
+
+app的几个`add_函数`都是支持元组类型的,也就是说一次可以添加多个对象.
+app不需要注册组件类型.
+
+调度在运行期间不能修改,所以需要通过app明确配置完.
+单个system是可以配置运行条件的;
+利用`MainScheduleOrder`资源可以动态开启/关闭某个调度(这个是个高级用法,很少用到).
+
 ## Builtin Bevy Functionality
 
 The Bevy game engine's own functionality is represented as a [plugin group][cb::plugingroup].
 Every typical Bevy app must first add it, using either:
  - [`DefaultPlugins`] if you are making a full game/app.
  - [`MinimalPlugins`] for something like a headless server.
+
+bevy游戏引擎自己的逻辑使用`插件组`来表示,bevy提供了两个默认的功能组:
+ - DefaultPlugins,默认插件列表
+ - MinimalPlugins,最小插件列表
 
 ## Setting up data
 
@@ -61,6 +77,14 @@ times. You can also get [direct World access][cb::world].
 ```rust,no_run,noplayground
 {{#include ../code014/src/programming/app_builder.rs:world}}
 ```
+构造实体有以下几种方式:
+ - 在普通system中利用Commands实现
+ - 使用独占system来访问world的所有数据
+ - 在Startup调度中使用构造system来实现
+ - 在翻译菜单/游戏模型/等级时利用state在system开头或退出时实现
+ - 在app中直接使用world来构造
+
+通常利用app来直接初始化数据(资源,在剩下的游戏时间中都能被访问).
 
 ## Quitting the App
 
@@ -75,3 +99,6 @@ You can specify the exit code to return to the OS. If Bevy receives
 multiple [`AppExit`] events, success will only be returned if all
 of them report success. If some report an error, the last event will
 determine the actual exit code of the process.
+
+退出bevy使用,在任意system中发出`AppExit`事件即可,
+同时可以带上返回码.
