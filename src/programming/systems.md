@@ -48,6 +48,13 @@ cases, you should use regular parallel systems.
 {{#include ../code014/src/programming/systems.rs:exclusive}}
 ```
 
+system是bevy的功能片段,通常是rust函数实现,游戏的逻辑都在这里.
+
+system的入参是有限制的(0),打破限制会导致编译报错(4.3).
+常用的入参类型有:资源/query/Commands/事件收发器.
+
+为了方便组织,可以将同类型的入参使用元组组织.
+
 ## Runtime
 
 In order for your systems to actually be run by Bevy, you need to configure
@@ -73,6 +80,13 @@ powerful tools that Bevy offers for managing when/how your systems run, such as:
 [explicit ordering][cb::system-order], [run conditions][cb::rc], [system
 sets][cb::systemset], [states][cb::state].
 
+在app中可以利用调度器配置system的执行顺序,如果system函数没有添加到app中,
+此是编译器不会报错,但运行没有效果,这可能要会花很多时间排查.
+
+Startup是app启动时执行一次,Update是每帧都会执行,具体详情可以查看`调度器`章节.
+
+当system数量非常多时,可用到下列工具:`显示顺序指定`,`运行条件`,`system集合`,`状态`.
+
 ### One-Shot Systems
 
 Sometimes you don't want Bevy to run your system for you. In that case,
@@ -81,3 +95,6 @@ don't add it to a schedule.
 If you are a writing a system that you want to call yourself whenever
 you want (such as on a button press), you can do that using [one-shot
 systems][cb::oneshot].
+
+`单击`system,不是注册到app由调度机制来触发执行,而是按需执行,
+eg:按钮点击执行一个system.
