@@ -6,6 +6,8 @@ This page is an overview, to give you an idea of the big picture of how Bevy
 works. Click on the various links to be taken to dedicated pages where you can
 learn more about each concept.
 
+这里只是概述,细节需要点击链接进一步查看.
+
 ---
 
 As mentioned in [the ECS Intro][cb::ecs-intro], Bevy manages all of your
@@ -28,6 +30,12 @@ can be accessed.
 
 (learn more about: [systems][cb::system], [queries][cb::query], [commands][cb::commands], [resources][cb::res], [entities][cb::entity], [components][cb::component])
 
+ECS是数据和逻辑分离的,这些逻辑成为system,在bevy中system用函数表示,
+函数参数指定了要访问哪些数据.而数据是存在资源/实体的组件中,
+system的另一种参数是Commands,这是对world数据的修改(实体/组件的增删),
+bevy会将Commands放在每帧的后面执行(默认是PostUpdate),
+同时还提供了after/befor来执行system执行顺序.
+
 ## Parallel Systems
 
 Based on the [parameter][cb::system-param] types of the [systems][cb::system]
@@ -48,6 +56,18 @@ Bevy's parallelism is non-deterministic by default. Your systems might run in a
 different and unpredictable order relative to one another, unless you add
 [ordering][cb::system-order] dependencies to constrain it.
 
+并行执行system是bevy的核心设计之一,也是高性能的保证.
+
+bevy通过system参数就知道哪些system有竞争,不竞争的system会放在不同的cpu核中执行,
+在利用现代多核CPU硬件的基础上,开发者还不用关心这些多线程的组织逻辑(bevy帮忙做了).
+
+要减少竞争,最好的办法是控制数据的颗粒度,拆分system让其符合单一原则,
+只有这样才能更好配合bevy进行并行执行.
+一个system承载太多功能,或一个组件/资源承载太多数据,都会大大影响并行.
+
+system之间要保证正交性(不管何时由哪个cpu执行,结果都是一样的),
+如果两个system确实有顺序依赖,可以用system的顺序规则来指定先后.
+
 ## Exclusive Systems
 
 [Exclusive][cb::exclusive] systems provide you with a way to get [full direct
@@ -58,6 +78,9 @@ you might need this additonal power.
 ```rust,no_run,noplayground
 {{#include ../code014/src/programming/intro_code.rs:exclusive}}
 ```
+
+独占system是直接修改world数据的,极少情况下会用到,类似于核武器.
+这类system并不能并行执行.
 
 ## Schedules
 
@@ -145,3 +168,18 @@ created in code:
 ```
 
 (learn more about: [schedules][cb::schedule], [system sets][cb::systemset], [states][cb::state], [run conditions][cb::rc], [system ordering][cb::system-order])
+
+bevy的调度系统是保证并行执行的关键,也是保证system灵活的基石.
+bevy将system列表存在一个容器,叫`调度`,bevy知道调度何时执行.
+
+system的运行条件和顺序执行信息都存在调度中,这些信息被成为system的元数据
+ - 运行条件,控制了调度中的system要不要执行
+ - 顺序约束,控制了调度中关联system的执行顺序
+
+bevy对调度的设计并不仅仅如表面看到的这么简单,设计的足够灵活,未来扩展就容易很大.
+调度中的部分system列表可以继续放在一个容器集合中,也叫`调度`,算是之前调度的子调度,
+默认是共享父调度的配置和元数据,在bevy的设计中也可以从其他调度中继承,这是后话,
+目前bevy中对引擎的实现是: bevy管理了几个内置调度,每个调度都有多个子调度,
+对于我们自己游戏的system,bevy提供了顺序约束,在此基础上,bevy总是尽量做到并行.
+
+system足够小(功能内聚),bevy就能找到更大的并行机会.
