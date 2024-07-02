@@ -22,6 +22,20 @@ shared/readonly access and `&mut` for exclusive/mutable access. Use [`Option`] i
 the component is not required (you want to find entities with or without that
 component. If you want multiple components, put them in a tuple.
 
+通过query可以访问实体的组件.
+
+```rsut
+pub struct Query<'world, 'state, D, F = ()>
+where
+    D: QueryData, // 特型,用于从world中查找数据.
+    F: QueryFilter, // 特型,用于过滤查询的结果.
+{ /* private fields */ }
+```
+
+Query是一个泛型结构体,有两个参数.前一个参数只能是引用类型(不然所有权没了),
+且如果不确定某个组件有没有,使用Option,如果实体包含此组件,就返回;否则返回空.
+如果要访问多个组件,使用元组.
+
 ### Iterating
 
 The most common operation is to simply iterate to access the component values of
@@ -38,6 +52,9 @@ to later perform specific operations on those entities.
 ```rust,no_run,noplayground
 {{#include ../code013/src/programming/queries.rs:query-entity}}
 ```
+
+上面显示了query组件最常见的遍历方式.
+也可以query实体,得到的是实体ID,如上面的例子.
 
 ### Accessing Specific Entities
 
@@ -57,6 +74,9 @@ match the query, and will produce an error otherwise.
 {{#include ../code013/src/programming/queries.rs:query-many}}
 ```
 
+访问特定的实体,提前保存好实体id即可.
+如果要同时访问多个实体,可以使用many/many_mut或get_many/get_many_mut.
+
 ### Unique Entities
 
 If you know that only one matching entity is supposed to exist (the query is
@@ -71,6 +91,9 @@ You do not need to know the [`Entity`] ID.
 {{#include ../code013/src/programming/queries.rs:query-single}}
 ```
 
+唯一实体,eg:我们操纵的角色只有一个,此时可用single/single_mut或get_single/get_many_mut.
+此时不需要实体ID.
+
 ### Combinations
 
 If you want to iterate over all possible combinations of N entities, Bevy
@@ -81,6 +104,9 @@ can easily become very slow!
 {{#include ../code013/src/programming/queries.rs:query-combinations}}
 ```
 
+将query结果进行组合,使其变为数组.当实体数量大时,性能会很差.
+这个的意义在与补充标准`query-for`的遍历方式.
+
 ## Bundles
 
 Queries work with individual components. If you created an entity using a
@@ -88,6 +114,8 @@ Queries work with individual components. If you created an entity using a
 that bundle that you care about.
 
 A common beginner mistake is to query for the bundle type!
+
+bundle只在构造时有用,不能用在query处.
 
 ## Query Filters
 
@@ -116,6 +144,11 @@ Multiple filters can be combined:
  - using the `Or<(…)>` wrapper to detect any of them (OR logic).
    - (note the tuple inside)
 
+query的第二个泛型参数是过滤,可省略,也可以是元组组成.
+多个过滤可以进行组合:
+ - 用元组,里面是`逻辑与`关系
+ - 用`Or<..>`, `逻辑或`关系
+
 ## Query Transmutation
 
 If you want one function with a [`Query`] parameter to call another function
@@ -137,3 +170,22 @@ all entities.
 Also note: this has some performance overhead; the transmute operation is not
 free. Bevy normally caches some query metadata across multiple runs of a
 system. When you create the new query, it has to make a copy of it.
+
+部分场景下,system会调用另一个函数,另一个函数的参数也是一个query,
+只不过这个query参数是调用方system 入参query的兼容部分(只是包含部分组件),
+如上面的例子所示,可以使用一个叫`QueryLen`的技术来实现转换.
+
+```rust
+pub fn transmute_lens<NewD>(&mut self) -> QueryLens<'_, NewD>
+where
+    NewD: QueryData,
+```
+
+这是对QueryData的处理,将要查询的组件缩小了范围.组件范围缩小了,
+意味着将system函数拆分为小函数的过程中,部分小函数只关心自己需要的那部分数据,
+好处是小函数也容易复用.
+
+这么做也是有代价的,性能是一个,内存也是一个.
+因为bevy通常会缓存查询的元数据,方便多次调用system时能提高性能,
+但新建一个query时,需要拷贝.
+
