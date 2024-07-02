@@ -32,7 +32,7 @@ custom types.
 资源是可以存储某类型数据的全局单例,独立于实体.
 对于app来说,资源是全局的,(配置和设置就是资源),在任何地方访问资源都非常方便.
 
-创建资源很简单,添加`Resource`自动实现即可(组件/事件都是如此声明的).
+创建资源很简单,struct/enum添加`Resource`自动实现即可(组件/事件都是如此声明的).
 
 资源类型要唯一(这个是肯定的),只能有一个实例(单例,这个也是正常的).
 如果有多个实例,使用ECS即可.
@@ -69,12 +69,13 @@ system][cb::exclusive]:
 Resources can also be set up from the [app builder][cb::app]. Do this for
 resources that are meant to always exist from the start.
 
-运行过程中增删资源使用Commands进行操作;也可以在独占system中直接对world进行操作;
-对于一开始就要存在的资源,在app builder中也可以直接通过app增加资源.
-
 ```rust,no_run,noplayground
 {{#include ../code014/src/programming/res.rs:app}}
 ```
+
+运行过程中增删资源使用Commands进行操作;
+也可以在独占system中直接对world进行操作;
+对于一开始就要存在的资源,在app builder中也可以直接通过app增加资源.
 
 ## Resource Initialization
 
@@ -97,6 +98,7 @@ Beware: it can be easy to get yourself into a mess of unmaintainable code
 if you overuse [`FromWorld`] to do complex things.
 
 使用init_resource()时,对于特别复杂的初始化,可以直接使用`FroWorld`.
+这种灵活性的代价是`过渡使用FromWorld很有可能写出无法维护的代码`.
 
 ## Usage Advice
 
