@@ -31,6 +31,31 @@ You can create ("spawn") new entities and destroy ("despawn") entities using
 Many of your entities might need to have the same common components. You can use
 [Bundles][cb::bundle] to make it easier to spawn your entities.
 
+实体,就是组件集合,组件的rust类型是struct/enum.
+
+在ECS设计中,实体通常是一个简单的整数ID,通过这个id可以找到实际的实体数据.
+bevy也是这么设计的.
+
+```rust
+#[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "bevy_reflect", derive(Reflect))]
+#[cfg_attr(feature = "bevy_reflect", reflect_value(Hash, PartialEq))]
+#[cfg_attr(
+    all(feature = "bevy_reflect", feature = "serialize"),
+    reflect_value(Serialize, Deserialize)
+)]
+#[repr(C, align(8))]
+pub struct Entity {
+    #[cfg(target_endian = "little")]
+    index: u32, // 对外暴露的ID.
+    generation: NonZeroU32, // 版本,代数,重用一次自增一次.
+    #[cfg(target_endian = "big")]
+    index: u32,
+}
+```
+
+很多实体可能需要相同的组件,bevy提供了多个模板Bundle,用于简化实体的构造.
+
 # Components
 
 Components are the data associated with entities.
@@ -44,6 +69,8 @@ derive the [`Component`] trait.
 
 Types must be unique – an entity can only have one component per Rust type.
 
+实体不能包含多个同一类型的组件,因为实体是按类型区别组件的,重复会导致panic.
+
 ## Newtype Components
 
 Use wrapper (newtype) structs to make unique components out of simpler types:
@@ -51,6 +78,8 @@ Use wrapper (newtype) structs to make unique components out of simpler types:
 ```rust,no_run,noplayground
 {{#include ../code014/src/programming/ec.rs:component-newtype}}
 ```
+
+新类型组件,就是了防止两个组件的类型一致而添加了一层封装.
 
 ## Marker Components
 
@@ -60,6 +89,9 @@ known as "marker components". Useful with [query filters][cb::query-filter].
 ```rust,no_run,noplayground
 {{#include ../code014/src/programming/ec.rs:component-marker}}
 ```
+
+标记组件,空结构体,这个用处太多了.eg:友军和敌军大部分组件都是类似的,
+利用标记组件来做区分.
 
 ## Accessing Components
 
@@ -73,6 +105,8 @@ that match the query's signature.
 {{#include ../code014/src/programming/ec.rs:query}}
 ```
 
+访问组件一般都是通过query来匹配实体,遍历实体列表,再访问组件.
+
 ## Adding/removing Components
 
 You can add/remove components on existing entities, using [`Commands`][cb::commands] or
@@ -81,3 +115,7 @@ You can add/remove components on existing entities, using [`Commands`][cb::comma
 ```rust,no_run,noplayground
 {{#include ../code014/src/programming/ec.rs:insert-remove}}
 ```
+
+增删实体的组件有两种方式:
+ - Commands
+ - 独占system访问world
