@@ -228,13 +228,20 @@ where you like them:
 {{#include ../code013/src/programming/schedules.rs:apply-deferred}}
 ```
 
+bevy会自动管理如Commands之类的延时操作,如果两个system之间有顺序依赖,
+第一个system执行完后会立马执行延时操作,再执行第二个system.
 
+当然也可以禁止这种自动行为,改为手动管理同步机制.
+`auto_insert_apply_deferred = false`,并且使用`apply_deferred`手动管理同步机制.
 
 ## Main Schedule Configuration
 
 The order of schedules to be run by [`Main`] every frame is configured in the
 [`MainScheduleOrder`] [resource][cb::res]. For advanced use cases, if Bevy's
 predefined schedules don't work for your needs, you can change it.
+
+Main调度的顺序也可以修改.需要用到这种场景的应该是非常少,
+但bevy还是提供了各种扩展来丰富其灵活性,理想主义又抬头了.
 
 ### Creating a New Custom Schedule
 
@@ -255,4 +262,17 @@ systems to it!
 
 ```rust,no_run,noplayground
 {{#include ../code013/src/programming/schedules.rs:custom-schedule-app}}
+```
+
+bevy提供的默认调度顺序大部分场合是够用了,如果不够可以新建调度,
+并插到某个调度的前后.
+
+Main调度顺序是存在一个资源中的,`MainScheduleOrder`,
+所有调度的顺序其实是放在Vec中的,插入一个新的并不难.
+
+```rust
+pub struct MainScheduleOrder {
+    pub labels: Vec<Interned<dyn ScheduleLabel>>,
+    pub startup_labels: Vec<Interned<dyn ScheduleLabel>>,
+}
 ```
