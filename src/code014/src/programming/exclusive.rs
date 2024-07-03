@@ -45,14 +45,14 @@ fn spawn_particles_for_enemies(
 ) {
     // note: unlike with a regular Query, we need to provide the world as an argument.
     // The world will only be "locked" for the duration of this loop
-    for transform in q_enemies.iter(world) {
-        // TODO: do something with the transforms
+    for transform in q_enemies.iter(world) { // 和普通system.query差别不大
+         // TODO: do something with the transforms
     }
 
     // create a scope where we can access our things like a regular system
     {
-        let (mut settings, mut tracker, mut q_player, mut evr, commands) =
-            params.get_mut(world);
+        // 这个作用域限制了变量的范围,这样灵活性更高一点.
+        let (mut settings, mut tracker, mut q_player, mut evr, commands) = params.get_mut(world);
 
         // TODO: do things with our resources, query, events, commands, ...
     }
@@ -65,11 +65,12 @@ fn spawn_particles_for_enemies(
     // because the World is no longer used by anything
     // (the SystemState and the QueryState are no longer accessing it)
 
-    world.spawn_batch((0..10000) // efficiently spawn 10000 particles
-        .map(|_| SpriteBundle {
-            // ...
-            ..Default::default()
-        })
+    world.spawn_batch(
+        (0..10000) // efficiently spawn 10000 particles
+            .map(|_| SpriteBundle {
+                // ...
+                ..Default::default()
+            }),
     );
 
     // and, of course, we can use our Local
@@ -78,13 +79,14 @@ fn spawn_particles_for_enemies(
 // ANCHOR_END: systemstate
 
 fn main() {
-let mut app = App::new();
-// ANCHOR: app
-app.add_systems(Update,
-    do_crazy_things
-        .run_if(needs_crazy_things)
-        .after(do_regular_things)
-        .before(other_things)
-);
-// ANCHOR_END: app
+    let mut app = App::new();
+    // ANCHOR: app
+    app.add_systems(
+        Update,
+        do_crazy_things
+            .run_if(needs_crazy_things)
+            .after(do_regular_things)
+            .before(other_things),
+    );
+    // ANCHOR_END: app
 }
