@@ -39,6 +39,28 @@ looping some systems multiple times, selecting different systems to run in
 different circumstances, exporting/importing data from files like scenes or
 game saves, …
 
+bevy将ECS的数据存储在world中,包括:资源/实体/组件.
+
+通常app的所有调度都跑在主world中,普通system通过system参数类型跑在指定world中,
+大部分代码都是通过Commands间接维护world.
+
+直接维护world的几种途径如下:
+ - 独占system
+ - FromWorld的实现
+ - app
+ - 为特殊目的手动创建的world(eg:测试/场景)
+ - 自定义Commands
+
+直接访问world可以做以下几种事:
+ - 自由的构造/销毁实体;自由的增删资源等,都是立马生效
+ - 访问任意组件/实体/资源
+ - 手动执行任意system/调度
+
+如果在每帧的执行调度上,bevy内置的调度机制不满足需求,那么直接访问world是一种选择.
+
+直接访问world意味着可以实现自定义逻辑流,eg:循环system多次,
+不同的环境选择不同的system,游戏或场景的导入/导出.
+
 ## Working with the `World`
 
 Here are some ways that you can make use of the direct world access APIs.
@@ -67,6 +89,11 @@ apply them.
 // TODO: write code example
 ```
 
+访问world最常见的手法是`SystemState`,用法和普通的system类似,能实现的功能也类似.
+
+可以跟踪持久化的状态,这点可用于`变更检测`或缓存(提高性能).
+如果要多次重用同一SystemState,就应该考虑持久化,避免每次执行都生成一个新的.
+
 ### Running a System
 
 ```rust,no_run,noplayground
@@ -90,6 +117,10 @@ schedules of systems as appropriate!
 // TODO: write code example
 ```
 
+如果要运行多个system(eg:测试用例),最简单的方式是构造一个调度,其他地方能重用.
+
+若要实现自定义控制流,调度也是非常有用的,bevy的固定时间戳就是这样实现的.
+
 ### Navigating by Metadata
 
 The world contains a lot of metadata that allows navigating all the data
@@ -99,3 +130,6 @@ archeypes.
 ```rust,no_run,noplayground
 // TODO: write code example
 ```
+
+world包含了很多元数据,这个元数据之间有关联,可以方便做到导航,
+eg:存储所有实体/组件/原型的信息.
