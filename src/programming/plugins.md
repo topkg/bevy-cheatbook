@@ -55,6 +55,19 @@ Some suggestions:
  - Create plugins for different [states][cb::state].
  - Create plugins for various sub-systems, like physics or input handling.
 
+随着项目的增长,需要考虑模块化,此时需要用到`插件`,将部分逻辑拆分到插件中.
+最简单的插件实现就是一个函数.其次是用结构体实现`Plugin`特性.
+
+为了追求灵活性,struct实现的插件,可以接受一些配置参数.
+之前很多篇幅中都有使用到这点,eg:设置背景色,默认插件列表中有大部分都是可配置插件.
+
+虽然在任何地方都可以在app中添加插件,不过在main中处理这些是主流方案.
+在组织项目时,插件的主要值的类型需要用pub声明.
+
+下面是使用插件的建议:
+ - 不同状态使用不同的插件
+ - 不同的子system使用不同插件,eg:输入/物理部分
+
 ## Plugin Groups
 
 Plugin groups register multiple plugins at once.  Bevy's [`DefaultPlugins`]
@@ -84,6 +97,15 @@ If you want to slim down your build, you should look at disabling Bevy's
 default [cargo features][cb::features], or depending on the various Bevy
 sub-crates individually.
 
+插件组,一次性注册多个插件.方便不同场景下使用,免得每新建一个项目就需要注册很多插件,
+这是用户友好的表现,bevy内置了两个常用的插件组:DefaultPlugins/MinimalPlugins.
+
+如果要实现自己的插件组,只需要实现PluginGroup特型即可.这应该是一个比较常用的功能.
+在app处添加插件组时还能disable部分插件(这种方式只是屏蔽了特定的插件,
+不能减少二进制大小).
+
+如果实在要减少二进制大小,需要在cargo功能处做disable,或者将子包独立,从依赖出着手.
+
 ## Plugin Configuration
 
 Plugins are also a convenient place to store settings/configuration that are
@@ -101,6 +123,12 @@ configured. Many of Bevy's [`DefaultPlugins`] work this way.
 {{#include ../code014/src/programming/plugins.rs:defaultplugins-config}}
 ```
 
+插件在初始化或启动时可以配置(struct插件才行,这也是大部分插件的选择).
+运行时也可以修改,不过推荐将配置放在资源中(这种场景应该非常少见).
+
+ps:bevy还是有点理想主义的,各个包和机制都设计得非常灵活,但实际场景下,
+绝大部分只使用到了其中几条,这点在bevy的很多地方都都体现了:eg:这儿+ecs.
+
 ## Publishing Crates
 
 Plugins give you a nice way to publish Bevy-based libraries for other people
@@ -115,3 +143,5 @@ by making a PR in [the Github repo][project::bevyassets].
 
 If you are interested in supporting bleeding-edge Bevy (main), [see here
 for advice][cb::git-plugins].
+
+插件作为模块化分割了逻辑,就能分享给他人.
