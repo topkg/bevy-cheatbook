@@ -14,6 +14,12 @@ individual systems.
 
 All of this combined gives you a lot of flexibility and control over how your systems run.
 
+在顺序约束和条件运行中都涉及到system集合,这个集合是组织system的一种底层次方式.
+
+任何新增到集合中的system都会自动应用集合的约束.
+
+一个system可以属于多个set,继承所有set的约束.也可单独为system添加属性.
+
 ## Anonymous Sets
 
 The simplest kind of system set is when you just [add][cb::app] a tuple of
@@ -25,6 +31,8 @@ multiple [systems][cb::system] using `.add_systems`.
 
 This syntax is useful when you just want to apply some common configuration to
 multiple systems.
+
+匿名集合,用元组.
 
 ## Named Sets
 
@@ -65,6 +73,18 @@ Some examples:
  - A set for all your input handling systems, so you can order them to run before gameplay systems.
  - A set for all your gameplay systems, so that they only run during the in-game [state][cb::state].
 
+具名集合.使用SystemSet特型指明,具体类型可以是struct/enum.
+枚举的单个类型都是一个新的system集合.
+
+`in_set`将system集合的system提取出来,扁平化处理后添加到某个地方.
+运行条件和顺序约束的应用和普通system没啥区别.
+
+具名集合的主要用途是组织.下面都是使用例子:
+- 所有audio相关的system放一起,这样方便实现mute
+- 触摸屏输入的sytem放一起,方便对触摸屏输入功能进行开关
+- 所有的输入处理system放一起,这样可以让她们在游戏逻辑前面运行
+- 所有游戏逻辑放在一起,这样可以确保只在某个游戏状态时运行
+
 ### With Plugins
 
 Named sets are also very useful together with [plugins][cb::plugin]. When you are writing
@@ -81,6 +101,9 @@ Some examples:
    so that you can easily add ordering dependencies between UI and gameplay. Other plugins
    / places in your code now don't need to know about the internals of your UI plugin.
 
+具名集合和插件配合使用.对于某个插件包的提供者来说,
+对外暴露system集合好过单独暴露多个sytem.
+
 ## Common Pitfalls
 
 WARNING! System set configuration is stored *per-[schedule][cb::schedule]!* Notice how
@@ -96,3 +119,12 @@ Some common scenarios where this can occur:
  - You configure your set in [`Update`] and try to also use it in [`FixedUpdate`], or vice versa.
  - You try to use your sets in the [`OnEnter`]/[`OnExit`] schedules of various [app states][cb::state].
  - You add a system to [`PostUpdate`] or [`PreUpdate`].
+
+常见陷阱.
+
+配置的system集合存储在调度中,这个集合可以用在多个调度中,
+要注意:每个调度中的集合都需要配置,不然就是默认配置.
+
+如果集合用在Update中,又用在FixedUpdate中,记住两个地方都需要配置.
+如果OnEnter/OnExit调度中都用到某个集合,记住两个地方都需要配置.
+一个system添加到PostUpdate/PreUpdate调度中,记住两个地方都需要配置.
