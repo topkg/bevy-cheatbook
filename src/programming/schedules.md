@@ -14,6 +14,9 @@ should run, and an associated executor algorithm to run the systems.
 A Bevy app has many different schedules for different purposes, to run them
 in different situations.
 
+bevy运行的system是放在容器中的(调度schedule),也是由调度组织的.
+调度还包含system的元数据(运行条件/顺序约束,system集合).
+
 ## Scheduling Systems
 
 If you want a [system][cb::system] to be run by Bevy, you need to add it to a
@@ -25,6 +28,8 @@ Whenever you add a system, you specify what schedule to put it in:
 ```rust,no_run,noplayground
 {{#include ../code013/src/programming/schedules.rs:add-system}}
 ```
+
+app添加system都是将system丢到某个调度中,如果忘了就会出现system无效果的现象.
 
 ### Per-System Configuration
 
@@ -47,6 +52,16 @@ run in a non-deterministic order by default! A system might run at different
 times every frame. If you care about its relationship to other systems, add
 [ordering dependencies][cb::system-order].
 
+每个system都可以进行配置,包括(运行条件/顺序约束/system集合).
+其中system集合是system组,一些通用配置都可以应用到组内每个system.
+
+bevy执行一个system的前提条件:
+ - system覆盖的mut数据,没有依赖同样数据的system正在运行
+ - before顺序的system都运行完了或因为运行条件跳过了
+ - 运行条件为true
+
+并行执行的system的之间的顺序不是确定的,每帧都可能不一样.
+
 ### Dynamically Adding/Removing Systems
 
 Bevy's schedules do not (yet?) support adding and removing systems at runtime.
@@ -55,6 +70,8 @@ You need to configure everything ahead of time.
 You should add all systems you might want to run, and then control them using
 [run conditions][cb::rc]. That is the mechanism for disabling them if they
 shouldn't run.
+
+system的动态增删,目前还不支持.
 
 ## Bevy's App Structure
 
@@ -71,6 +88,11 @@ Most Bevy users only have to deal with the sub-schedules of [`Main`].
 develop new/custom rendering features for the engine. This page is only focused
 on [`Main`]. If you want to learn more about [`Extract`] and [`Render`], [see
 this page about Bevy's rendering architecture][cb::render-architecture].
+
+bevy的三个基础调度:Main/Extract/Render,分别是主调度/外部调度/渲染调度.
+外部调度负责将world数据拷贝到渲染调度中.渲染调度和下帧的主调度并行执行.
+
+大部分游戏只需要在Main调度中添加system逻辑即可.
 
 ## The Main Schedule
 
@@ -116,6 +138,19 @@ separated from your users' startup systems.
 ensure something runs before/after *everything* else, including all the normal
 "engine-internal" code.
 
+Main调度是入口,会管理其他调度,我们添加的system只能添加到其管理的调度中.
+调度顺序和组织方式可以参看(0),都是一样的内容.
+
+Startup做初始化,Update做每帧逻辑,FixedUpdate适合自定义间隔的逻辑.
+
+其他调度是引擎内部的功能,bevy维护,我们不需要配置,
+bevy在实现内部调度时,用的是ECS+system的顺序约束,我们自定义逻辑也是这个套路.
+
+如果要开发插件,PreUpdate/PostUpdate就能用上了.
+
+First/Last就是特殊场景下才使用,eg:在Update之前/之后要确保某个对象的状态.
+引擎内部的代码就用到了这两个调度.
+
 ## Configuring Schedules
 
 Bevy also offers some features that can be configured at the schedule level.
@@ -132,6 +167,16 @@ dependencies][cb::system-order] where you need determinism.
 
 ```rust,no_run,noplayground
 {{#include ../code013/src/programming/schedules.rs:single-threaded}}
+```
+
+如果多线程不合适,可以考虑单线程,在主线程一次只运行一个system.
+
+```rust
+pub enum ExecutorKind {
+    SingleThreaded, // 适合wasm.
+    Simple, // 和单线程类似,只不过会在每个system执行完后立马执行延时任务(eg:Commands).
+    MultiThreaded, // 带线程池的.
+}
 ```
 
 ### Ambiguity Detection
@@ -152,6 +197,14 @@ Such situations might indicate a bug, because you don't know if the systems that
 read the data would run before or after the system that mutates the data.
 
 It is up to you to decide if you care about this, on a case-by-case basis.
+
+二义性检查,这是一个功能开关,开启后可对不确定的执行顺序进行二义性检查,
+常用在debug模式.如果有数据竞争,这个就可以很好检测出来,添加顺序约束即可.
+这个检查可能会误报,因为实际上的游戏逻辑可能会确保两个system不会产生竞争.
+
+---
+为啥rust编译器要做的事需要bevy来做,因为bevy的system调度是自定义的,
+rust编译器并不能很好的发挥作用.
 
 ### Deferred Application
 
@@ -174,6 +227,8 @@ where you like them:
 ```rust,no_run,noplayground
 {{#include ../code013/src/programming/schedules.rs:apply-deferred}}
 ```
+
+
 
 ## Main Schedule Configuration
 
