@@ -44,3 +44,14 @@ This ensures only one of the conflicting parameters can be used at the same time
 Bevy will now happily run our system.
 
 The maximum number of parameters in a param set is 8.
+
+system的多个入参不能对同一数据有竞争访问.  
+多个不兼容的query;同时拥有&world(独占世界)和其他数据的访问.
+
+rust是不知道的bevy的ECS语义的,所以system入参竞争是无法通过编译器报告出来的,
+运行时会导致panic.
+
+bevy提供了一个方法: 使用ParamSet将不兼容的入参封装一下.
+这样bevy会保证在同一时间只会有个一个竞争参数在使用.
+
+ParamSet最大参数个数为8.
