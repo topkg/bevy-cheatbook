@@ -32,6 +32,19 @@ Also, if your [system][cb::system] is unlikely to ever encounter huge
 numbers of entities/events, don't bother with it and just iterate your
 [queries][cb::query] and [events][cb::event] normally.
 
+内部并行是指system内部的多线程.  
+外部并行是指bevy启用多线程让system并行执行.
+
+某些时候,在一个system内可能要遍历大量实体或事件,
+此时简单的query或事件迭代就无法有效利用CPU了.
+
+bevy提出了内部并行的方案:bevy自动将实体列表/事件列表拆分成合适大小,
+每块使用一个CPU线程来运行.如果块数很少,bevy会自动合并到一个线程中跑.
+
+即使开启了内部并行,但bevy内部的自动机制也不一定合适,因为闭包内部还有其他限制.
+
+**如果项目不是遇到巨量实体/事件,使用正常的query循环/事件迭代就够用了.**
+
 ## Parallel Query Iteration
 
 [Queries][cb::query] support parallel iteration to let you process many
