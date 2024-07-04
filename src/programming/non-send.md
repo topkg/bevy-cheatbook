@@ -17,6 +17,14 @@ thread-pool, making use of many CPU cores. However, you might need to ensure
 that some code always runs on the "main thread", or access data that is not
 safe to access in a multithreaded way.
 
+Non-Send资源,意味只能从主线程访问指定类型的数据.rust会将这些数据标记为`!Send`.
+
+很多底层OS接口都不能在多线程中安全切换,eg:窗口,图像,音频.
+
+通常bevy运行system是利用线程池来运行,以提高多核CPU的利用率.
+
+部分场景下,部分代码是需要一直跑在主线程中的,还有多线程访问数据是不安全的.
+
 ## Non-Send Systems and Data Access
 
 To do this, you can use a [`NonSend<T>`] / [`NonSendMut<T>`] system parameter.
@@ -37,6 +45,14 @@ functionality.
 ```rust,no_run,noplayground
 {{#include ../code014/src/programming/non_send.rs:nonsend-app}}
 ```
+
+Non-Send system和数据访问.`NonSend<T>, NonSendMut<T>`这是访问资源的升级版,
+添加的约束是system只在主函数中运行.
+
+另一个常见的就是WinitWindows资源,是窗口实体背后窗口管理器的后端,
+只能在主线程访问.
+
+只需要指定NonSend,bevy在检查system参数时就会明白这个system是主线程跑的.
 
 ## Custom Non-Send Resources
 
@@ -71,3 +87,14 @@ you can use [`NonSendMarker`] as a dummy.
 {{#include ../code014/src/programming/non_send.rs:nonsend-marker}}
 ```
 
+自定义Non-Send资源.
+
+一般添加的资源都是Send的(可在多线程访问的).
+
+自定义的Non-Send资源只能通过world直接访问,Commands是无法添加这类资源的.
+
+world直接访问意味着:独占system/FromWorld/app三种途径可以实现.
+`world.insert_non_send_resource()`.
+
+还有一种情况,system没有特别的入参,可使用`NonSend<NonSendMarker>`来告诉bevy,
+system运行在主线程上.
