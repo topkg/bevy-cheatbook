@@ -10,6 +10,8 @@ item or ability in your game, etc…
 {{#include ../code014/src/programming/one_shot_systems.rs:example}}
 ```
 
+单击system,ui操作,游戏中的补蓝等.
+
 ## Registration
 
 You should not add these systems to a [schedule][cb::schedule].
@@ -55,6 +57,18 @@ Or from the [app builder][cb::app]:
 
 </details>
 
+单击system不属于调度,而是属于world.使用`register_system`来注册system.
+(add_system是ecs添加system).
+
+这里有个概念,world中的单击system是有systemID的,类似于实体id一样,是个引用.
+register_system注册后会返回systemID,后续调用需要这个ID.
+
+这个ID可以保存起来,是的,推荐使用资源将ID保存起来,为了方便区分,还可以使用hash存储起来.
+
+如上图所示,定一个资源来存储hash.实现FromWorld特型(自动填充资源).
+或者直接操纵world来添加资源,或者通过app来添加资源.
+(推荐使用FromWorld特型).
+
 ## Running
 
 The easiest way is using [Commands][cb::commands] ([`Commands`]):
@@ -77,6 +91,9 @@ system][cb::exclusive]:
 Either way, the one-shot system's [Commands][cb::commands]
 are automatically applied immediately when it runs.
 
+运行,通过`Commands.run_system(systemID)`实现.这样是延时执行的.
+如果要立马生效,用独占system来直接访问world.
+
 ### Without Registration
 
 It is possible to also run one-shot systems without [registering](#registration)
@@ -94,6 +111,11 @@ If you do this, Bevy is unable to store any data related to the system:
 It is therefore recommended to register your one-shot systems, unless
 you really only intend to run them once.
 
+bevy还允许不注册直接运行单击system.`world.run_system_once(my_oneshot_system_fn);`
+只是这样bevy就不能缓存system相关数据了:
+ - Local
+ - Query
+
 ## Performance Considerations
 
 To run a one-shot system, exclusive [`World`] access is required. The
@@ -107,3 +129,9 @@ one-shot systems are things that happen rarely.
 But maybe don't overuse them! If something happens regularly, consider
 doing it from a normal system that is part of a [schedule][cb::schedule],
 and controlling it with [run conditions][cb::rc] instead.
+
+如果使用独占system来运行单击system,此时会独占world,性能就是一个大问题.
+
+这个机制存在的理由是:实际场景下必须使用独占system来运行单击system的场景非常少.
+
+只要不过渡使用即可.如果单击system发生的非常频繁,需考虑转换成普通system.
