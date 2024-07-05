@@ -1,0 +1,475 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>macOS Desktop - Unofficial Bevy Cheat Book</title>
+
+
+        <!-- Custom HTML head -->
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../nagbar.css">
+        <link rel="stylesheet" href="../sidebar.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="../overview.html">Chapter Overview</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../builtins.html">List of Bevy Builtins</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded "><a href="../tutorial.html"><strong aria-hidden="true">1.</strong> Bevy Tutorials</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tutorial/guide.html"><strong aria-hidden="true">1.1.</strong> Guided Tour</a></li></ol></li><li class="chapter-item expanded "><a href="../cookbook.html"><strong aria-hidden="true">2.</strong> Bevy Cookbook</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../cookbook/print-framerate.html"><strong aria-hidden="true">2.1.</strong> Show Framerate</a></li><li class="chapter-item expanded "><a href="../cookbook/cursor2world.html"><strong aria-hidden="true">2.2.</strong> Convert cursor to world coordinates</a></li><li class="chapter-item expanded "><a href="../cookbook/custom-projection.html"><strong aria-hidden="true">2.3.</strong> Custom Camera Projection</a></li><li class="chapter-item expanded "><a href="../cookbook/pan-orbit-camera.html"><strong aria-hidden="true">2.4.</strong> 3D Pan+Orbit Camera</a></li><li class="chapter-item expanded "><a href="../cookbook/print-resources.html"><strong aria-hidden="true">2.5.</strong> List All Resource Types</a></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded "><a href="../setup.html"><strong aria-hidden="true">3.</strong> Bevy Setup Tips</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup/getting-started.html"><strong aria-hidden="true">3.1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../setup/editor.html"><strong aria-hidden="true">3.2.</strong> Text Editor / IDE</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup/editor/vscode.html"><strong aria-hidden="true">3.2.1.</strong> Visual Studio Code</a></li><li class="chapter-item expanded "><a href="../setup/editor/jetbrains.html"><strong aria-hidden="true">3.2.2.</strong> JetBrains (RustRover, IntelliJ, CLion)</a></li><li class="chapter-item expanded "><a href="../setup/editor/kak.html"><strong aria-hidden="true">3.2.3.</strong> Kakoune</a></li><li class="chapter-item expanded "><a href="../setup/editor/vim.html"><strong aria-hidden="true">3.2.4.</strong> Vim</a></li><li class="chapter-item expanded "><a href="../setup/editor/emacs.html"><strong aria-hidden="true">3.2.5.</strong> Emacs</a></li></ol></li><li class="chapter-item expanded "><a href="../setup/bevy-config.html"><strong aria-hidden="true">3.3.</strong> Customizing Bevy (features, modularity)</a></li><li class="chapter-item expanded "><a href="../setup/unofficial-plugins.html"><strong aria-hidden="true">3.4.</strong> Community Plugin Ecosystem</a></li><li class="chapter-item expanded "><a href="../setup/bevy-tools.html"><strong aria-hidden="true">3.5.</strong> Dev Tools and Editors for Bevy</a></li><li class="chapter-item expanded "><a href="../setup/perf.html"><strong aria-hidden="true">3.6.</strong> Performance Tunables</a></li><li class="chapter-item expanded "><a href="../setup/bevy-git.html"><strong aria-hidden="true">3.7.</strong> Using bleeding-edge Bevy (main)</a></li></ol></li><li class="chapter-item expanded "><a href="../pitfalls.html"><strong aria-hidden="true">4.</strong> Common Pitfalls</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../pitfalls/build-errors.html"><strong aria-hidden="true">4.1.</strong> Strange compile errors from Bevy or dependencies</a></li><li class="chapter-item expanded "><a href="../pitfalls/performance.html"><strong aria-hidden="true">4.2.</strong> Slow Performance</a></li><li class="chapter-item expanded "><a href="../pitfalls/into-system.html"><strong aria-hidden="true">4.3.</strong> Error adding function as system</a></li><li class="chapter-item expanded "><a href="../pitfalls/3d-not-rendering.html"><strong aria-hidden="true">4.4.</strong> 3D objects not displaying</a></li><li class="chapter-item expanded "><a href="../pitfalls/split-borrows.html"><strong aria-hidden="true">4.5.</strong> Borrow multiple fields from struct</a></li><li class="chapter-item expanded "><a href="../pitfalls/time.html"><strong aria-hidden="true">4.6.</strong> Jittering Time (choppy movement/animation)</a></li><li class="chapter-item expanded "><a href="../pitfalls/uv-coordinates.html"><strong aria-hidden="true">4.7.</strong> Textures/Images are flipped</a></li></ol></li><li class="chapter-item expanded "><a href="../fundamentals.html"><strong aria-hidden="true">5.</strong> Game Engine Fundamentals</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../fundamentals/coords.html"><strong aria-hidden="true">5.1.</strong> Coordinate System</a></li><li class="chapter-item expanded "><a href="../fundamentals/transforms.html"><strong aria-hidden="true">5.2.</strong> Transforms</a></li><li class="chapter-item expanded "><a href="../fundamentals/visibility.html"><strong aria-hidden="true">5.3.</strong> Visibility</a></li><li class="chapter-item expanded "><a href="../fundamentals/time.html"><strong aria-hidden="true">5.4.</strong> Time and Timers</a></li><li class="chapter-item expanded "><a href="../fundamentals/log.html"><strong aria-hidden="true">5.5.</strong> Logging, Console Messages</a></li><li class="chapter-item expanded "><a href="../fundamentals/hierarchy.html"><strong aria-hidden="true">5.6.</strong> Parent/Child Hierarchies</a></li><li class="chapter-item expanded "><a href="../fundamentals/fixed-timestep.html"><strong aria-hidden="true">5.7.</strong> Fixed Timestep</a></li><li class="chapter-item expanded "><a href="../fundamentals/gizmos.html"><strong aria-hidden="true">5.8.</strong> Gizmos</a></li></ol></li><li class="chapter-item expanded "><a href="../graphics.html"><strong aria-hidden="true">6.</strong> General Graphics Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../graphics/camera.html"><strong aria-hidden="true">6.1.</strong> Cameras</a></li><li class="chapter-item expanded "><a href="../graphics/hdr-tonemap.html"><strong aria-hidden="true">6.2.</strong> HDR and Tonemapping</a></li><li class="chapter-item expanded "><a href="../graphics/bloom.html"><strong aria-hidden="true">6.3.</strong> Bloom</a></li></ol></li><li class="chapter-item expanded "><a href="../2d.html"><strong aria-hidden="true">7.</strong> Working with 2D</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../2d/camera.html"><strong aria-hidden="true">7.1.</strong> 2D Camera Setup</a></li><li class="chapter-item expanded "><a href="../2d/sprites.html"><strong aria-hidden="true">7.2.</strong> Sprites and Atlases</a></li></ol></li><li class="chapter-item expanded "><a href="../3d.html"><strong aria-hidden="true">8.</strong> Working with 3D</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3d/camera.html"><strong aria-hidden="true">8.1.</strong> 3D Camera Setup</a></li><li class="chapter-item expanded "><a href="../3d/gltf.html"><strong aria-hidden="true">8.2.</strong> 3D Models and Scenes (GLTF)</a></li></ol></li><li class="chapter-item expanded "><a href="../input.html"><strong aria-hidden="true">9.</strong> Input Handling</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../input/keyboard.html"><strong aria-hidden="true">9.1.</strong> Keyboard</a></li><li class="chapter-item expanded "><a href="../input/mouse.html"><strong aria-hidden="true">9.2.</strong> Mouse</a></li><li class="chapter-item expanded "><a href="../input/gamepad.html"><strong aria-hidden="true">9.3.</strong> Gamepad (Controller, Joystick)</a></li><li class="chapter-item expanded "><a href="../input/touch.html"><strong aria-hidden="true">9.4.</strong> Touchscreen</a></li><li class="chapter-item expanded "><a href="../input/gesture.html"><strong aria-hidden="true">9.5.</strong> Gestures</a></li><li class="chapter-item expanded "><a href="../input/dnd.html"><strong aria-hidden="true">9.6.</strong> Drag-and-Drop (Files)</a></li><li class="chapter-item expanded "><a href="../input/ime.html"><strong aria-hidden="true">9.7.</strong> IME (Advanced Text)</a></li></ol></li><li class="chapter-item expanded "><a href="../window.html"><strong aria-hidden="true">10.</strong> Window Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../window/props.html"><strong aria-hidden="true">10.1.</strong> Window Properties</a></li><li class="chapter-item expanded "><a href="../window/clear-color.html"><strong aria-hidden="true">10.2.</strong> Change the Background Color</a></li><li class="chapter-item expanded "><a href="../window/mouse-grab.html"><strong aria-hidden="true">10.3.</strong> Grab/Capture the Mouse Cursor</a></li><li class="chapter-item expanded "><a href="../window/icon.html"><strong aria-hidden="true">10.4.</strong> Set the Window Icon</a></li></ol></li><li class="chapter-item expanded "><a href="../assets.html"><strong aria-hidden="true">11.</strong> Asset Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../assets/handles.html"><strong aria-hidden="true">11.1.</strong> Handles</a></li><li class="chapter-item expanded "><a href="../assets/assetserver.html"><strong aria-hidden="true">11.2.</strong> Load Assets from Files</a></li><li class="chapter-item expanded "><a href="../assets/data.html"><strong aria-hidden="true">11.3.</strong> Access the Asset Data</a></li><li class="chapter-item expanded "><a href="../assets/assetevent.html"><strong aria-hidden="true">11.4.</strong> React to Changes with Asset Events</a></li><li class="chapter-item expanded "><a href="../assets/ready.html"><strong aria-hidden="true">11.5.</strong> Track Loading Progress</a></li><li class="chapter-item expanded "><a href="../assets/hot-reload.html"><strong aria-hidden="true">11.6.</strong> Hot-Reloading Assets</a></li><li class="chapter-item expanded "><a href="../assets/processing.html"><strong aria-hidden="true">11.7.</strong> Processing Assets</a></li></ol></li><li class="chapter-item expanded "><a href="../audio.html"><strong aria-hidden="true">12.</strong> Audio</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../audio/basic.html"><strong aria-hidden="true">12.1.</strong> Playing Sounds</a></li><li class="chapter-item expanded "><a href="../audio/spatial.html"><strong aria-hidden="true">12.2.</strong> Spatial Audio</a></li><li class="chapter-item expanded "><a href="../audio/custom.html"><strong aria-hidden="true">12.3.</strong> Custom Audio Streams</a></li></ol></li><li class="chapter-item expanded "><a href="../ui.html"><strong aria-hidden="true">13.</strong> Bevy UI Framework</a></li><li class="chapter-item expanded "><a href="../programming.html"><strong aria-hidden="true">14.</strong> Bevy Core Programming Framework</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../programming/ecs-intro.html"><strong aria-hidden="true">14.1.</strong> Intro to ECS</a></li><li class="chapter-item expanded "><a href="../programming/intro-data.html"><strong aria-hidden="true">14.2.</strong> Intro: Your Data</a></li><li class="chapter-item expanded "><a href="../programming/intro-code.html"><strong aria-hidden="true">14.3.</strong> Intro: Your Code</a></li><li class="chapter-item expanded "><a href="../programming/app-builder.html"><strong aria-hidden="true">14.4.</strong> The App</a></li><li class="chapter-item expanded "><a href="../programming/systems.html"><strong aria-hidden="true">14.5.</strong> Systems</a></li><li class="chapter-item expanded "><a href="../programming/res.html"><strong aria-hidden="true">14.6.</strong> Resources</a></li><li class="chapter-item expanded "><a href="../programming/ec.html"><strong aria-hidden="true">14.7.</strong> Entities, Components</a></li><li class="chapter-item expanded "><a href="../programming/bundle.html"><strong aria-hidden="true">14.8.</strong> Bundles</a></li><li class="chapter-item expanded "><a href="../programming/queries.html"><strong aria-hidden="true">14.9.</strong> Queries</a></li><li class="chapter-item expanded "><a href="../programming/commands.html"><strong aria-hidden="true">14.10.</strong> Commands</a></li><li class="chapter-item expanded "><a href="../programming/events.html"><strong aria-hidden="true">14.11.</strong> Events</a></li><li class="chapter-item expanded "><a href="../programming/plugins.html"><strong aria-hidden="true">14.12.</strong> Plugins</a></li><li class="chapter-item expanded "><a href="../programming/local.html"><strong aria-hidden="true">14.13.</strong> Local Resources</a></li><li class="chapter-item expanded "><a href="../programming/exclusive.html"><strong aria-hidden="true">14.14.</strong> Exclusive Systems</a></li><li class="chapter-item expanded "><a href="../programming/world.html"><strong aria-hidden="true">14.15.</strong> Direct ECS World Access</a></li><li class="chapter-item expanded "><a href="../programming/schedules.html"><strong aria-hidden="true">14.16.</strong> Schedules</a></li><li class="chapter-item expanded "><a href="../programming/system-order.html"><strong aria-hidden="true">14.17.</strong> System Order of Execution</a></li><li class="chapter-item expanded "><a href="../programming/run-conditions.html"><strong aria-hidden="true">14.18.</strong> Run Conditions</a></li><li class="chapter-item expanded "><a href="../programming/system-sets.html"><strong aria-hidden="true">14.19.</strong> System Sets</a></li><li class="chapter-item expanded "><a href="../programming/states.html"><strong aria-hidden="true">14.20.</strong> States</a></li><li class="chapter-item expanded "><a href="../programming/change-detection.html"><strong aria-hidden="true">14.21.</strong> Change Detection</a></li><li class="chapter-item expanded "><a href="../programming/one-shot-systems.html"><strong aria-hidden="true">14.22.</strong> One-Shot Systems</a></li><li class="chapter-item expanded "><a href="../programming/par-iter.html"><strong aria-hidden="true">14.23.</strong> Internal Parallelism</a></li><li class="chapter-item expanded "><a href="../programming/system-piping.html"><strong aria-hidden="true">14.24.</strong> System Piping</a></li><li class="chapter-item expanded "><a href="../programming/paramset.html"><strong aria-hidden="true">14.25.</strong> ParamSet</a></li><li class="chapter-item expanded "><a href="../programming/non-send.html"><strong aria-hidden="true">14.26.</strong> Non-Send</a></li></ol></li><li class="chapter-item expanded "><a href="../gpu.html"><strong aria-hidden="true">15.</strong> Bevy Render (GPU) Framework</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../gpu/intro.html"><strong aria-hidden="true">15.1.</strong> Render Architecture Overview</a></li><li class="chapter-item expanded "><a href="../gpu/stages.html"><strong aria-hidden="true">15.2.</strong> Render Stages</a></li></ol></li><li class="chapter-item expanded "><a href="../patterns.html"><strong aria-hidden="true">16.</strong> Programming Patterns</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../patterns/generic-systems.html"><strong aria-hidden="true">16.1.</strong> Generic Systems</a></li><li class="chapter-item expanded "><a href="../patterns/component-storage.html"><strong aria-hidden="true">16.2.</strong> Component Storage (Table/Sparse-Set)</a></li><li class="chapter-item expanded "><a href="../patterns/manual-event-clear.html"><strong aria-hidden="true">16.3.</strong> Manual Event Clearing</a></li><li class="chapter-item expanded "><a href="../patterns/system-tests.html"><strong aria-hidden="true">16.4.</strong> Writing Tests for Systems</a></li></ol></li><li class="chapter-item expanded "><a href="../platforms.html"><strong aria-hidden="true">17.</strong> Bevy on Different Platforms</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../platforms/linux.html"><strong aria-hidden="true">17.1.</strong> Linux Desktop</a></li><li class="chapter-item expanded "><a href="../platforms/macos.html" class="active"><strong aria-hidden="true">17.2.</strong> macOS Desktop</a></li><li class="chapter-item expanded "><a href="../platforms/windows.html"><strong aria-hidden="true">17.3.</strong> Windows Desktop</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../platforms/windows/wsl2.html"><strong aria-hidden="true">17.3.1.</strong> Working in WSL2</a></li></ol></li><li class="chapter-item expanded "><a href="../platforms/wasm.html"><strong aria-hidden="true">17.4.</strong> Browser (WebAssembly)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../platforms/wasm/size-opt.html"><strong aria-hidden="true">17.4.1.</strong> Optimize for Size</a></li><li class="chapter-item expanded "><a href="../platforms/wasm/webpage.html"><strong aria-hidden="true">17.4.2.</strong> Create a Custom Web Page</a></li><li class="chapter-item expanded "><a href="../platforms/wasm/gh-pages.html"><strong aria-hidden="true">17.4.3.</strong> Hosting on GitHub Pages</a></li></ol></li><li class="chapter-item expanded "><a href="../setup/cross.html"><strong aria-hidden="true">17.5.</strong> Cross-Compilation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup/cross/linux-windows.html"><strong aria-hidden="true">17.5.1.</strong> From Linux to Windows</a></li><li class="chapter-item expanded "><a href="../setup/cross/macos-windows.html"><strong aria-hidden="true">17.5.2.</strong> From macOS to Windows</a></li></ol></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../credits.html">Credits</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../contact.html">Contact Me</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../contributing-bevy.html">Contribute to Bevy</a></li><li class="chapter-item expanded affix "><a href="../contributing.html">Contribute to this Book</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Unofficial Bevy Cheat Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/bevy-cheatbook/bevy-cheatbook/issues/new" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <div class="table-wrapper"><table><thead><tr><th><a href="/introduction.html#maintenance-policy">Bevy Version:</a></th><th><a href="https://bevyengine.org/news/bevy-0-12">0.12</a></th><th>(outdated!)</th></tr></thead><tbody>
+</tbody></table>
+</div><p style="text-align: center;">
+As this page is outdated, please refer to Bevy's official migration guides while reading,
+to cover the differences:
+<a href="https://bevyengine.org/learn/migration-guides/0-12-to-0-13/">0.12 to 0.13</a>.
+</p>
+<p style="text-align: center;">
+I apologize for the inconvenience. I will update the page as soon as I find the time.
+</p>
+<hr />
+<p><code>当前双语版本对应的是: 3d540e7, 日期: 2024/06/13, 等双语版本整个翻译完之后,再处理原始仓库的更新</code></p>
+<h1 id="macos-desktop"><a class="header" href="#macos-desktop">macOS Desktop</a></h1>
+<p>If you have any additional macOS-specific knowledge,
+please help improve this page!</p>
+<p>Create Issues or PRs on <a href="https://github.com/bevy-cheatbook/bevy-cheatbook">GitHub</a>.</p>
+<hr />
+<p><a href="/setup/cross/macos-windows.html">See here if you also want to build Windows EXEs from macOS</a>.</p>
+<h2 id="known-pitfalls"><a class="header" href="#known-pitfalls">Known Pitfalls</a></h2>
+<h3 id="input-peculiarities"><a class="header" href="#input-peculiarities">Input Peculiarities</a></h3>
+<p><a href="/input/mouse.html#mouse-scrolling--wheel">Mouse wheel scrolling</a> behaves in a peculiar manner,
+because macOS does "scroll acceleration" at the OS level. Other OSs, with
+regular PC mice, provide <code>Line</code> scroll events with whole number values, where
+1.0 corresponds to one step on the scroll wheel. macOS scales the value
+depending on how fast the user is spinning the wheel. You do not get whole
+numbers. They can range anywhere from tiny values &lt;0.1 (for the starting event,
+before the scroll speed ramps up), up to values as big as &gt;10.0 (say, for a fast
+flick of the wheel), per event.</p>
+<p>macOS provides <a href="/input/mouse.html#touchpad-gestures">special events for touchpad gestures</a>
+for zooming and rotation, which you can handle in Bevy.</p>
+<p>Some keyboard keys have a somewhat-unintuitive mapping:</p>
+<ul>
+<li>The Command (⌘) key is <code>KeyCode::{SuperLeft, SuperRight}</code>.</li>
+<li>The Option (⌥) key is <code>KeyCode::{AltLeft, AltRight}</code>.</li>
+</ul>
+<p>Other key codes have their intuitive names.</p>
+<h3 id="window-management-apps-compatability"><a class="header" href="#window-management-apps-compatability">Window Management Apps Compatability</a></h3>
+<p>Bevy apps can encounter performance issues (such as lag when dragging the window
+around the screen) when window management apps like "Magnet" are used. This is a
+bug in <code>winit</code> (the OS window management library that Bevy uses). This issue can
+be tracked <a href="https://github.com/rust-windowing/winit/issues/1737">here</a>.</p>
+<p>Until that bug is fixed, advise closing the window management apps, if
+encountering performance issues.</p>
+<h2 id="creating-an-application-bundle"><a class="header" href="#creating-an-application-bundle">Creating an Application Bundle</a></h2>
+<p>When you build your Bevy project normally, cargo/Rust will produce a bare
+executable file, similar to other operating systems. However, this is not how
+"normal" macOS apps look and behave. You probably want to create a proper
+native-feeling Mac app for distribution to your users.</p>
+<p>You need to do this, to have your app play nicely with the Mac desktop GUI, such
+as to have a nice icon appear in the dock.</p>
+<p>macOS applications are typically stored on the filesystem as "bundles" – special
+directories/folders that end in <code>.app</code>, that the OS displays to the user as one
+item. macOS expects to find a special hieararchy of subfolders and files inside.</p>
+<p>A minimal app bundle might have the following files:</p>
+<ul>
+<li><code>MyGame.app/Contents/MacOS/MyGame</code>: the actual executable file</li>
+<li><code>MyGame.app/Contents/MacOS/assets/</code>: your Bevy assets folder</li>
+<li><code>MyGame.app/Contents/Info.plist</code>: metadata (see below)</li>
+<li><code>MyGame.app/Contents/Resources/AppIcon.icns</code>: the app's icon</li>
+</ul>
+<p>Only the executable file is technically mandatory. If you have nothing else, the
+app will run, as long as the executable file name matches the app bundle file
+name. You should, however, follow the below instructions, if you want to make a
+proper nice Mac app. :)</p>
+<h3 id="executable-file"><a class="header" href="#executable-file">Executable File</a></h3>
+<p>The executable file produced by the Rust compiler (in the <code>target</code> directory) is
+a single-architecture binary for your current development machine. You could
+just copy this file into the app bundle, but then you will not support all Mac
+hardware natively.</p>
+<p>If you want to support both machines with Intel CPUs and with Apple Silicon
+(Arm) CPUs, you need to compile for both of them, and then combine them into a
+single executable using Apple's <code>lipo</code> tool.</p>
+<p>First, make sure you have Rust toolchain support for both architectures installed:</p>
+<pre><code class="language-sh">rustup target add x86_64-apple-darwin
+rustup target add aarch64-apple-darwin
+</code></pre>
+<p>Now, you can compile for both architectures:</p>
+<pre><code class="language-sh">cargo build --release --target x86_64-apple-darwin
+cargo build --release --target aarch64-apple-darwin
+</code></pre>
+<p>Now, you can combine the two executables into one, for your app bundle.</p>
+<pre><code class="language-sh">lipo "target/x86_64-apple-darwin/release/my_game" \
+     "target/aarch64-apple-darwin/release/my_game" \
+     -create -output "MyGame.app/Contents/MacOS/MyGame"
+</code></pre>
+<p>Note: please ensure the Bevy <code>dynamic_linking</code> cargo feature is <em><strong>not</strong></em> enabled.</p>
+<h3 id="game-assets"><a class="header" href="#game-assets">Game Assets</a></h3>
+<p>Your Bevy <code>assets</code> folder needs to be placed alongside the executable file,
+for Bevy to find it and be able to load your assets. Just copy it into
+<code>Contents/MacOS</code> in your app bundle.</p>
+<p>Note: This is not the standard conventional location as prescribed by Apple.
+Typically, macOS apps store their data files in <code>Contents/Resources</code>. However,
+Bevy will not find them there. Thankfully, Apple does not enforce this, so we
+are free to do something unusual when we have to.</p>
+<h3 id="infoplist"><a class="header" href="#infoplist"><code>Info.plist</code></a></h3>
+<p>This file contains all the metadata that macOS wants.</p>
+<p>If you do not create this file, or if it is missing some of the fields, macOS
+will try to guess them, so your app can still run. Ideally, you want to create a
+proper <code>Info.plist</code> file, to prevent issues.</p>
+<p><a href="/dl/Info.plist">Download an example file as a starting point.</a></p>
+<p>You can edit this file using Apple XCode or a text editor. Check that all the
+values make sense for your app. Pay special attention to these values:</p>
+<ul>
+<li><code>CFBundleName</code> (Bundle name)
+<ul>
+<li>Short user-visible name of your app</li>
+</ul>
+</li>
+<li><code>CFBundleDisplayName</code> (Bundle display name)
+<ul>
+<li>Optional: You can set a longer user-visible name here, if you want</li>
+</ul>
+</li>
+<li><code>CFBundleExecutable</code> (Executable file)
+<ul>
+<li>The name of the executable file</li>
+</ul>
+</li>
+<li><code>CFIconFile</code> (Icon file)
+<ul>
+<li>The name of the icon file</li>
+</ul>
+</li>
+<li><code>CFBundleIdentifier</code> (Bundle identifier)
+<ul>
+<li>Apple wants an ID for your app, in domain format, like: <code>com.mycompany.mygame</code></li>
+</ul>
+</li>
+<li><code>CFBundleShortVersionString</code> (Bundle version string (short))
+<ul>
+<li>The version of your app, like <code>0.1.0</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="app-icon"><a class="header" href="#app-icon">App Icon</a></h3>
+<p>The icon file needs to be in a special Apple format.</p>
+<p>Such a file can be created from a collection of PNGs of different standard sizes
+(powers of two). If you want your app to look nice at all sizes, you can
+hand-craft an image for each size, following <a href="https://developer.apple.com/design/human-interface-guidelines/app-icons">Apple Design
+Guidelines</a>. If you don't care, you can just take one image
+(ideally 1024x1024, the biggest size used by macOS) and scale it to different sizes.</p>
+<p>Here is a script that does that:</p>
+<pre><code class="language-sh">SOURCE_IMAGE="myicon1024.png"
+mkdir -p AppIcon.iconset
+sips -z 16 16     "${SOURCE_IMAGE}" --out AppIcon.iconset/icon_16x16.png
+sips -z 32 32     "${SOURCE_IMAGE}" --out AppIcon.iconset/icon_16x16@2x.png
+sips -z 32 32     "${SOURCE_IMAGE}" --out AppIcon.iconset/icon_32x32.png
+sips -z 64 64     "${SOURCE_IMAGE}" --out AppIcon.iconset/icon_32x32@2x.png
+sips -z 128 128   "${SOURCE_IMAGE}" --out AppIcon.iconset/icon_128x128.png
+sips -z 256 256   "${SOURCE_IMAGE}" --out AppIcon.iconset/icon_128x128@2x.png
+sips -z 256 256   "${SOURCE_IMAGE}" --out AppIcon.iconset/icon_256x256.png
+sips -z 512 512   "${SOURCE_IMAGE}" --out AppIcon.iconset/icon_256x256@2x.png
+sips -z 512 512   "${SOURCE_IMAGE}" --out AppIcon.iconset/icon_512x512.png
+cp "${SOURCE_IMAGE}" AppIcon.iconset/icon_512x512@2x.png
+iconutil -c icns AppIcon.iconset
+## move it into the app bundle
+mv AppIcon.icns MyGame.app/Contents/Resources
+</code></pre>
+<p>It works by creating a special <code>iconset</code> folder, with all the PNG files at different
+sizes, created by resizing your source image. Then, it uses <code>iconutil</code> to produce
+the final Apple ICNS file for your app bundle.</p>
+<p>If you want hand-crafted icons for each size, you could use a similar process.
+Create an <code>iconset</code> folder with your PNGs, and run <code>iconutil -c icns</code> on it.</p>
+<p>Alternatively, Apple XCode has GUI tools for creating and editing app icons.</p>
+<h3 id="putting-everything-together"><a class="header" href="#putting-everything-together">Putting Everything Together</a></h3>
+<p>Here is a simple shell script to build a Mac app. It follows the recommendations
+on this page. Adjust everything as necessary for your project.</p>
+<pre><code class="language-sh"># set the name of the Mac App
+APP_NAME="MyGame"
+# set the name of your rust crate
+RUST_CRATE_NAME="my_game"
+# create the folder structure
+mkdir -p "${APP_NAME}.app/Contents/MacOS"
+mkdir -p "${APP_NAME}.app/Contents/Resources"
+# copy Info.plist
+cp Info.plist "${APP_NAME}.app/Contents/Info.plist"
+# copy the icon (assuming you already have it in Apple ICNS format)
+cp AppIcon.icns "${APP_NAME}.app/Contents/Resources/AppIcon.icns"
+# copy your Bevy game assets
+cp -a assets "${APP_NAME}.app/Contents/MacOS/"
+# compile the executables for each architecture
+cargo build --release --target x86_64-apple-darwin # build for Intel
+cargo build --release --target aarch64-apple-darwin # build for Apple Silicon
+# combine the executables into a single file and put it in the bundle
+lipo "target/x86_64-apple-darwin/release/${RUST_CRATE_NAME}" \
+     "target/aarch64-apple-darwin/release/${RUST_CRATE_NAME}" \
+     -create -output "${APP_NAME}.app/Contents/MacOS/${APP_NAME}"
+</code></pre>
+<p>Note: please ensure the Bevy <code>dynamic_linking</code> cargo feature is <em><strong>not</strong></em> enabled.</p>
+<h2 id="creating-a-dmg-file"><a class="header" href="#creating-a-dmg-file">Creating a DMG file</a></h2>
+<p>It is common for Mac apps downloadable from the internet to be distributed as
+DMG files – Apple's "disk image" format. Users can drag-and-drop the app bundle
+inside into their <code>Applications</code> folder on their system.</p>
+<h3 id="create-dmg"><a class="header" href="#create-dmg"><code>create-dmg</code></a></h3>
+<p>If you want to create a fancy DMG file, you can install and use the
+<a href="https://github.com/create-dmg/create-dmg"><code>create-dmg</code> tool</a>.</p>
+<p>If you are using Homebrew, you can install it easily from there:</p>
+<pre><code class="language-sh">brew install create-dmg
+</code></pre>
+<p>Then, you can use it as follows:</p>
+<pre><code class="language-sh">create-dmg \
+  --volname "My Bevy Game" \
+  --volicon "AppIcon.icns" \
+  --background "DMG-background.png" \
+  --window-size 800 400 \
+  --icon-size 128 \
+  --icon "MyGame.app" 200 200 \
+  --hide-extension "MyGame.app" \
+  --app-drop-link 600 200 \
+  "mybevygame_release_mac.dmg" \
+  "build/mac/"
+</code></pre>
+<p>The options are:</p>
+<ul>
+<li><code>--volname</code>: the name of the device when the user opens the DMG file</li>
+<li><code>--volicon</code>: the icon of the device when the user opens the DMG file</li>
+<li><code>--background</code>: the background image for the Finder window</li>
+<li><code>--window-size</code>: the size of the Finder window</li>
+<li><code>--icon-size</code>: the default zoom level (how big the icons should look)</li>
+<li><code>--icon</code>: specify the X/Y coordinates where to display a specific file</li>
+<li><code>--hide-extension</code>: do not display the file extension for this file</li>
+<li><code>--app-drop-link</code>: create a shortcut to Applications for easy drag-and-drop; place at given X/Y coordinates</li>
+<li>the name of the DMG file to create</li>
+<li>the name of the folder where you have the files to be added to the DMG (your app + anything else you want to add)</li>
+</ul>
+<h3 id="hdiutil"><a class="header" href="#hdiutil"><code>hdiutil</code></a></h3>
+<p>If you don't want to install any special tools, you can create a very simple
+DMG file using <code>hdiutil</code>, which comes with macOS:</p>
+<pre><code class="language-sh">hdiutil create -fs HFS+ \
+  -volname "My Bevy Game" \
+  -srcfolder "MyGame.app" \
+  "mybevygame_release_mac.dmg"
+</code></pre>
+<p>Specify the Volume Name (how it appears when opened), the name of your app
+bundle, and the name of the output DMG file, respectively. You can use
+<code>-srcfolder</code> multiple times, if you want to add more files and folders to the
+DMG image.</p>
+<h3 id="gui"><a class="header" href="#gui">GUI</a></h3>
+<p>If you want to create a DMG file using a GUI, you can use Apple's "Disk
+Utility" app that comes preinstalled with macOS. Then, just use Finder to
+set up everything inside how you like it.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../platforms/linux.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../platforms/windows.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../platforms/linux.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../platforms/windows.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../nagbar.js"></script>
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,594 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Gamepad (Controller, Joystick) - Unofficial Bevy Cheat Book</title>
+
+
+        <!-- Custom HTML head -->
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../nagbar.css">
+        <link rel="stylesheet" href="../sidebar.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="../overview.html">Chapter Overview</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../builtins.html">List of Bevy Builtins</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded "><a href="../tutorial.html"><strong aria-hidden="true">1.</strong> Bevy Tutorials</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tutorial/guide.html"><strong aria-hidden="true">1.1.</strong> Guided Tour</a></li></ol></li><li class="chapter-item expanded "><a href="../cookbook.html"><strong aria-hidden="true">2.</strong> Bevy Cookbook</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../cookbook/print-framerate.html"><strong aria-hidden="true">2.1.</strong> Show Framerate</a></li><li class="chapter-item expanded "><a href="../cookbook/cursor2world.html"><strong aria-hidden="true">2.2.</strong> Convert cursor to world coordinates</a></li><li class="chapter-item expanded "><a href="../cookbook/custom-projection.html"><strong aria-hidden="true">2.3.</strong> Custom Camera Projection</a></li><li class="chapter-item expanded "><a href="../cookbook/pan-orbit-camera.html"><strong aria-hidden="true">2.4.</strong> 3D Pan+Orbit Camera</a></li><li class="chapter-item expanded "><a href="../cookbook/print-resources.html"><strong aria-hidden="true">2.5.</strong> List All Resource Types</a></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded "><a href="../setup.html"><strong aria-hidden="true">3.</strong> Bevy Setup Tips</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup/getting-started.html"><strong aria-hidden="true">3.1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../setup/editor.html"><strong aria-hidden="true">3.2.</strong> Text Editor / IDE</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup/editor/vscode.html"><strong aria-hidden="true">3.2.1.</strong> Visual Studio Code</a></li><li class="chapter-item expanded "><a href="../setup/editor/jetbrains.html"><strong aria-hidden="true">3.2.2.</strong> JetBrains (RustRover, IntelliJ, CLion)</a></li><li class="chapter-item expanded "><a href="../setup/editor/kak.html"><strong aria-hidden="true">3.2.3.</strong> Kakoune</a></li><li class="chapter-item expanded "><a href="../setup/editor/vim.html"><strong aria-hidden="true">3.2.4.</strong> Vim</a></li><li class="chapter-item expanded "><a href="../setup/editor/emacs.html"><strong aria-hidden="true">3.2.5.</strong> Emacs</a></li></ol></li><li class="chapter-item expanded "><a href="../setup/bevy-config.html"><strong aria-hidden="true">3.3.</strong> Customizing Bevy (features, modularity)</a></li><li class="chapter-item expanded "><a href="../setup/unofficial-plugins.html"><strong aria-hidden="true">3.4.</strong> Community Plugin Ecosystem</a></li><li class="chapter-item expanded "><a href="../setup/bevy-tools.html"><strong aria-hidden="true">3.5.</strong> Dev Tools and Editors for Bevy</a></li><li class="chapter-item expanded "><a href="../setup/perf.html"><strong aria-hidden="true">3.6.</strong> Performance Tunables</a></li><li class="chapter-item expanded "><a href="../setup/bevy-git.html"><strong aria-hidden="true">3.7.</strong> Using bleeding-edge Bevy (main)</a></li></ol></li><li class="chapter-item expanded "><a href="../pitfalls.html"><strong aria-hidden="true">4.</strong> Common Pitfalls</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../pitfalls/build-errors.html"><strong aria-hidden="true">4.1.</strong> Strange compile errors from Bevy or dependencies</a></li><li class="chapter-item expanded "><a href="../pitfalls/performance.html"><strong aria-hidden="true">4.2.</strong> Slow Performance</a></li><li class="chapter-item expanded "><a href="../pitfalls/into-system.html"><strong aria-hidden="true">4.3.</strong> Error adding function as system</a></li><li class="chapter-item expanded "><a href="../pitfalls/3d-not-rendering.html"><strong aria-hidden="true">4.4.</strong> 3D objects not displaying</a></li><li class="chapter-item expanded "><a href="../pitfalls/split-borrows.html"><strong aria-hidden="true">4.5.</strong> Borrow multiple fields from struct</a></li><li class="chapter-item expanded "><a href="../pitfalls/time.html"><strong aria-hidden="true">4.6.</strong> Jittering Time (choppy movement/animation)</a></li><li class="chapter-item expanded "><a href="../pitfalls/uv-coordinates.html"><strong aria-hidden="true">4.7.</strong> Textures/Images are flipped</a></li></ol></li><li class="chapter-item expanded "><a href="../fundamentals.html"><strong aria-hidden="true">5.</strong> Game Engine Fundamentals</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../fundamentals/coords.html"><strong aria-hidden="true">5.1.</strong> Coordinate System</a></li><li class="chapter-item expanded "><a href="../fundamentals/transforms.html"><strong aria-hidden="true">5.2.</strong> Transforms</a></li><li class="chapter-item expanded "><a href="../fundamentals/visibility.html"><strong aria-hidden="true">5.3.</strong> Visibility</a></li><li class="chapter-item expanded "><a href="../fundamentals/time.html"><strong aria-hidden="true">5.4.</strong> Time and Timers</a></li><li class="chapter-item expanded "><a href="../fundamentals/log.html"><strong aria-hidden="true">5.5.</strong> Logging, Console Messages</a></li><li class="chapter-item expanded "><a href="../fundamentals/hierarchy.html"><strong aria-hidden="true">5.6.</strong> Parent/Child Hierarchies</a></li><li class="chapter-item expanded "><a href="../fundamentals/fixed-timestep.html"><strong aria-hidden="true">5.7.</strong> Fixed Timestep</a></li><li class="chapter-item expanded "><a href="../fundamentals/gizmos.html"><strong aria-hidden="true">5.8.</strong> Gizmos</a></li></ol></li><li class="chapter-item expanded "><a href="../graphics.html"><strong aria-hidden="true">6.</strong> General Graphics Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../graphics/camera.html"><strong aria-hidden="true">6.1.</strong> Cameras</a></li><li class="chapter-item expanded "><a href="../graphics/hdr-tonemap.html"><strong aria-hidden="true">6.2.</strong> HDR and Tonemapping</a></li><li class="chapter-item expanded "><a href="../graphics/bloom.html"><strong aria-hidden="true">6.3.</strong> Bloom</a></li></ol></li><li class="chapter-item expanded "><a href="../2d.html"><strong aria-hidden="true">7.</strong> Working with 2D</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../2d/camera.html"><strong aria-hidden="true">7.1.</strong> 2D Camera Setup</a></li><li class="chapter-item expanded "><a href="../2d/sprites.html"><strong aria-hidden="true">7.2.</strong> Sprites and Atlases</a></li></ol></li><li class="chapter-item expanded "><a href="../3d.html"><strong aria-hidden="true">8.</strong> Working with 3D</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3d/camera.html"><strong aria-hidden="true">8.1.</strong> 3D Camera Setup</a></li><li class="chapter-item expanded "><a href="../3d/gltf.html"><strong aria-hidden="true">8.2.</strong> 3D Models and Scenes (GLTF)</a></li></ol></li><li class="chapter-item expanded "><a href="../input.html"><strong aria-hidden="true">9.</strong> Input Handling</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../input/keyboard.html"><strong aria-hidden="true">9.1.</strong> Keyboard</a></li><li class="chapter-item expanded "><a href="../input/mouse.html"><strong aria-hidden="true">9.2.</strong> Mouse</a></li><li class="chapter-item expanded "><a href="../input/gamepad.html" class="active"><strong aria-hidden="true">9.3.</strong> Gamepad (Controller, Joystick)</a></li><li class="chapter-item expanded "><a href="../input/touch.html"><strong aria-hidden="true">9.4.</strong> Touchscreen</a></li><li class="chapter-item expanded "><a href="../input/gesture.html"><strong aria-hidden="true">9.5.</strong> Gestures</a></li><li class="chapter-item expanded "><a href="../input/dnd.html"><strong aria-hidden="true">9.6.</strong> Drag-and-Drop (Files)</a></li><li class="chapter-item expanded "><a href="../input/ime.html"><strong aria-hidden="true">9.7.</strong> IME (Advanced Text)</a></li></ol></li><li class="chapter-item expanded "><a href="../window.html"><strong aria-hidden="true">10.</strong> Window Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../window/props.html"><strong aria-hidden="true">10.1.</strong> Window Properties</a></li><li class="chapter-item expanded "><a href="../window/clear-color.html"><strong aria-hidden="true">10.2.</strong> Change the Background Color</a></li><li class="chapter-item expanded "><a href="../window/mouse-grab.html"><strong aria-hidden="true">10.3.</strong> Grab/Capture the Mouse Cursor</a></li><li class="chapter-item expanded "><a href="../window/icon.html"><strong aria-hidden="true">10.4.</strong> Set the Window Icon</a></li></ol></li><li class="chapter-item expanded "><a href="../assets.html"><strong aria-hidden="true">11.</strong> Asset Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../assets/handles.html"><strong aria-hidden="true">11.1.</strong> Handles</a></li><li class="chapter-item expanded "><a href="../assets/assetserver.html"><strong aria-hidden="true">11.2.</strong> Load Assets from Files</a></li><li class="chapter-item expanded "><a href="../assets/data.html"><strong aria-hidden="true">11.3.</strong> Access the Asset Data</a></li><li class="chapter-item expanded "><a href="../assets/assetevent.html"><strong aria-hidden="true">11.4.</strong> React to Changes with Asset Events</a></li><li class="chapter-item expanded "><a href="../assets/ready.html"><strong aria-hidden="true">11.5.</strong> Track Loading Progress</a></li><li class="chapter-item expanded "><a href="../assets/hot-reload.html"><strong aria-hidden="true">11.6.</strong> Hot-Reloading Assets</a></li><li class="chapter-item expanded "><a href="../assets/processing.html"><strong aria-hidden="true">11.7.</strong> Processing Assets</a></li></ol></li><li class="chapter-item expanded "><a href="../audio.html"><strong aria-hidden="true">12.</strong> Audio</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../audio/basic.html"><strong aria-hidden="true">12.1.</strong> Playing Sounds</a></li><li class="chapter-item expanded "><a href="../audio/spatial.html"><strong aria-hidden="true">12.2.</strong> Spatial Audio</a></li><li class="chapter-item expanded "><a href="../audio/custom.html"><strong aria-hidden="true">12.3.</strong> Custom Audio Streams</a></li></ol></li><li class="chapter-item expanded "><a href="../ui.html"><strong aria-hidden="true">13.</strong> Bevy UI Framework</a></li><li class="chapter-item expanded "><a href="../programming.html"><strong aria-hidden="true">14.</strong> Bevy Core Programming Framework</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../programming/ecs-intro.html"><strong aria-hidden="true">14.1.</strong> Intro to ECS</a></li><li class="chapter-item expanded "><a href="../programming/intro-data.html"><strong aria-hidden="true">14.2.</strong> Intro: Your Data</a></li><li class="chapter-item expanded "><a href="../programming/intro-code.html"><strong aria-hidden="true">14.3.</strong> Intro: Your Code</a></li><li class="chapter-item expanded "><a href="../programming/app-builder.html"><strong aria-hidden="true">14.4.</strong> The App</a></li><li class="chapter-item expanded "><a href="../programming/systems.html"><strong aria-hidden="true">14.5.</strong> Systems</a></li><li class="chapter-item expanded "><a href="../programming/res.html"><strong aria-hidden="true">14.6.</strong> Resources</a></li><li class="chapter-item expanded "><a href="../programming/ec.html"><strong aria-hidden="true">14.7.</strong> Entities, Components</a></li><li class="chapter-item expanded "><a href="../programming/bundle.html"><strong aria-hidden="true">14.8.</strong> Bundles</a></li><li class="chapter-item expanded "><a href="../programming/queries.html"><strong aria-hidden="true">14.9.</strong> Queries</a></li><li class="chapter-item expanded "><a href="../programming/commands.html"><strong aria-hidden="true">14.10.</strong> Commands</a></li><li class="chapter-item expanded "><a href="../programming/events.html"><strong aria-hidden="true">14.11.</strong> Events</a></li><li class="chapter-item expanded "><a href="../programming/plugins.html"><strong aria-hidden="true">14.12.</strong> Plugins</a></li><li class="chapter-item expanded "><a href="../programming/local.html"><strong aria-hidden="true">14.13.</strong> Local Resources</a></li><li class="chapter-item expanded "><a href="../programming/exclusive.html"><strong aria-hidden="true">14.14.</strong> Exclusive Systems</a></li><li class="chapter-item expanded "><a href="../programming/world.html"><strong aria-hidden="true">14.15.</strong> Direct ECS World Access</a></li><li class="chapter-item expanded "><a href="../programming/schedules.html"><strong aria-hidden="true">14.16.</strong> Schedules</a></li><li class="chapter-item expanded "><a href="../programming/system-order.html"><strong aria-hidden="true">14.17.</strong> System Order of Execution</a></li><li class="chapter-item expanded "><a href="../programming/run-conditions.html"><strong aria-hidden="true">14.18.</strong> Run Conditions</a></li><li class="chapter-item expanded "><a href="../programming/system-sets.html"><strong aria-hidden="true">14.19.</strong> System Sets</a></li><li class="chapter-item expanded "><a href="../programming/states.html"><strong aria-hidden="true">14.20.</strong> States</a></li><li class="chapter-item expanded "><a href="../programming/change-detection.html"><strong aria-hidden="true">14.21.</strong> Change Detection</a></li><li class="chapter-item expanded "><a href="../programming/one-shot-systems.html"><strong aria-hidden="true">14.22.</strong> One-Shot Systems</a></li><li class="chapter-item expanded "><a href="../programming/par-iter.html"><strong aria-hidden="true">14.23.</strong> Internal Parallelism</a></li><li class="chapter-item expanded "><a href="../programming/system-piping.html"><strong aria-hidden="true">14.24.</strong> System Piping</a></li><li class="chapter-item expanded "><a href="../programming/paramset.html"><strong aria-hidden="true">14.25.</strong> ParamSet</a></li><li class="chapter-item expanded "><a href="../programming/non-send.html"><strong aria-hidden="true">14.26.</strong> Non-Send</a></li></ol></li><li class="chapter-item expanded "><a href="../gpu.html"><strong aria-hidden="true">15.</strong> Bevy Render (GPU) Framework</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../gpu/intro.html"><strong aria-hidden="true">15.1.</strong> Render Architecture Overview</a></li><li class="chapter-item expanded "><a href="../gpu/stages.html"><strong aria-hidden="true">15.2.</strong> Render Stages</a></li></ol></li><li class="chapter-item expanded "><a href="../patterns.html"><strong aria-hidden="true">16.</strong> Programming Patterns</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../patterns/generic-systems.html"><strong aria-hidden="true">16.1.</strong> Generic Systems</a></li><li class="chapter-item expanded "><a href="../patterns/component-storage.html"><strong aria-hidden="true">16.2.</strong> Component Storage (Table/Sparse-Set)</a></li><li class="chapter-item expanded "><a href="../patterns/manual-event-clear.html"><strong aria-hidden="true">16.3.</strong> Manual Event Clearing</a></li><li class="chapter-item expanded "><a href="../patterns/system-tests.html"><strong aria-hidden="true">16.4.</strong> Writing Tests for Systems</a></li></ol></li><li class="chapter-item expanded "><a href="../platforms.html"><strong aria-hidden="true">17.</strong> Bevy on Different Platforms</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../platforms/linux.html"><strong aria-hidden="true">17.1.</strong> Linux Desktop</a></li><li class="chapter-item expanded "><a href="../platforms/macos.html"><strong aria-hidden="true">17.2.</strong> macOS Desktop</a></li><li class="chapter-item expanded "><a href="../platforms/windows.html"><strong aria-hidden="true">17.3.</strong> Windows Desktop</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../platforms/windows/wsl2.html"><strong aria-hidden="true">17.3.1.</strong> Working in WSL2</a></li></ol></li><li class="chapter-item expanded "><a href="../platforms/wasm.html"><strong aria-hidden="true">17.4.</strong> Browser (WebAssembly)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../platforms/wasm/size-opt.html"><strong aria-hidden="true">17.4.1.</strong> Optimize for Size</a></li><li class="chapter-item expanded "><a href="../platforms/wasm/webpage.html"><strong aria-hidden="true">17.4.2.</strong> Create a Custom Web Page</a></li><li class="chapter-item expanded "><a href="../platforms/wasm/gh-pages.html"><strong aria-hidden="true">17.4.3.</strong> Hosting on GitHub Pages</a></li></ol></li><li class="chapter-item expanded "><a href="../setup/cross.html"><strong aria-hidden="true">17.5.</strong> Cross-Compilation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup/cross/linux-windows.html"><strong aria-hidden="true">17.5.1.</strong> From Linux to Windows</a></li><li class="chapter-item expanded "><a href="../setup/cross/macos-windows.html"><strong aria-hidden="true">17.5.2.</strong> From macOS to Windows</a></li></ol></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../credits.html">Credits</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../contact.html">Contact Me</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../contributing-bevy.html">Contribute to Bevy</a></li><li class="chapter-item expanded affix "><a href="../contributing.html">Contribute to this Book</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Unofficial Bevy Cheat Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/bevy-cheatbook/bevy-cheatbook/issues/new" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <div class="table-wrapper"><table><thead><tr><th><a href="/introduction.html#maintenance-policy">Bevy Version:</a></th><th>0.14</th><th>(upcoming / release candidate)</th></tr></thead><tbody>
+</tbody></table>
+</div>
+<p><code>当前双语版本对应的是: 3d540e7, 日期: 2024/06/13, 等双语版本整个翻译完之后,再处理原始仓库的更新</code></p>
+<h1 id="gamepad-controller-joystick"><a class="header" href="#gamepad-controller-joystick">Gamepad (Controller, Joystick)</a></h1>
+<p>Relevant official examples:
+<a href="https://github.com/bevyengine/bevy/blob/v0.14.0-rc.2/examples/input/gamepad_input.rs"><code>gamepad_input</code></a>,
+<a href="https://github.com/bevyengine/bevy/blob/v0.14.0-rc.2/examples/input/gamepad_input_events.rs"><code>gamepad_input_events</code></a>.</p>
+<hr />
+<p>Bevy has support for gamepad input hardware, using <a href="https://gitlab.com/gilrs-project/gilrs">gilrs</a>:
+console controllers, joysticks, etc. Many different kinds of hardware should
+work, but if your device is not supported, you should file an issue with the
+<a href="https://gitlab.com/gilrs-project/gilrs">gilrs</a> project.</p>
+<p>bevy利用gilrs库来实现手柄的输入.</p>
+<h2 id="gamepad-ids"><a class="header" href="#gamepad-ids">Gamepad IDs</a></h2>
+<p>Bevy assigns a unique ID (<a href="https://docs.rs/bevy/0.14.0-rc.2/bevy/input/gamepad/struct.Gamepad.html"><code>Gamepad</code></a>) to each connected gamepad. For local
+multiplayer, this lets you associate each device with a specific player and
+distinguish which one your inputs are coming from.</p>
+<p>You can use the <a href="https://docs.rs/bevy/0.14.0-rc.2/bevy/input/gamepad/struct.Gamepads.html"><code>Gamepads</code></a> <a href="/programming/res.html">resource</a> to list the IDs of all the
+currently connected gamepad devices, or to check the status of a specific one.</p>
+<pre><code class="language-rust no_run noplayground">fn list_gamepads(gamepads: Res&lt;Gamepads&gt;) {
+    println!("Currently connected gamepads:");
+    for gamepad in gamepads.iter() {
+        println!(
+            "ID: {:?}; Name: {}",
+            gamepad,
+            gamepads.name(gamepad).unwrap_or("unknown")
+        );
+    }
+}</code></pre>
+<p>bevy给每个连接的手柄都分配了唯一id,这个id是用于区分输入源的.</p>
+<p>上面的例子是通过Gamepads资源显示所有已连接的手柄.</p>
+<h3 id="handling-connections--disconnections"><a class="header" href="#handling-connections--disconnections">Handling Connections / Disconnections</a></h3>
+<p>To detect when gamepads are connected or disconnected, you can use
+<a href="https://docs.rs/bevy/0.14.0-rc.2/bevy/input/gamepad/enum.GamepadEvent.html"><code>GamepadEvent</code></a> <a href="/programming/events.html">events</a>.</p>
+<p>Example showing how to remember the first connected gamepad ID:</p>
+<pre><code class="language-rust no_run noplayground">use bevy::input::gamepad::{GamepadConnection, GamepadEvent};
+
+/// Simple resource to store the ID of the first connected gamepad.
+/// We can use it to know which gamepad to use for player input.
+#[derive(Resource)]
+struct MyGamepad(Gamepad);
+
+fn gamepad_connections(
+    mut commands: Commands,
+    my_gamepad: Option&lt;Res&lt;MyGamepad&gt;&gt;,
+    mut evr_gamepad: EventReader&lt;GamepadEvent&gt;,
+) {
+    for ev in evr_gamepad.read() {
+        // we only care about connection events
+        let GamepadEvent::Connection(ev_conn) = ev else {
+            continue;
+        };
+        match &amp;ev_conn.connection {
+            GamepadConnection::Connected(info) =&gt; {
+                debug!(
+                    "New gamepad connected: {:?}, name: {}",
+                    ev_conn.gamepad, info.name,
+                );
+                // if we don't have any gamepad yet, use this one
+                if my_gamepad.is_none() {
+                    commands.insert_resource(MyGamepad(ev_conn.gamepad));
+                }
+            }
+            GamepadConnection::Disconnected =&gt; {
+                debug!("Lost connection with gamepad: {:?}", ev_conn.gamepad);
+                // if it's the one we previously used for the player, remove it:
+                if let Some(MyGamepad(old_id)) = my_gamepad.as_deref() {
+                    if *old_id == ev_conn.gamepad {
+                        commands.remove_resource::&lt;MyGamepad&gt;();
+                    }
+                }
+            }
+        }
+    }
+}</code></pre>
+<p>使用<code>GamepadEvent</code>事件来检测手柄的连接状态.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum GamepadEvent {
+    Connection(GamepadConnectionEvent),
+    Button(GamepadButtonChangedEvent),
+    Axis(GamepadAxisChangedEvent),
+}
+<span class="boring">}</span></code></pre></pre>
+<p>上面维护手柄连接状态的例子,用资源保存了一个手柄信息,并未支持多手柄.</p>
+<h2 id="handling-gamepad-inputs"><a class="header" href="#handling-gamepad-inputs">Handling Gamepad Inputs</a></h2>
+<p>The <code>Axis&lt;GamepadAxis&gt;</code> (<a href="https://docs.rs/bevy/0.14.0-rc.2/bevy/input/struct.Axis.html"><code>Axis</code></a>, <a href="https://docs.rs/bevy/0.14.0-rc.2/bevy/input/gamepad/struct.GamepadAxis.html"><code>GamepadAxis</code></a>) <a href="/programming/res.html">resource</a>
+keeps track of the current value of the different axes: X/Y for each thumb
+stick, and the Z axes (the analog triggers).</p>
+<p>Buttons can be handled with the <code>ButtonInput&lt;GamepadButton&gt;</code>
+(<a href="https://docs.rs/bevy/0.14.0-rc.2/bevy/input/struct.ButtonInput.html"><code>ButtonInput</code></a>, <a href="https://docs.rs/bevy/0.14.0-rc.2/bevy/input/gamepad/struct.GamepadButton.html"><code>GamepadButton</code></a>) <a href="/programming/res.html">resource</a>, similar to <a href="/input/mouse.html#mouse-buttons">mouse
+buttons</a> or <a href="/input/keyboard.html">keyboard keys</a>.</p>
+<pre><code class="language-rust no_run noplayground">fn gamepad_input(
+    axes: Res&lt;Axis&lt;GamepadAxis&gt;&gt;, // 手柄输入可以通过事件或资源获取,这里是通过资源
+    buttons: Res&lt;ButtonInput&lt;GamepadButton&gt;&gt;,
+    my_gamepad: Option&lt;Res&lt;MyGamepad&gt;&gt;,
+) {
+    // 手柄输入的处理流程是标准的: 先处理连接,再处理输入,两者独立处理.
+    let Some(&amp;MyGamepad(gamepad)) = my_gamepad.as_deref() else {
+        // no gamepad is connected
+        // 这里可以只处理感兴趣的手柄,在多手柄连接的场景非常必要.
+        // ns主界面,红蓝手柄都能控制,就是没有处理过滤.
+        return;
+    };
+
+    // The joysticks are represented using a separate axis for X and Y
+    let axis_lx = GamepadAxis {
+        gamepad,
+        axis_type: GamepadAxisType::LeftStickX,
+    };
+    let axis_ly = GamepadAxis {
+        gamepad,
+        axis_type: GamepadAxisType::LeftStickY,
+    };
+
+    // pub struct Axis&lt;T&gt;, T为输入设备类型,struct存储的是位置信息.
+    // Axis.get()获取有限制范围,使用get_unclamped()获取无限制范围.
+
+    if let (Some(x), Some(y)) = (axes.get(axis_lx), axes.get(axis_ly)) {
+        // combine X and Y into one vector
+        let left_stick = Vec2::new(x, y);
+
+        // Example: check if the stick is pushed up
+        if left_stick.length() &gt; 0.9 &amp;&amp; left_stick.y &gt; 0.5 {
+            // do something
+            // 自定义遥感逻辑.
+        }
+    }
+
+    // In a real game, the buttons would be configurable, but here we hardcode them
+    // 遥感按钮,和普通按钮的处理方式一致.
+    let jump_button = GamepadButton {
+        gamepad,
+        button_type: GamepadButtonType::South,
+    };
+    let heal_button = GamepadButton {
+        gamepad,
+        button_type: GamepadButtonType::East,
+    };
+
+    if buttons.just_pressed(jump_button) {
+        // button just pressed: make the player jump
+    }
+
+    if buttons.pressed(heal_button) {
+        // button being held down: heal the player
+    }
+}</code></pre>
+<p>Notice that the names of buttons in the <a href="https://docs.rs/bevy/0.14.0-rc.2/bevy/input/gamepad/struct.GamepadButton.html"><code>GamepadButton</code></a> <code>enum</code> are
+vendor-neutral (like <code>South</code> and <code>East</code> instead of X/O or A/B).</p>
+<p>Some game controllers have additional buttons and axes beyond what is available
+on a standard controller, for example:</p>
+<ul>
+<li>HOTAS (stick for flight sim)</li>
+<li>steering wheel + pedals (for car driving games)</li>
+</ul>
+<p>These are represented by the <code>Other(u8)</code> variant in <a href="https://docs.rs/bevy/0.14.0-rc.2/bevy/input/gamepad/struct.GamepadButton.html"><code>GamepadButton</code></a>/<a href="https://docs.rs/bevy/0.14.0-rc.2/bevy/input/gamepad/struct.GamepadAxis.html"><code>GamepadAxis</code></a>.
+The <code>u8</code> value is hardware-specific, so if you want to support such devices,
+your game needs to have a way for your users to configure their input bindings.</p>
+<p>手柄输入的第一类就是遥感.
+通过<code>Axis</code>和<code>GamepadAxis</code>可获取遥感的方向和模拟的Z轴.
+遥感按钮是通过<code>ButtonInput&lt;GamepadButton&gt;</code>获取的.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Debug, Resource)]
+pub struct Axis&lt;T&gt; {
+    /// The position data of the input devices.
+    axis_data: HashMap&lt;T, f32&gt;,
+}
+
+// 如何从资源中获取输入,下面分析一下.起点就是system的资源参数`Res&lt;Axis&lt;GamepadAxis&gt;&gt;`.
+// Axis用hashmap来维护输入的值,key为输入类型,value为输入的值;获取值就使用get().
+// 从使用的流程上讲,只需要构造一个GamepadAxis来能获取到对应手柄对应的输入事件的值了.
+
+// GamepadAxis设计的如此暴力(简单有效)
+pub struct GamepadAxis {
+    pub gamepad: Gamepad, // 哪个手柄的
+    pub axis_type: GamepadAxisType, // 哪个类型的输入
+}
+
+// 左右手柄的xyz是在这儿区分的.
+pub enum GamepadAxisType {
+    LeftStickX,
+    LeftStickY,
+    LeftZ,
+    RightStickX,
+    RightStickY,
+    RightZ,
+    Other(u8),
+}
+
+// 遥感按钮.
+// GamepadButtonType枚举, 在bevy中重新取了名字,按键的数量和w3c的标准手柄按钮是能对上的.
+pub struct GamepadButton {
+    pub gamepad: Gamepad,
+    pub button_type: GamepadButtonType,
+}
+<span class="boring">}</span></code></pre></pre>
+<p>bevy中的手柄按钮是贴近某些手柄厂商的,不是贴近w3c标准的.
+部分设备还支持非标输入,eg:开车游戏中的方向盘和踏板,飞行游戏中的飞行棒,
+这些都用<code>Other(u8)</code>来处理.游戏需要提供一种方法让用户来绑定按键.</p>
+<h3 id="events"><a class="header" href="#events">Events</a></h3>
+<p>Alternatively, if you want to detect all activity as it comes in, you
+can also handle gamepad inputs using <a href="https://docs.rs/bevy/0.14.0-rc.2/bevy/input/gamepad/enum.GamepadEvent.html"><code>GamepadEvent</code></a> <a href="/programming/events.html">events</a>:</p>
+<pre><code class="language-rust no_run noplayground">fn gamepad_input_events(mut evr_gamepad: EventReader&lt;GamepadEvent&gt;) {
+    for ev in evr_gamepad.read() {
+        match ev {
+            GamepadEvent::Axis(ev_axis) =&gt; {
+                println!(
+                    "Axis {:?} on gamepad {:?} is now at {:?}",
+                    ev_axis.axis_type, ev_axis.gamepad, ev_axis.value
+                );
+            }
+            GamepadEvent::Button(ev_button) =&gt; {
+                // The "value" of a button is typically `0.0` or `1.0`, but it
+                // is a `f32` because some gamepads may have buttons that are
+                // pressure-sensitive or otherwise analog somehow.
+                println!(
+                    "Button {:?} on gamepad {:?} is now at {:?}",
+                    ev_button.button_type, ev_button.gamepad, ev_button.value
+                );
+            }
+            _ =&gt; {
+                // we don't care about other events here (connect/disconnect)
+            }
+        }
+    }
+}</code></pre>
+<p>如果要捕获手柄的所有事件,用<code>GamepadEvent</code>.</p>
+<h2 id="gamepad-settings"><a class="header" href="#gamepad-settings">Gamepad Settings</a></h2>
+<p>You can use the <a href="https://docs.rs/bevy/0.14.0-rc.2/bevy/input/gamepad/struct.GamepadSettings.html"><code>GamepadSettings</code></a> <a href="/programming/res.html">resource</a> to configure dead-zones
+and other parameters of the various axes and buttons. You can set the global
+defaults, as well as individually per-axis/button.</p>
+<p>Here is an example showing how to configure gamepads with custom settings
+(not necessarily <em>good</em> settings, please don't copy these blindly):</p>
+<pre><code class="language-rust no_run noplayground">use bevy::input::gamepad::{AxisSettings, ButtonSettings, GamepadSettings};
+
+fn configure_gamepads(my_gamepad: Option&lt;Res&lt;MyGamepad&gt;&gt;, mut settings: ResMut&lt;GamepadSettings&gt;) {
+    let Some(&amp;MyGamepad(gamepad)) = my_gamepad.as_deref() else {
+        // no gamepad is connected
+        return;
+    };
+
+    // add a larger default dead-zone to all axes (ignore small inputs, round to zero)
+    settings.default_axis_settings.set_deadzone_lowerbound(-0.1);
+    settings.default_axis_settings.set_deadzone_upperbound(0.1);
+
+    // make the right stick "binary", squash higher values to 1.0 and lower values to 0.0
+    let mut right_stick_settings = AxisSettings::default();
+    right_stick_settings.set_deadzone_lowerbound(-0.5);
+    right_stick_settings.set_deadzone_upperbound(0.5);
+    right_stick_settings.set_livezone_lowerbound(-0.5);
+    right_stick_settings.set_livezone_upperbound(0.5);
+    // the raw value should change by at least this much,
+    // for Bevy to register an input event:
+    right_stick_settings.set_threshold(0.01);
+
+    // make the triggers work in big/coarse steps, to get fewer events
+    // reduces noise and precision
+    let mut trigger_settings = AxisSettings::default();
+    trigger_settings.set_threshold(0.25);
+
+    // set these settings for the gamepad we use for our player
+    settings.axis_settings.insert(
+        GamepadAxis {
+            gamepad,
+            axis_type: GamepadAxisType::RightStickX,
+        },
+        right_stick_settings.clone(),
+    );
+    settings.axis_settings.insert(
+        GamepadAxis {
+            gamepad,
+            axis_type: GamepadAxisType::RightStickY,
+        },
+        right_stick_settings.clone(),
+    );
+    settings.axis_settings.insert(
+        GamepadAxis {
+            gamepad,
+            axis_type: GamepadAxisType::LeftZ,
+        },
+        trigger_settings.clone(),
+    );
+    settings.axis_settings.insert(
+        GamepadAxis {
+            gamepad,
+            axis_type: GamepadAxisType::RightZ,
+        },
+        trigger_settings.clone(),
+    );
+
+    // for buttons (or axes treated as buttons):
+    let mut button_settings = ButtonSettings::default();
+    // require them to be pressed almost all the way, to count
+    button_settings.set_press_threshold(0.9);
+    // require them to be released almost all the way, to count
+    button_settings.set_release_threshold(0.1);
+
+    settings.default_button_settings = button_settings;
+}</code></pre>
+<p>To tie the examples together: if you have the <a href="/programming/systems.html">system</a> from the
+<a href="#handling-connections--disconnections">connect/disconnect example</a> earlier
+above on this page, to update our <code>MyGamepad</code> resource, we can configure
+the system from the above example with a <a href="/programming/run-criteria.html">run condition</a>, so that
+the gamepad settings are updated whenever a new gamepad is connected and
+selected to be used:</p>
+<pre><code class="language-rust no_run noplayground">    app.add_systems(
+        Update,
+        configure_gamepads.run_if(resource_exists_and_changed::&lt;MyGamepad&gt;),
+    );</code></pre>
+<p>每个遥感都可以设置<code>死区</code>,也可以全局配置.</p>
+<h2 id="gamepad-rumble"><a class="header" href="#gamepad-rumble">Gamepad Rumble</a></h2>
+<p>To cause rumble/vibration, use the <a href="https://docs.rs/bevy/0.14.0-rc.2/bevy/input/gamepad/enum.GamepadRumbleRequest.html"><code>GamepadRumbleRequest</code></a> event. Every
+event you send will add a "rumble" with a given intensity that lasts for
+a given duration of time. As you send multiple events, each requested rumble
+will be tracked independently, and the actual hardware vibration intensity
+will be the sum of all the rumbles currently in progress.</p>
+<p>You can also send a <code>Stop</code> event to immediately cancel any ongoing rumbling.</p>
+<p>The intensity of each rumble is represented as two values: the "strong"
+motor and the "weak" motor. These might produce different-feeling vibrations
+on different hardware.</p>
+<pre><code class="language-rust no_run noplayground">use bevy::input::gamepad::{GamepadRumbleIntensity, GamepadRumbleRequest};
+
+fn gamepad_rumble(
+    mut evw_rumble: EventWriter&lt;GamepadRumbleRequest&gt;,
+    my_gamepad: Option&lt;Res&lt;MyGamepad&gt;&gt;,
+) {
+    let Some(&amp;MyGamepad(gamepad)) = my_gamepad.as_deref() else {
+        // no gamepad is connected
+        return;
+    };
+
+    // add a short 100ms rumble at max intensity
+    evw_rumble.send(GamepadRumbleRequest::Add {
+        gamepad,
+        duration: Duration::from_millis(100),
+        intensity: GamepadRumbleIntensity::MAX,
+    });
+
+    // also rumble for a little longer (500 ms)
+    // with the weak motor at half intensity
+    // and the strong motor at quarter intensity
+    evw_rumble.send(GamepadRumbleRequest::Add {
+        gamepad,
+        duration: Duration::from_millis(500),
+        intensity: GamepadRumbleIntensity {
+            strong_motor: 0.25,
+            weak_motor: 0.5,
+        },
+    });
+}</code></pre>
+<p>手柄振动.<code>GamepadRumbleRequest</code>事件.
+您发送的每个事件都会添加具有给定强度并持续给定时间的震动.
+当您发送多个事件时,每个请求的震动都会被单独跟踪,
+实际的硬件振动强度将是当前正在进行的所有震动的总和.</p>
+<p><code>Stop</code>事件会立马终止振动.
+振动有时长,有强弱.</p>
+<p>强弱能设置为渐进的.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../input/mouse.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../input/touch.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../input/mouse.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../input/touch.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../nagbar.js"></script>
+
+
+    </div>
+    </body>
+</html>

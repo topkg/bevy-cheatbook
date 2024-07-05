@@ -1,0 +1,582 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Performance Tunables - Unofficial Bevy Cheat Book</title>
+
+
+        <!-- Custom HTML head -->
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../nagbar.css">
+        <link rel="stylesheet" href="../sidebar.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="../overview.html">Chapter Overview</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../builtins.html">List of Bevy Builtins</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded "><a href="../tutorial.html"><strong aria-hidden="true">1.</strong> Bevy Tutorials</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tutorial/guide.html"><strong aria-hidden="true">1.1.</strong> Guided Tour</a></li></ol></li><li class="chapter-item expanded "><a href="../cookbook.html"><strong aria-hidden="true">2.</strong> Bevy Cookbook</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../cookbook/print-framerate.html"><strong aria-hidden="true">2.1.</strong> Show Framerate</a></li><li class="chapter-item expanded "><a href="../cookbook/cursor2world.html"><strong aria-hidden="true">2.2.</strong> Convert cursor to world coordinates</a></li><li class="chapter-item expanded "><a href="../cookbook/custom-projection.html"><strong aria-hidden="true">2.3.</strong> Custom Camera Projection</a></li><li class="chapter-item expanded "><a href="../cookbook/pan-orbit-camera.html"><strong aria-hidden="true">2.4.</strong> 3D Pan+Orbit Camera</a></li><li class="chapter-item expanded "><a href="../cookbook/print-resources.html"><strong aria-hidden="true">2.5.</strong> List All Resource Types</a></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded "><a href="../setup.html"><strong aria-hidden="true">3.</strong> Bevy Setup Tips</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup/getting-started.html"><strong aria-hidden="true">3.1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../setup/editor.html"><strong aria-hidden="true">3.2.</strong> Text Editor / IDE</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup/editor/vscode.html"><strong aria-hidden="true">3.2.1.</strong> Visual Studio Code</a></li><li class="chapter-item expanded "><a href="../setup/editor/jetbrains.html"><strong aria-hidden="true">3.2.2.</strong> JetBrains (RustRover, IntelliJ, CLion)</a></li><li class="chapter-item expanded "><a href="../setup/editor/kak.html"><strong aria-hidden="true">3.2.3.</strong> Kakoune</a></li><li class="chapter-item expanded "><a href="../setup/editor/vim.html"><strong aria-hidden="true">3.2.4.</strong> Vim</a></li><li class="chapter-item expanded "><a href="../setup/editor/emacs.html"><strong aria-hidden="true">3.2.5.</strong> Emacs</a></li></ol></li><li class="chapter-item expanded "><a href="../setup/bevy-config.html"><strong aria-hidden="true">3.3.</strong> Customizing Bevy (features, modularity)</a></li><li class="chapter-item expanded "><a href="../setup/unofficial-plugins.html"><strong aria-hidden="true">3.4.</strong> Community Plugin Ecosystem</a></li><li class="chapter-item expanded "><a href="../setup/bevy-tools.html"><strong aria-hidden="true">3.5.</strong> Dev Tools and Editors for Bevy</a></li><li class="chapter-item expanded "><a href="../setup/perf.html" class="active"><strong aria-hidden="true">3.6.</strong> Performance Tunables</a></li><li class="chapter-item expanded "><a href="../setup/bevy-git.html"><strong aria-hidden="true">3.7.</strong> Using bleeding-edge Bevy (main)</a></li></ol></li><li class="chapter-item expanded "><a href="../pitfalls.html"><strong aria-hidden="true">4.</strong> Common Pitfalls</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../pitfalls/build-errors.html"><strong aria-hidden="true">4.1.</strong> Strange compile errors from Bevy or dependencies</a></li><li class="chapter-item expanded "><a href="../pitfalls/performance.html"><strong aria-hidden="true">4.2.</strong> Slow Performance</a></li><li class="chapter-item expanded "><a href="../pitfalls/into-system.html"><strong aria-hidden="true">4.3.</strong> Error adding function as system</a></li><li class="chapter-item expanded "><a href="../pitfalls/3d-not-rendering.html"><strong aria-hidden="true">4.4.</strong> 3D objects not displaying</a></li><li class="chapter-item expanded "><a href="../pitfalls/split-borrows.html"><strong aria-hidden="true">4.5.</strong> Borrow multiple fields from struct</a></li><li class="chapter-item expanded "><a href="../pitfalls/time.html"><strong aria-hidden="true">4.6.</strong> Jittering Time (choppy movement/animation)</a></li><li class="chapter-item expanded "><a href="../pitfalls/uv-coordinates.html"><strong aria-hidden="true">4.7.</strong> Textures/Images are flipped</a></li></ol></li><li class="chapter-item expanded "><a href="../fundamentals.html"><strong aria-hidden="true">5.</strong> Game Engine Fundamentals</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../fundamentals/coords.html"><strong aria-hidden="true">5.1.</strong> Coordinate System</a></li><li class="chapter-item expanded "><a href="../fundamentals/transforms.html"><strong aria-hidden="true">5.2.</strong> Transforms</a></li><li class="chapter-item expanded "><a href="../fundamentals/visibility.html"><strong aria-hidden="true">5.3.</strong> Visibility</a></li><li class="chapter-item expanded "><a href="../fundamentals/time.html"><strong aria-hidden="true">5.4.</strong> Time and Timers</a></li><li class="chapter-item expanded "><a href="../fundamentals/log.html"><strong aria-hidden="true">5.5.</strong> Logging, Console Messages</a></li><li class="chapter-item expanded "><a href="../fundamentals/hierarchy.html"><strong aria-hidden="true">5.6.</strong> Parent/Child Hierarchies</a></li><li class="chapter-item expanded "><a href="../fundamentals/fixed-timestep.html"><strong aria-hidden="true">5.7.</strong> Fixed Timestep</a></li><li class="chapter-item expanded "><a href="../fundamentals/gizmos.html"><strong aria-hidden="true">5.8.</strong> Gizmos</a></li></ol></li><li class="chapter-item expanded "><a href="../graphics.html"><strong aria-hidden="true">6.</strong> General Graphics Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../graphics/camera.html"><strong aria-hidden="true">6.1.</strong> Cameras</a></li><li class="chapter-item expanded "><a href="../graphics/hdr-tonemap.html"><strong aria-hidden="true">6.2.</strong> HDR and Tonemapping</a></li><li class="chapter-item expanded "><a href="../graphics/bloom.html"><strong aria-hidden="true">6.3.</strong> Bloom</a></li></ol></li><li class="chapter-item expanded "><a href="../2d.html"><strong aria-hidden="true">7.</strong> Working with 2D</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../2d/camera.html"><strong aria-hidden="true">7.1.</strong> 2D Camera Setup</a></li><li class="chapter-item expanded "><a href="../2d/sprites.html"><strong aria-hidden="true">7.2.</strong> Sprites and Atlases</a></li></ol></li><li class="chapter-item expanded "><a href="../3d.html"><strong aria-hidden="true">8.</strong> Working with 3D</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3d/camera.html"><strong aria-hidden="true">8.1.</strong> 3D Camera Setup</a></li><li class="chapter-item expanded "><a href="../3d/gltf.html"><strong aria-hidden="true">8.2.</strong> 3D Models and Scenes (GLTF)</a></li></ol></li><li class="chapter-item expanded "><a href="../input.html"><strong aria-hidden="true">9.</strong> Input Handling</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../input/keyboard.html"><strong aria-hidden="true">9.1.</strong> Keyboard</a></li><li class="chapter-item expanded "><a href="../input/mouse.html"><strong aria-hidden="true">9.2.</strong> Mouse</a></li><li class="chapter-item expanded "><a href="../input/gamepad.html"><strong aria-hidden="true">9.3.</strong> Gamepad (Controller, Joystick)</a></li><li class="chapter-item expanded "><a href="../input/touch.html"><strong aria-hidden="true">9.4.</strong> Touchscreen</a></li><li class="chapter-item expanded "><a href="../input/gesture.html"><strong aria-hidden="true">9.5.</strong> Gestures</a></li><li class="chapter-item expanded "><a href="../input/dnd.html"><strong aria-hidden="true">9.6.</strong> Drag-and-Drop (Files)</a></li><li class="chapter-item expanded "><a href="../input/ime.html"><strong aria-hidden="true">9.7.</strong> IME (Advanced Text)</a></li></ol></li><li class="chapter-item expanded "><a href="../window.html"><strong aria-hidden="true">10.</strong> Window Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../window/props.html"><strong aria-hidden="true">10.1.</strong> Window Properties</a></li><li class="chapter-item expanded "><a href="../window/clear-color.html"><strong aria-hidden="true">10.2.</strong> Change the Background Color</a></li><li class="chapter-item expanded "><a href="../window/mouse-grab.html"><strong aria-hidden="true">10.3.</strong> Grab/Capture the Mouse Cursor</a></li><li class="chapter-item expanded "><a href="../window/icon.html"><strong aria-hidden="true">10.4.</strong> Set the Window Icon</a></li></ol></li><li class="chapter-item expanded "><a href="../assets.html"><strong aria-hidden="true">11.</strong> Asset Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../assets/handles.html"><strong aria-hidden="true">11.1.</strong> Handles</a></li><li class="chapter-item expanded "><a href="../assets/assetserver.html"><strong aria-hidden="true">11.2.</strong> Load Assets from Files</a></li><li class="chapter-item expanded "><a href="../assets/data.html"><strong aria-hidden="true">11.3.</strong> Access the Asset Data</a></li><li class="chapter-item expanded "><a href="../assets/assetevent.html"><strong aria-hidden="true">11.4.</strong> React to Changes with Asset Events</a></li><li class="chapter-item expanded "><a href="../assets/ready.html"><strong aria-hidden="true">11.5.</strong> Track Loading Progress</a></li><li class="chapter-item expanded "><a href="../assets/hot-reload.html"><strong aria-hidden="true">11.6.</strong> Hot-Reloading Assets</a></li><li class="chapter-item expanded "><a href="../assets/processing.html"><strong aria-hidden="true">11.7.</strong> Processing Assets</a></li></ol></li><li class="chapter-item expanded "><a href="../audio.html"><strong aria-hidden="true">12.</strong> Audio</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../audio/basic.html"><strong aria-hidden="true">12.1.</strong> Playing Sounds</a></li><li class="chapter-item expanded "><a href="../audio/spatial.html"><strong aria-hidden="true">12.2.</strong> Spatial Audio</a></li><li class="chapter-item expanded "><a href="../audio/custom.html"><strong aria-hidden="true">12.3.</strong> Custom Audio Streams</a></li></ol></li><li class="chapter-item expanded "><a href="../ui.html"><strong aria-hidden="true">13.</strong> Bevy UI Framework</a></li><li class="chapter-item expanded "><a href="../programming.html"><strong aria-hidden="true">14.</strong> Bevy Core Programming Framework</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../programming/ecs-intro.html"><strong aria-hidden="true">14.1.</strong> Intro to ECS</a></li><li class="chapter-item expanded "><a href="../programming/intro-data.html"><strong aria-hidden="true">14.2.</strong> Intro: Your Data</a></li><li class="chapter-item expanded "><a href="../programming/intro-code.html"><strong aria-hidden="true">14.3.</strong> Intro: Your Code</a></li><li class="chapter-item expanded "><a href="../programming/app-builder.html"><strong aria-hidden="true">14.4.</strong> The App</a></li><li class="chapter-item expanded "><a href="../programming/systems.html"><strong aria-hidden="true">14.5.</strong> Systems</a></li><li class="chapter-item expanded "><a href="../programming/res.html"><strong aria-hidden="true">14.6.</strong> Resources</a></li><li class="chapter-item expanded "><a href="../programming/ec.html"><strong aria-hidden="true">14.7.</strong> Entities, Components</a></li><li class="chapter-item expanded "><a href="../programming/bundle.html"><strong aria-hidden="true">14.8.</strong> Bundles</a></li><li class="chapter-item expanded "><a href="../programming/queries.html"><strong aria-hidden="true">14.9.</strong> Queries</a></li><li class="chapter-item expanded "><a href="../programming/commands.html"><strong aria-hidden="true">14.10.</strong> Commands</a></li><li class="chapter-item expanded "><a href="../programming/events.html"><strong aria-hidden="true">14.11.</strong> Events</a></li><li class="chapter-item expanded "><a href="../programming/plugins.html"><strong aria-hidden="true">14.12.</strong> Plugins</a></li><li class="chapter-item expanded "><a href="../programming/local.html"><strong aria-hidden="true">14.13.</strong> Local Resources</a></li><li class="chapter-item expanded "><a href="../programming/exclusive.html"><strong aria-hidden="true">14.14.</strong> Exclusive Systems</a></li><li class="chapter-item expanded "><a href="../programming/world.html"><strong aria-hidden="true">14.15.</strong> Direct ECS World Access</a></li><li class="chapter-item expanded "><a href="../programming/schedules.html"><strong aria-hidden="true">14.16.</strong> Schedules</a></li><li class="chapter-item expanded "><a href="../programming/system-order.html"><strong aria-hidden="true">14.17.</strong> System Order of Execution</a></li><li class="chapter-item expanded "><a href="../programming/run-conditions.html"><strong aria-hidden="true">14.18.</strong> Run Conditions</a></li><li class="chapter-item expanded "><a href="../programming/system-sets.html"><strong aria-hidden="true">14.19.</strong> System Sets</a></li><li class="chapter-item expanded "><a href="../programming/states.html"><strong aria-hidden="true">14.20.</strong> States</a></li><li class="chapter-item expanded "><a href="../programming/change-detection.html"><strong aria-hidden="true">14.21.</strong> Change Detection</a></li><li class="chapter-item expanded "><a href="../programming/one-shot-systems.html"><strong aria-hidden="true">14.22.</strong> One-Shot Systems</a></li><li class="chapter-item expanded "><a href="../programming/par-iter.html"><strong aria-hidden="true">14.23.</strong> Internal Parallelism</a></li><li class="chapter-item expanded "><a href="../programming/system-piping.html"><strong aria-hidden="true">14.24.</strong> System Piping</a></li><li class="chapter-item expanded "><a href="../programming/paramset.html"><strong aria-hidden="true">14.25.</strong> ParamSet</a></li><li class="chapter-item expanded "><a href="../programming/non-send.html"><strong aria-hidden="true">14.26.</strong> Non-Send</a></li></ol></li><li class="chapter-item expanded "><a href="../gpu.html"><strong aria-hidden="true">15.</strong> Bevy Render (GPU) Framework</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../gpu/intro.html"><strong aria-hidden="true">15.1.</strong> Render Architecture Overview</a></li><li class="chapter-item expanded "><a href="../gpu/stages.html"><strong aria-hidden="true">15.2.</strong> Render Stages</a></li></ol></li><li class="chapter-item expanded "><a href="../patterns.html"><strong aria-hidden="true">16.</strong> Programming Patterns</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../patterns/generic-systems.html"><strong aria-hidden="true">16.1.</strong> Generic Systems</a></li><li class="chapter-item expanded "><a href="../patterns/component-storage.html"><strong aria-hidden="true">16.2.</strong> Component Storage (Table/Sparse-Set)</a></li><li class="chapter-item expanded "><a href="../patterns/manual-event-clear.html"><strong aria-hidden="true">16.3.</strong> Manual Event Clearing</a></li><li class="chapter-item expanded "><a href="../patterns/system-tests.html"><strong aria-hidden="true">16.4.</strong> Writing Tests for Systems</a></li></ol></li><li class="chapter-item expanded "><a href="../platforms.html"><strong aria-hidden="true">17.</strong> Bevy on Different Platforms</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../platforms/linux.html"><strong aria-hidden="true">17.1.</strong> Linux Desktop</a></li><li class="chapter-item expanded "><a href="../platforms/macos.html"><strong aria-hidden="true">17.2.</strong> macOS Desktop</a></li><li class="chapter-item expanded "><a href="../platforms/windows.html"><strong aria-hidden="true">17.3.</strong> Windows Desktop</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../platforms/windows/wsl2.html"><strong aria-hidden="true">17.3.1.</strong> Working in WSL2</a></li></ol></li><li class="chapter-item expanded "><a href="../platforms/wasm.html"><strong aria-hidden="true">17.4.</strong> Browser (WebAssembly)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../platforms/wasm/size-opt.html"><strong aria-hidden="true">17.4.1.</strong> Optimize for Size</a></li><li class="chapter-item expanded "><a href="../platforms/wasm/webpage.html"><strong aria-hidden="true">17.4.2.</strong> Create a Custom Web Page</a></li><li class="chapter-item expanded "><a href="../platforms/wasm/gh-pages.html"><strong aria-hidden="true">17.4.3.</strong> Hosting on GitHub Pages</a></li></ol></li><li class="chapter-item expanded "><a href="../setup/cross.html"><strong aria-hidden="true">17.5.</strong> Cross-Compilation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup/cross/linux-windows.html"><strong aria-hidden="true">17.5.1.</strong> From Linux to Windows</a></li><li class="chapter-item expanded "><a href="../setup/cross/macos-windows.html"><strong aria-hidden="true">17.5.2.</strong> From macOS to Windows</a></li></ol></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../credits.html">Credits</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../contact.html">Contact Me</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../contributing-bevy.html">Contribute to Bevy</a></li><li class="chapter-item expanded affix "><a href="../contributing.html">Contribute to this Book</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Unofficial Bevy Cheat Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/bevy-cheatbook/bevy-cheatbook/issues/new" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <div class="table-wrapper"><table><thead><tr><th><a href="/introduction.html#maintenance-policy">Bevy Version:</a></th><th><a href="https://bevyengine.org/news/bevy-0-12">0.12</a></th><th>(outdated!)</th></tr></thead><tbody>
+</tbody></table>
+</div><p style="text-align: center;">
+As this page is outdated, please refer to Bevy's official migration guides while reading,
+to cover the differences:
+<a href="https://bevyengine.org/learn/migration-guides/0-12-to-0-13/">0.12 to 0.13</a>.
+</p>
+<p style="text-align: center;">
+I apologize for the inconvenience. I will update the page as soon as I find the time.
+</p>
+<hr />
+<p><code>当前双语版本对应的是: 3d540e7, 日期: 2024/06/13, 等双语版本整个翻译完之后,再处理原始仓库的更新</code></p>
+<h1 id="performance-tunables"><a class="header" href="#performance-tunables">Performance Tunables</a></h1>
+<p>Bevy offers a lot of features that should improve performance in most cases, and
+most of them are enabled by default. However, they might be detrimental to some
+projects.</p>
+<p>Luckily, most of them are configurable. Most users should probably not touch
+these settings, but if your game does not perform well with Bevy's default
+configuration, this page will show you some things you can try to change, to see
+if they help your project.</p>
+<p>Bevy's default configruation is designed with <em>scalability</em> in mind. That is, so
+that you don't have to worry too much about performance, as you add more
+features and complexity to your project. Bevy will automatically take care to
+distribute the workload as to make good use of the available hardware (GPU, CPU
+multithreading).</p>
+<p>However, it might hurt simpler projects or have undesirable implications in some
+cases.</p>
+<p>This trade-off is good, because small and simple games will probably be fast
+enough anyway, even with the additional overhead, but large and complex games
+will benefit from the advanced scheduling to avoid bottlenecks. You can
+develop your game without performance degrading much as you add more stuff.</p>
+<p>性能可调参数.</p>
+<p>bevy提供了大量功能,在大多数场景下都能提高性能,这些大多是默认开启的.
+在部分项目中,这些默认开启的可能会起到反效果.</p>
+<p>这些参数都是可调的.</p>
+<p>bevy的设计权衡是可扩展,有些机制启用后在简单项目中不是最优,但消耗也能接受,
+在复杂项目中就能得到很好的收益,eg:多线程(在自定义bevy一节中,多线程是第一个默认启用的功能).</p>
+<h2 id="multithreading-overhead"><a class="header" href="#multithreading-overhead">Multithreading Overhead</a></h2>
+<p>Bevy has a smart multithreaded executor, so that your <a href="/programming/systems.html">systems</a> can
+automatically <a href="/programming/intro-code.html">run in parallel</a> across multiple CPU cores,
+when they don't need conflicting access to the same data, while <a href="/programming/system-order.html">honoring ordering
+constraints</a>. This is great, because you can just keep adding
+more systems to do different things and implement more features in your game,
+and Bevy will make good use of modern multi-core CPUs with no effort from you!</p>
+<p>However, the smart scheduling adds some overhead to all common operations (such
+as every time a <a href="/programming/systems.html">system</a> runs). In projects that have little work to
+do every frame, especially if all of your systems complete very quickly, the
+overhead can add up to overshadow the actual useful work you are doing!</p>
+<p>You might want to try disabling multithreading, to see if your game might
+perform better without it.</p>
+<p>多线程,这样多个system就可以在多个cpu并行处理,配合system的<code>顺序约定</code>,
+bevy就自动处理了多核调度.</p>
+<p>bevy自动调度不是没有代价的,而且还很大,如果system都是执行简单任务,
+多线程的收益不一定能覆盖住bevy自动调度的消耗.
+换言之,system任务越复杂,多线程调度的收益越高.</p>
+<h3 id="disabling-multithreading-for-update-schedule-only"><a class="header" href="#disabling-multithreading-for-update-schedule-only">Disabling Multithreading for Update Schedule Only</a></h3>
+<p>Multithreading can be disabled per-<a href="/programming/schedules.html">schedule</a>. This means it
+is easy to disable it only for your code / game logic (in the <code>Update</code> schedule),
+while still leaving it enabled for all the Bevy engine internal systems.</p>
+<p>This could speed up simple games that don't have much gameplay logic, while still
+letting the engine run with multithreading.</p>
+<p>You can edit the settings of a specific <a href="/programming/schedules.html">schedule</a> via the <a href="/programming/app-builder.html">app builder</a>:</p>
+<pre><code class="language-rust no_run noplayground">    use bevy::ecs::schedule::ExecutorKind;
+
+    App::new()
+        .add_plugins(DefaultPlugins)
+        .edit_schedule(Update, |schedule| {
+            schedule.set_executor_kind(ExecutorKind::SingleThreaded);
+        })
+        // ...</code></pre>
+<p>bevy中有很多调度器,其中Update就是我们自定义的游戏逻辑,其他很多是bevy内置的system,
+这里提供了一种方式只让Update调度器禁止使用多线程.这对简单项目是有性能提高的.</p>
+<p>如上图所示,指定调度器类型为单线程即可.</p>
+<h3 id="disabling-multithreading-completely"><a class="header" href="#disabling-multithreading-completely">Disabling Multithreading Completely</a></h3>
+<p>If you want to try to completely disable multithreading for everything,
+you can do so by removing the <code>multi-threaded</code> default Cargo feature.</p>
+<p>In <code>Cargo.toml</code></p>
+<pre><code class="language-toml">[dependencies.bevy]
+version = "0.12"
+default-features = false
+features = [
+   # re-enable everything you need, without `multi-threaded`
+   # ...
+]
+</code></pre>
+<p><a href="/setup/bevy-config.html">(see here for how to configure Bevy's cargo features)</a></p>
+<p>This is generally not recommended. Bevy is designed to work with multithreading.
+Only consider it if you really need it (like if you are making a special build
+of your project to run on a system where it makes sense, like WASM or old
+hardware).</p>
+<p>如果要禁止所有system的多线程运行,通过features禁用<code>multi-threaded</code>即可.
+这个一般出现在wasm或老旧硬件的项目中.</p>
+<h2 id="multithreading-configuration"><a class="header" href="#multithreading-configuration">Multithreading Configuration</a></h2>
+<p>You can configure how many CPU threads Bevy uses.</p>
+<p>Bevy creates threads for 3 different purposes:</p>
+<ul>
+<li>Compute: where all your systems and all per-frame work is run</li>
+<li>AsyncCompute: for background processing independent from framerate</li>
+<li>I/O: for loading of assets and other disk/network activity</li>
+</ul>
+<p>By default, Bevy <em>splits/partitions</em> the available CPU threads as follows:</p>
+<ul>
+<li>I/O: 25% of the available CPU threads, minimum 1, maximum 4</li>
+<li>AsyncCompute: 25% of the available CPU threads, minimum 1, maximum 4</li>
+<li>Compute: all remaining threads</li>
+</ul>
+<p>This means <em>no overprovisioning</em>. Every hardware CPU thread is used
+for one specific purpose.</p>
+<p>This provides a good balance for mixed CPU workloads. Particularly for games
+that load a lot of assets (especially if assets are loaded dynamically during
+gameplay), the dedicated I/O threads will reduce stuttering and load times.
+Background computation will not affect your framerate. Etc.</p>
+<p>Examples:</p>
+<div class="table-wrapper"><table><thead><tr><th>CPU Cores/Threads</th><th># I/O</th><th># AsyncCompute</th><th># Compute</th></tr></thead><tbody>
+<tr><td>1-3</td><td>1</td><td>1</td><td>1</td></tr>
+<tr><td>4</td><td>1</td><td>1</td><td>2</td></tr>
+<tr><td>6</td><td>2</td><td>2</td><td>2</td></tr>
+<tr><td>8</td><td>2</td><td>2</td><td>4</td></tr>
+<tr><td>10</td><td>3</td><td>3</td><td>4</td></tr>
+<tr><td>12</td><td>3</td><td>3</td><td>6</td></tr>
+<tr><td>16</td><td>4</td><td>4</td><td>8</td></tr>
+<tr><td>24</td><td>4</td><td>4</td><td>16</td></tr>
+<tr><td>32</td><td>4</td><td>4</td><td>24</td></tr>
+</tbody></table>
+</div>
+<p>Note: Bevy does not currently have any special handling for asymmetric
+(big.LITTLE or Intel P/E cores) CPUs. In an ideal world, maybe it would be nice
+to use the number of big/P cores for Compute and little/E cores for I/O.</p>
+<p>进一步还可以配置bevy能使用到的线程数,bevy创建的线程一般要干3件事:</p>
+<ul>
+<li>计算,所有的system和每帧前置的工作</li>
+<li>异步计算,独立于帧率的后台处理逻辑</li>
+<li>io,资产加载或活跃的磁盘网络活动</li>
+</ul>
+<p>默认bevy是按如下方式分配cpu线程的:</p>
+<ul>
+<li>io: 25%可用线程数,最少1个,最多4个</li>
+<li>异步计算: 25%可用线程数,最少1个,最多4个</li>
+<li>计算:剩下线程数</li>
+</ul>
+<p>这个配置很平衡,资源加载(大一点的游戏都是动态加载资源的)和io会减少游戏卡顿和加载时间,
+后台的异步计算也不会受帧率影响,这是这么设计的考虑.</p>
+<p>如上表所示: 8核的分配是2/2/4(对着表格看),24核的分配是4/4/16.</p>
+<h3 id="overprovisioning"><a class="header" href="#overprovisioning">Overprovisioning</a></h3>
+<p>However, if your game does very little I/O (asset loading) or background
+computation, this default configuration might be sub-optimal. Those threads will
+be sitting idle a lot of the time. Meanwhile, Compute, which is your frame
+update loop and is important to your game's overall framerate, is limited to
+fewer threads. This can be especially bad on CPUs with few cores (less than 4
+total threads).</p>
+<p>For example, in my projects, I usually load all my assets during a loading
+screen, so the I/O threads are unused during normal gameplay. I rarely use
+AsyncCompute.</p>
+<p>If your game is like that, you might want to make all CPU threads available for
+Compute. This could boost your framerate, especially on CPUs with few cores.
+However, any AsyncCompute or I/O workloads during gameplay could impact your
+game's performance / framerate consistency.</p>
+<p>Here is how to do that:</p>
+<pre><code class="language-rust no_run noplayground">    use bevy::core::TaskPoolThreadAssignmentPolicy;
+    use bevy::tasks::available_parallelism;
+
+    App::new()
+        .add_plugins(DefaultPlugins.set(TaskPoolPlugin {
+            // DefaultPlugins.set() 就是自定义某个插件,
+            // TaskPoolPlugin 里面包含了3个任务池,分别是异步计算/计算/io.
+            task_pool_options: TaskPoolOptions {
+                compute: TaskPoolThreadAssignmentPolicy {
+                    // set the minimum # of compute threads
+                    // to the total number of available threads
+                    // 通过设置最小线程数为最大可用线程数来屏蔽异步计算和io的线程数.
+                    min_threads: available_parallelism(),
+                    max_threads: std::usize::MAX, // unlimited max threads
+                    percent: 1.0,                 // this value is irrelevant in this case
+                },
+                // keep the defaults for everything else
+                ..default()
+            },
+        }))
+        // ...</code></pre>
+<p>And here is an example of an entirely custom configuration:</p>
+<pre><code class="language-rust no_run noplayground">    App::new()
+        .add_plugins(DefaultPlugins.set(TaskPoolPlugin {
+            task_pool_options: TaskPoolOptions {
+                min_total_threads: 1,
+                max_total_threads: std::usize::MAX, // unlimited threads
+                io: TaskPoolThreadAssignmentPolicy {
+                    // say we know our app is i/o intensive (asset streaming?)
+                    // so maybe we want lots of i/o threads
+                    // io密集型程序.
+                    min_threads: 4,
+                    max_threads: std::usize::MAX,
+                    percent: 0.5, // use 50% of available threads for I/O
+                },
+                async_compute: TaskPoolThreadAssignmentPolicy {
+                    // say our app never does any background compute,
+                    // so we don't care, but keep one thread just in case
+                    // 异步计算虽然没有,可以指定为1个.
+                    min_threads: 1,
+                    max_threads: 1,
+                    percent: 0.0,
+                },
+                compute: TaskPoolThreadAssignmentPolicy {
+                    // say we want to use at least half the CPU for compute
+                    // (maybe over-provisioning if there are very few cores)
+                    // 最少保证一半的线程在计算上.
+                    min_threads: available_parallelism() / 2,
+                    // but limit it to a maximum of 8 threads
+                    max_threads: 8,
+                    // 1.0 in this case means "use all remaining threads"
+                    // (that were not assigned to io/async_compute)
+                    // (clamped to min_threads..=max_threads)
+                    percent: 1.0,
+                },
+            },
+        }))
+        // ...</code></pre>
+<p>当然,如果我们的游戏在资产加载(io)和异步计算方面的任务非常少,默认配置就不是最优的,
+在很多时间内,分配给io和异步计算的线程就是闲着的,如果cpu线程数多一点,
+这点闲置对游戏还没啥大影响,如果cpu线程数很少(小于4个),这点浪费就是巨大的浪费.</p>
+<p>eg:在屏幕加载画面中,资产已经加载完毕,这意味着没啥io,如果异步计算也少,
+这种情况下,调整默认配置就是很有必要的.</p>
+<h2 id="pipelined-rendering"><a class="header" href="#pipelined-rendering">Pipelined Rendering</a></h2>
+<p>Bevy has a <a href="/gpu/intro.html">pipelined rendering architecture</a>. This
+means Bevy's GPU-related <a href="/programming/systems.html">systems</a> (that run on the CPU to prepare
+work for the GPU every frame) will run in parallel with all the normal systems
+for the next frame. Bevy will render the previous frame in parallel with the
+next frame update.</p>
+<p>This will improve GPU utilization (make it less likely the GPU will sit idle
+waiting for the CPU to give it work to do), by making better use of CPU
+multithreading. Typically, it can result in 10-30% higher framerate, sometimes
+more.</p>
+<p>However, it can also affect perceived input latency ("click-to-photon"
+latency), often for the worse. The effects of the player's input might be
+shown on screen delayed by one frame. It might be compensated by the faster
+framerate, or it might not be. Here is a diagram to visualize what happens:</p>
+<p><img src="../img/pipelined-latency.png" alt="Timeline comparing pipelined and non-pipelined rendering. In the pipelined case, one additional frame is displayed before the effects of the mouse click can be seen on-screen." /></p>
+<p>The actual mouse click happens in-between frames. In both cases, frame #4 is
+when the input is detected by Bevy. In the pipelined case, rendering
+of the previous frame is done in parallel, so an additional frame without
+the input appears on-screen.</p>
+<p>Without pipelining, the user will see their input delayed by 1 frame. With
+pipelining, it will be delayed by 2 frames.</p>
+<p>However, in the diagram above, the frame rate increase from pipelining is
+big enough that overall the input is processed and displayed sooner. Your
+application might not be so lucky.</p>
+<p>bevy的渲染是管道式架构.GPU在显卡上,运行在cpu的system会将每帧要投递给GPU数据准备好,
+GPU和CPU是并行运行的.这类system称为<code>GPU相关的system</code>,
+其特点是当前帧的GPU system和下帧的普通system是并行执行的.</p>
+<p>这种设计提高了GPU的利用率,配合多线程,总体能提高10-30%的帧率.</p>
+<p>因为GPU system的实际上工作在下帧,在低延时的场景下, 对输入的感知会造成影响,
+这是提高帧率的代价之一.高帧率比低帧率的影响小一些.</p>
+<p>如上图所示,鼠标点击后,在4处bevy感知到了点击事件,
+在没有pipeline机制时,在5处就通过画面反馈到玩家了,用了1帧;
+在使用pipeline机制时,在6处才反馈到玩家,用了2帧.</p>
+<p>在高帧率下,pipeline机制的代价会被收益覆盖,我们的程序具体是咋样的,
+需要具体分析.</p>
+<hr />
+<p>If you care more about latency than framerate, you might want to disable
+pipelined rendering. For the best latency, you probably also want to
+<a href="/window/props.html#vsync">disable VSync</a>.</p>
+<p>Here is how to disable pipelined rendering:</p>
+<pre><code class="language-rust no_run noplayground">    use bevy::render::pipelined_rendering::PipelinedRenderingPlugin;
+
+    App::new()
+        .add_plugins(DefaultPlugins.build().disable::&lt;PipelinedRenderingPlugin&gt;())
+        // ...
+        .run();</code></pre>
+<p>pipeline的开关如上图操作.</p>
+<h2 id="clustered-forward-rendering"><a class="header" href="#clustered-forward-rendering">Clustered Forward Rendering</a></h2>
+<p>By default, Bevy uses a Clustered Forward Rendering architecture for 3D.  The
+viewport (on-screen area where the game is displayed) is split into
+rectangles/voxels, so that the lighting can be handled separately for each small
+portion of the scene. This allows you to use many lights in your 3D scenes,
+without destroying performance.</p>
+<p>The dimensions of these clusters can affect rendering performance. The default
+settings are good for most 3D games, but fine-tuning them could improve
+performance, depending on your game.</p>
+<p>In games with a top-down-view camera (such as many strategy and simulation
+games), most of the lights tend to be a similar distance away from the camera.
+In such cases, you might want to reduce the number of Z slices (so that the
+screen is split into smaller X/Y rectangles, but each one covering more
+distance/depth):</p>
+<pre><code class="language-rust no_run noplayground">    use bevy::pbr::ClusterConfig;
+
+    commands.spawn((
+        Camera3dBundle {
+            // ... your 3D camera configruation
+            ..Default::default()
+        },
+        ClusterConfig::FixedZ {
+            // 固定z, 适合从上到下视角的游戏,eg:策略或模拟游戏.
+
+            // 4096 clusters is the Bevy default
+            // if you don't have many lights, you can reduce this value
+            // 灯光数少,就减少total值. 默认集群分组数是4096.
+            total: 4096,
+            // Bevy default is 24 Z-slices
+            // For a top-down-view game, 1 is probably optimal.
+            // 从上到下视角的游戏中,设置z为1.
+            z_slices: 1,
+            dynamic_resizing: true,
+            z_config: Default::default(),
+        },
+    ));</code></pre>
+<p>For games that use very few lights, or where lights affect the entire scene (
+such as inside a small room / indoor area), you might want to try disabling
+clustering:</p>
+<pre><code class="language-rust no_run noplayground">    commands.spawn((
+        Camera3dBundle {
+            // ... your 3D camera configruation
+            ..Default::default()
+        },
+        ClusterConfig::Single, // 如果是室内,光源单一,可以disable集群.
+    ));</code></pre>
+<p>Changing these settings will probably result in bad performance for many games,
+outside of the specific scenarios described above.</p>
+<p>默认bevy在3d渲染中使用<code>集群向前渲染</code>,
+视口（显示游戏的屏幕区域）被分割成矩形/体素，这样可以针对场景的每个小部分单独处理照明。
+这样，可以在 3D 场景中使用许多灯光，而不会影响性能。</p>
+<p>集群分组的尺寸会影响渲染性能,适合的设置会提升性能.
+在采用自上而下视角的游戏中（例如许多策略和模拟游戏），大多数灯光与相机的距离都差不多。
+在这种情况下，您可能需要减少 Z 切片的数量
+(以便将屏幕分割成更小的 X/Y 矩形，但每个矩形覆盖更大的距离/深度).</p>
+<p><em><strong>大多数场景下不需要这么设置,只在特殊场景下使用会提高性能.</strong></em></p>
+<p>集群向前渲染是一种现代渲染技术.<br />
+结合了传统的前向渲染（Forward Rendering）和集群（Clustered）分组的方法，
+以更高效地处理复杂场景中的光源和阴影。
+它在处理大量光源时比传统的前向渲染更高效，
+并且在性能和灵活性上比延迟渲染（Deferred Rendering）有一些优势。</p>
+<p>前向渲染（Forward Rendering）:<br />
+传统的渲染技术，其中每个对象在渲染时直接应用所有影响它的光源。
+这种方法在处理少量光源时比较高效，但随着光源数量的增加，性能会显著下降。</p>
+<p>延迟渲染（Deferred Rendering）：<br />
+延迟渲染首先渲染场景几何信息到多个缓冲区，然后在一个单独的光照阶段应用光源。
+它能很好地处理大量光源，但需要更多的内存带宽和较复杂的后期处理。</p>
+<p>集群分组（Clustered）：<br />
+场景被分割成多个小的三维区域（集群）。
+光源和物体的关系只在这些集群内进行计算，从而减少每个对象需要处理的光源数量。
+这种方法提高了光源管理的效率。</p>
+<p>Clustered Forward Rendering 的流程:</p>
+<p>空间划分：将视锥（视图体积）划分为多个集群，
+这些集群通常是视锥内的固定大小的体积单元（如立方体）。</p>
+<p>光源分配：遍历所有光源，并将每个光源分配到其影响的集群中。
+每个光源的影响范围通过简单的几何计算确定，这样每个集群只会存储影响它的光源列表。</p>
+<p>渲染阶段：在渲染每个像素时，首先确定该像素所在的集群，
+然后仅应用该集群中的光源进行光照计算。
+这减少了每个像素需要处理的光源数量，提高了渲染效率。</p>
+<p>优点: 处理大量光源, 灵活, 性能优化.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../setup/bevy-tools.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../setup/bevy-git.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../setup/bevy-tools.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../setup/bevy-git.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../nagbar.js"></script>
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,483 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>3D Camera Setup - Unofficial Bevy Cheat Book</title>
+
+
+        <!-- Custom HTML head -->
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../nagbar.css">
+        <link rel="stylesheet" href="../sidebar.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="../overview.html">Chapter Overview</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../builtins.html">List of Bevy Builtins</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded "><a href="../tutorial.html"><strong aria-hidden="true">1.</strong> Bevy Tutorials</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tutorial/guide.html"><strong aria-hidden="true">1.1.</strong> Guided Tour</a></li></ol></li><li class="chapter-item expanded "><a href="../cookbook.html"><strong aria-hidden="true">2.</strong> Bevy Cookbook</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../cookbook/print-framerate.html"><strong aria-hidden="true">2.1.</strong> Show Framerate</a></li><li class="chapter-item expanded "><a href="../cookbook/cursor2world.html"><strong aria-hidden="true">2.2.</strong> Convert cursor to world coordinates</a></li><li class="chapter-item expanded "><a href="../cookbook/custom-projection.html"><strong aria-hidden="true">2.3.</strong> Custom Camera Projection</a></li><li class="chapter-item expanded "><a href="../cookbook/pan-orbit-camera.html"><strong aria-hidden="true">2.4.</strong> 3D Pan+Orbit Camera</a></li><li class="chapter-item expanded "><a href="../cookbook/print-resources.html"><strong aria-hidden="true">2.5.</strong> List All Resource Types</a></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded "><a href="../setup.html"><strong aria-hidden="true">3.</strong> Bevy Setup Tips</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup/getting-started.html"><strong aria-hidden="true">3.1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../setup/editor.html"><strong aria-hidden="true">3.2.</strong> Text Editor / IDE</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup/editor/vscode.html"><strong aria-hidden="true">3.2.1.</strong> Visual Studio Code</a></li><li class="chapter-item expanded "><a href="../setup/editor/jetbrains.html"><strong aria-hidden="true">3.2.2.</strong> JetBrains (RustRover, IntelliJ, CLion)</a></li><li class="chapter-item expanded "><a href="../setup/editor/kak.html"><strong aria-hidden="true">3.2.3.</strong> Kakoune</a></li><li class="chapter-item expanded "><a href="../setup/editor/vim.html"><strong aria-hidden="true">3.2.4.</strong> Vim</a></li><li class="chapter-item expanded "><a href="../setup/editor/emacs.html"><strong aria-hidden="true">3.2.5.</strong> Emacs</a></li></ol></li><li class="chapter-item expanded "><a href="../setup/bevy-config.html"><strong aria-hidden="true">3.3.</strong> Customizing Bevy (features, modularity)</a></li><li class="chapter-item expanded "><a href="../setup/unofficial-plugins.html"><strong aria-hidden="true">3.4.</strong> Community Plugin Ecosystem</a></li><li class="chapter-item expanded "><a href="../setup/bevy-tools.html"><strong aria-hidden="true">3.5.</strong> Dev Tools and Editors for Bevy</a></li><li class="chapter-item expanded "><a href="../setup/perf.html"><strong aria-hidden="true">3.6.</strong> Performance Tunables</a></li><li class="chapter-item expanded "><a href="../setup/bevy-git.html"><strong aria-hidden="true">3.7.</strong> Using bleeding-edge Bevy (main)</a></li></ol></li><li class="chapter-item expanded "><a href="../pitfalls.html"><strong aria-hidden="true">4.</strong> Common Pitfalls</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../pitfalls/build-errors.html"><strong aria-hidden="true">4.1.</strong> Strange compile errors from Bevy or dependencies</a></li><li class="chapter-item expanded "><a href="../pitfalls/performance.html"><strong aria-hidden="true">4.2.</strong> Slow Performance</a></li><li class="chapter-item expanded "><a href="../pitfalls/into-system.html"><strong aria-hidden="true">4.3.</strong> Error adding function as system</a></li><li class="chapter-item expanded "><a href="../pitfalls/3d-not-rendering.html"><strong aria-hidden="true">4.4.</strong> 3D objects not displaying</a></li><li class="chapter-item expanded "><a href="../pitfalls/split-borrows.html"><strong aria-hidden="true">4.5.</strong> Borrow multiple fields from struct</a></li><li class="chapter-item expanded "><a href="../pitfalls/time.html"><strong aria-hidden="true">4.6.</strong> Jittering Time (choppy movement/animation)</a></li><li class="chapter-item expanded "><a href="../pitfalls/uv-coordinates.html"><strong aria-hidden="true">4.7.</strong> Textures/Images are flipped</a></li></ol></li><li class="chapter-item expanded "><a href="../fundamentals.html"><strong aria-hidden="true">5.</strong> Game Engine Fundamentals</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../fundamentals/coords.html"><strong aria-hidden="true">5.1.</strong> Coordinate System</a></li><li class="chapter-item expanded "><a href="../fundamentals/transforms.html"><strong aria-hidden="true">5.2.</strong> Transforms</a></li><li class="chapter-item expanded "><a href="../fundamentals/visibility.html"><strong aria-hidden="true">5.3.</strong> Visibility</a></li><li class="chapter-item expanded "><a href="../fundamentals/time.html"><strong aria-hidden="true">5.4.</strong> Time and Timers</a></li><li class="chapter-item expanded "><a href="../fundamentals/log.html"><strong aria-hidden="true">5.5.</strong> Logging, Console Messages</a></li><li class="chapter-item expanded "><a href="../fundamentals/hierarchy.html"><strong aria-hidden="true">5.6.</strong> Parent/Child Hierarchies</a></li><li class="chapter-item expanded "><a href="../fundamentals/fixed-timestep.html"><strong aria-hidden="true">5.7.</strong> Fixed Timestep</a></li><li class="chapter-item expanded "><a href="../fundamentals/gizmos.html"><strong aria-hidden="true">5.8.</strong> Gizmos</a></li></ol></li><li class="chapter-item expanded "><a href="../graphics.html"><strong aria-hidden="true">6.</strong> General Graphics Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../graphics/camera.html"><strong aria-hidden="true">6.1.</strong> Cameras</a></li><li class="chapter-item expanded "><a href="../graphics/hdr-tonemap.html"><strong aria-hidden="true">6.2.</strong> HDR and Tonemapping</a></li><li class="chapter-item expanded "><a href="../graphics/bloom.html"><strong aria-hidden="true">6.3.</strong> Bloom</a></li></ol></li><li class="chapter-item expanded "><a href="../2d.html"><strong aria-hidden="true">7.</strong> Working with 2D</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../2d/camera.html"><strong aria-hidden="true">7.1.</strong> 2D Camera Setup</a></li><li class="chapter-item expanded "><a href="../2d/sprites.html"><strong aria-hidden="true">7.2.</strong> Sprites and Atlases</a></li></ol></li><li class="chapter-item expanded "><a href="../3d.html"><strong aria-hidden="true">8.</strong> Working with 3D</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3d/camera.html" class="active"><strong aria-hidden="true">8.1.</strong> 3D Camera Setup</a></li><li class="chapter-item expanded "><a href="../3d/gltf.html"><strong aria-hidden="true">8.2.</strong> 3D Models and Scenes (GLTF)</a></li></ol></li><li class="chapter-item expanded "><a href="../input.html"><strong aria-hidden="true">9.</strong> Input Handling</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../input/keyboard.html"><strong aria-hidden="true">9.1.</strong> Keyboard</a></li><li class="chapter-item expanded "><a href="../input/mouse.html"><strong aria-hidden="true">9.2.</strong> Mouse</a></li><li class="chapter-item expanded "><a href="../input/gamepad.html"><strong aria-hidden="true">9.3.</strong> Gamepad (Controller, Joystick)</a></li><li class="chapter-item expanded "><a href="../input/touch.html"><strong aria-hidden="true">9.4.</strong> Touchscreen</a></li><li class="chapter-item expanded "><a href="../input/gesture.html"><strong aria-hidden="true">9.5.</strong> Gestures</a></li><li class="chapter-item expanded "><a href="../input/dnd.html"><strong aria-hidden="true">9.6.</strong> Drag-and-Drop (Files)</a></li><li class="chapter-item expanded "><a href="../input/ime.html"><strong aria-hidden="true">9.7.</strong> IME (Advanced Text)</a></li></ol></li><li class="chapter-item expanded "><a href="../window.html"><strong aria-hidden="true">10.</strong> Window Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../window/props.html"><strong aria-hidden="true">10.1.</strong> Window Properties</a></li><li class="chapter-item expanded "><a href="../window/clear-color.html"><strong aria-hidden="true">10.2.</strong> Change the Background Color</a></li><li class="chapter-item expanded "><a href="../window/mouse-grab.html"><strong aria-hidden="true">10.3.</strong> Grab/Capture the Mouse Cursor</a></li><li class="chapter-item expanded "><a href="../window/icon.html"><strong aria-hidden="true">10.4.</strong> Set the Window Icon</a></li></ol></li><li class="chapter-item expanded "><a href="../assets.html"><strong aria-hidden="true">11.</strong> Asset Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../assets/handles.html"><strong aria-hidden="true">11.1.</strong> Handles</a></li><li class="chapter-item expanded "><a href="../assets/assetserver.html"><strong aria-hidden="true">11.2.</strong> Load Assets from Files</a></li><li class="chapter-item expanded "><a href="../assets/data.html"><strong aria-hidden="true">11.3.</strong> Access the Asset Data</a></li><li class="chapter-item expanded "><a href="../assets/assetevent.html"><strong aria-hidden="true">11.4.</strong> React to Changes with Asset Events</a></li><li class="chapter-item expanded "><a href="../assets/ready.html"><strong aria-hidden="true">11.5.</strong> Track Loading Progress</a></li><li class="chapter-item expanded "><a href="../assets/hot-reload.html"><strong aria-hidden="true">11.6.</strong> Hot-Reloading Assets</a></li><li class="chapter-item expanded "><a href="../assets/processing.html"><strong aria-hidden="true">11.7.</strong> Processing Assets</a></li></ol></li><li class="chapter-item expanded "><a href="../audio.html"><strong aria-hidden="true">12.</strong> Audio</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../audio/basic.html"><strong aria-hidden="true">12.1.</strong> Playing Sounds</a></li><li class="chapter-item expanded "><a href="../audio/spatial.html"><strong aria-hidden="true">12.2.</strong> Spatial Audio</a></li><li class="chapter-item expanded "><a href="../audio/custom.html"><strong aria-hidden="true">12.3.</strong> Custom Audio Streams</a></li></ol></li><li class="chapter-item expanded "><a href="../ui.html"><strong aria-hidden="true">13.</strong> Bevy UI Framework</a></li><li class="chapter-item expanded "><a href="../programming.html"><strong aria-hidden="true">14.</strong> Bevy Core Programming Framework</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../programming/ecs-intro.html"><strong aria-hidden="true">14.1.</strong> Intro to ECS</a></li><li class="chapter-item expanded "><a href="../programming/intro-data.html"><strong aria-hidden="true">14.2.</strong> Intro: Your Data</a></li><li class="chapter-item expanded "><a href="../programming/intro-code.html"><strong aria-hidden="true">14.3.</strong> Intro: Your Code</a></li><li class="chapter-item expanded "><a href="../programming/app-builder.html"><strong aria-hidden="true">14.4.</strong> The App</a></li><li class="chapter-item expanded "><a href="../programming/systems.html"><strong aria-hidden="true">14.5.</strong> Systems</a></li><li class="chapter-item expanded "><a href="../programming/res.html"><strong aria-hidden="true">14.6.</strong> Resources</a></li><li class="chapter-item expanded "><a href="../programming/ec.html"><strong aria-hidden="true">14.7.</strong> Entities, Components</a></li><li class="chapter-item expanded "><a href="../programming/bundle.html"><strong aria-hidden="true">14.8.</strong> Bundles</a></li><li class="chapter-item expanded "><a href="../programming/queries.html"><strong aria-hidden="true">14.9.</strong> Queries</a></li><li class="chapter-item expanded "><a href="../programming/commands.html"><strong aria-hidden="true">14.10.</strong> Commands</a></li><li class="chapter-item expanded "><a href="../programming/events.html"><strong aria-hidden="true">14.11.</strong> Events</a></li><li class="chapter-item expanded "><a href="../programming/plugins.html"><strong aria-hidden="true">14.12.</strong> Plugins</a></li><li class="chapter-item expanded "><a href="../programming/local.html"><strong aria-hidden="true">14.13.</strong> Local Resources</a></li><li class="chapter-item expanded "><a href="../programming/exclusive.html"><strong aria-hidden="true">14.14.</strong> Exclusive Systems</a></li><li class="chapter-item expanded "><a href="../programming/world.html"><strong aria-hidden="true">14.15.</strong> Direct ECS World Access</a></li><li class="chapter-item expanded "><a href="../programming/schedules.html"><strong aria-hidden="true">14.16.</strong> Schedules</a></li><li class="chapter-item expanded "><a href="../programming/system-order.html"><strong aria-hidden="true">14.17.</strong> System Order of Execution</a></li><li class="chapter-item expanded "><a href="../programming/run-conditions.html"><strong aria-hidden="true">14.18.</strong> Run Conditions</a></li><li class="chapter-item expanded "><a href="../programming/system-sets.html"><strong aria-hidden="true">14.19.</strong> System Sets</a></li><li class="chapter-item expanded "><a href="../programming/states.html"><strong aria-hidden="true">14.20.</strong> States</a></li><li class="chapter-item expanded "><a href="../programming/change-detection.html"><strong aria-hidden="true">14.21.</strong> Change Detection</a></li><li class="chapter-item expanded "><a href="../programming/one-shot-systems.html"><strong aria-hidden="true">14.22.</strong> One-Shot Systems</a></li><li class="chapter-item expanded "><a href="../programming/par-iter.html"><strong aria-hidden="true">14.23.</strong> Internal Parallelism</a></li><li class="chapter-item expanded "><a href="../programming/system-piping.html"><strong aria-hidden="true">14.24.</strong> System Piping</a></li><li class="chapter-item expanded "><a href="../programming/paramset.html"><strong aria-hidden="true">14.25.</strong> ParamSet</a></li><li class="chapter-item expanded "><a href="../programming/non-send.html"><strong aria-hidden="true">14.26.</strong> Non-Send</a></li></ol></li><li class="chapter-item expanded "><a href="../gpu.html"><strong aria-hidden="true">15.</strong> Bevy Render (GPU) Framework</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../gpu/intro.html"><strong aria-hidden="true">15.1.</strong> Render Architecture Overview</a></li><li class="chapter-item expanded "><a href="../gpu/stages.html"><strong aria-hidden="true">15.2.</strong> Render Stages</a></li></ol></li><li class="chapter-item expanded "><a href="../patterns.html"><strong aria-hidden="true">16.</strong> Programming Patterns</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../patterns/generic-systems.html"><strong aria-hidden="true">16.1.</strong> Generic Systems</a></li><li class="chapter-item expanded "><a href="../patterns/component-storage.html"><strong aria-hidden="true">16.2.</strong> Component Storage (Table/Sparse-Set)</a></li><li class="chapter-item expanded "><a href="../patterns/manual-event-clear.html"><strong aria-hidden="true">16.3.</strong> Manual Event Clearing</a></li><li class="chapter-item expanded "><a href="../patterns/system-tests.html"><strong aria-hidden="true">16.4.</strong> Writing Tests for Systems</a></li></ol></li><li class="chapter-item expanded "><a href="../platforms.html"><strong aria-hidden="true">17.</strong> Bevy on Different Platforms</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../platforms/linux.html"><strong aria-hidden="true">17.1.</strong> Linux Desktop</a></li><li class="chapter-item expanded "><a href="../platforms/macos.html"><strong aria-hidden="true">17.2.</strong> macOS Desktop</a></li><li class="chapter-item expanded "><a href="../platforms/windows.html"><strong aria-hidden="true">17.3.</strong> Windows Desktop</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../platforms/windows/wsl2.html"><strong aria-hidden="true">17.3.1.</strong> Working in WSL2</a></li></ol></li><li class="chapter-item expanded "><a href="../platforms/wasm.html"><strong aria-hidden="true">17.4.</strong> Browser (WebAssembly)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../platforms/wasm/size-opt.html"><strong aria-hidden="true">17.4.1.</strong> Optimize for Size</a></li><li class="chapter-item expanded "><a href="../platforms/wasm/webpage.html"><strong aria-hidden="true">17.4.2.</strong> Create a Custom Web Page</a></li><li class="chapter-item expanded "><a href="../platforms/wasm/gh-pages.html"><strong aria-hidden="true">17.4.3.</strong> Hosting on GitHub Pages</a></li></ol></li><li class="chapter-item expanded "><a href="../setup/cross.html"><strong aria-hidden="true">17.5.</strong> Cross-Compilation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup/cross/linux-windows.html"><strong aria-hidden="true">17.5.1.</strong> From Linux to Windows</a></li><li class="chapter-item expanded "><a href="../setup/cross/macos-windows.html"><strong aria-hidden="true">17.5.2.</strong> From macOS to Windows</a></li></ol></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../credits.html">Credits</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../contact.html">Contact Me</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../contributing-bevy.html">Contribute to Bevy</a></li><li class="chapter-item expanded affix "><a href="../contributing.html">Contribute to this Book</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Unofficial Bevy Cheat Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/bevy-cheatbook/bevy-cheatbook/issues/new" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <div class="table-wrapper"><table><thead><tr><th><a href="/introduction.html#maintenance-policy">Bevy Version:</a></th><th><a href="https://bevyengine.org/news/bevy-0-12">0.12</a></th><th>(outdated!)</th></tr></thead><tbody>
+</tbody></table>
+</div><p style="text-align: center;">
+As this page is outdated, please refer to Bevy's official migration guides while reading,
+to cover the differences:
+<a href="https://bevyengine.org/learn/migration-guides/0-12-to-0-13/">0.12 to 0.13</a>.
+</p>
+<p style="text-align: center;">
+I apologize for the inconvenience. I will update the page as soon as I find the time.
+</p>
+<hr />
+<p><code>当前双语版本对应的是: 3d540e7, 日期: 2024/06/13, 等双语版本整个翻译完之后,再处理原始仓库的更新</code></p>
+<h1 id="3d-camera-setup"><a class="header" href="#3d-camera-setup">3D Camera Setup</a></h1>
+<p><a href="/graphics/camera.html">Cameras</a> in Bevy are mandatory to see anything: they configure the
+rendering.</p>
+<p>This page will teach you about the specifics of 3D cameras. If you want to learn about
+general non-3D specific functionality, see the <a href="/graphics/camera.html">general page on cameras</a>.</p>
+<h2 id="creating-a-3d-camera"><a class="header" href="#creating-a-3d-camera">Creating a 3D Camera</a></h2>
+<p>Bevy provides a <a href="/programming/bundle.html">bundle</a> that you can use to <a href="/programming/commands.html">spawn</a> a
+camera <a href="/programming/ec.html#entities">entity</a>. It has reasonable defaults to set up everything
+correctly.</p>
+<p>You might want to set the <a href="/fundamentals/transforms.html">transform</a>, to position the camera.</p>
+<pre><code class="language-rust no_run noplayground">#[derive(Component)]
+struct MyCameraMarker;
+
+fn setup_camera(mut commands: Commands) {
+    commands.spawn((
+        Camera3dBundle {
+            transform: Transform::from_xyz(10.0, 12.0, 16.0)
+                .looking_at(Vec3::ZERO, Vec3::Y),
+            ..default()
+        },
+        MyCameraMarker,
+    ));
+}
+
+fn main() {
+    App::new()
+        .add_plugins(DefaultPlugins)
+        .add_systems(Startup, setup_camera)
+        .run();
+}</code></pre>
+<p>The "looking at" function is an easy way to orient a 3D camera. The second
+parameter (which we provide as <code>Y</code>) is the "up" direction. If you want the camera
+to be tilted sideways, you can use something else there. If you want to make a
+top-down camera, looking straight down, you need to use something other than <code>Y</code>.</p>
+<p>构造3d相机和2d相机类似,推荐使用Camera3dBundle来构造实体.
+<code>looking_at()</code>的第二个参数是角度.</p>
+<h2 id="projection"><a class="header" href="#projection">Projection</a></h2>
+<p>The <a href="/graphics/camera.html#projection">projection</a> is what determines how coordinates map to the
+<a href="/graphics/camera.html#viewport">viewport</a> (commonly, the screen/window).</p>
+<p>3D cameras can use either a Perspective or an Orthographic projection.
+Perspective is the default, and most common, choice.</p>
+<p>When you spawn a 3D camera using Bevy's <a href="/programming/bundle.html">bundle</a>
+(<a href="https://docs.rs/bevy/0.12.0/bevy/core_pipeline/core_2d/struct.Camera2dBundle.html"><code>Camera3dBundle</code></a>), it adds the
+<a href="https://docs.rs/bevy/0.12.0/bevy/render/camera/enum.Projection.html"><code>Projection</code></a> <a href="/programming/ec.html#components">component</a> to your
+<a href="/programming/ec.html#entities">entity</a>, which is an <code>enum</code>, allowing either projection kind to be
+used.</p>
+<p>When you are working with 3D cameras and you want to access the projection, you
+should <a href="/programming/queries.html">query</a> for the <a href="https://docs.rs/bevy/0.12.0/bevy/render/camera/struct.OrthographicProjection.html"><code>Projection</code></a>
+<a href="/programming/ec.html#components">component</a> type. You can then match on the enum, to handle each
+case appropriately.</p>
+<pre><code class="language-rust no_run noplayground">fn debug_projection(
+    query_camera: Query&lt;&amp;Projection, With&lt;MyCameraMarker&gt;&gt;,
+) {
+    let projection = query_camera.single();
+    match projection {
+        Projection::Perspective(persp) =&gt; {
+            // we have a perspective projection
+        }
+        Projection::Orthographic(ortho) =&gt; {
+            // we have an orthographic projection
+        }
+    }
+}</code></pre>
+<p>Note that this is different from <a href="/2d/camera.html#projection">2D</a>. If you are
+making a library or some other code that should be able to handle both 2D and
+3D, you cannot make a single <a href="/programming/queries.html">query</a> to access both 2D and 3D
+cameras. You should create separate <a href="/programming/systems.html">systems</a>, or at least two
+separate queries, to handle each kind of camera. This makes sense, as you will
+likely need different logic for 2D vs. 3D anyway.</p>
+<p>投影决定了从窗口看到的东西,默认是透视投影,3d游戏大部分场合下都使用这个.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Component, Debug, Clone, Reflect)]
+#[reflect(Component, Default)]
+pub enum Projection {
+    Perspective(PerspectiveProjection),
+    Orthographic(OrthographicProjection),
+}
+
+// 默认是透视投影.
+impl Default for Projection {
+    fn default() -&gt; Self {
+        Projection::Perspective(Default::default())
+    }
+}
+
+impl Default for Camera3dBundle {
+    fn default() -&gt; Self {
+        Self {
+            camera_render_graph: CameraRenderGraph::new(Core3d),
+            camera: Default::default(),
+            projection: Default::default(),  // Camera3dBundle 的默认投影
+            visible_entities: Default::default(),
+            frustum: Default::default(),
+            transform: Default::default(),
+            global_transform: Default::default(),
+            camera_3d: Default::default(),
+            tonemapping: Default::default(),
+            color_grading: Default::default(),
+            exposure: Default::default(),
+            main_texture_usages: Default::default(),
+            deband_dither: DebandDither::Enabled,
+        }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>如果要在system中访问投影,query中查Projection即可.
+和2d类似,如果同时存在2d相机和3d相机,一个查询是无法查到两个相机的,
+需要2个query.</p>
+<h3 id="perspective-projections"><a class="header" href="#perspective-projections">Perspective Projections</a></h3>
+<p>Perspective creates a realistic sense of 3D space. Things appear smaller the
+further away they are from the camera. This is how things appear to the human
+eye, and to real-life cameras.</p>
+<p>The most important variable here is the FOV (Field-of-View). The FOV determines
+the strength of the perspective effect. The FOV is the angle covered by the
+height of the screen/image.</p>
+<p>A larger FOV is like a wide-angle camera lens. It makes everything appear more
+distant, stretched, "zoomed out". You can see more on-screen.</p>
+<p>A smaller FOV is like a telephoto camera lens. It makes everything appear closer
+and flatter, "zoomed in". You can see less on-screen.</p>
+<p>For reference, a good neutral value is 45° (narrower, Bevy default) or 60°
+(wider). 90° is very wide. 30° is very narrow.</p>
+<pre><code class="language-rust no_run noplayground">commands.spawn((
+    Camera3dBundle {
+        projection: PerspectiveProjection {
+            // We must specify the FOV in radians.
+            // Rust can convert degrees to radians for us.
+            fov: 60.0_f32.to_radians(),
+            ..default()
+        }.into(),
+        transform: Transform::from_xyz(10.0, 12.0, 16.0)
+            .looking_at(Vec3::ZERO, Vec3::Y),
+        ..default()
+    },
+    MyCameraMarker,
+));</code></pre>
+<p><img src="../img/camera-3d-fov.png" alt="Side-by-side comparison of different FOV values." /></p>
+<p>In the above image, we are halving/doubling the FOV and doubling/halving
+how far away the camera is positioned, to compensate. Note how you can see
+pretty much the same 3D content, but the higher FOV looks more stretched
+and has a stronger 3D perspective effect.</p>
+<p>Internally, Bevy's perspective projection uses an <a href="https://developer.nvidia.com/content/depth-precision-visualized">infinite reversed
+Z</a> configuration. This allows for good numeric
+precision for both nearby and far away objects, avoiding visual artifacts.</p>
+<p>透视投影,在3d游戏中更加逼真:远小近大.(和人眼看到的类似).</p>
+<p>透视投影中重要的概念是FOV(视野,包含水平视野HFOV/垂直视野VFOV,常用VFOV),
+FOV 是摄像机视锥体的一个角度,表示在摄像机镜头前方能够看到的最大视野范围.
+FOV定义了相机能看到的空间范围.</p>
+<p>bevy中的FOV就是指垂直视野.</p>
+<p>FOV越大就越像广角镜头,这让一切显得更加遥远/拉长/缩小,这样可以看到更多东西.<br />
+FOV越小就越像长焦镜头,这样一起显得更加近/平坦/方法,看到的东西也越少.</p>
+<p>bevy默认是45度(良好),60度属于较宽,90度很宽,30度非常窄.</p>
+<p>上图一个是45度+单位距离,一个是90度(45度的2倍)+半个单位距离,后者的3d效果更加明显.</p>
+<p>在内部,Bevy 的透视投影使用(无限反向Z配置)(这是一个显卡技术).
+这使得附近和远处的物体都具有良好的数值精度,避免了视觉伪影.</p>
+<h4 id="zooming"><a class="header" href="#zooming">Zooming</a></h4>
+<p>To "zoom", change the perspective projection's FOV.</p>
+<pre><code class="language-rust no_run noplayground">fn zoom_perspective(
+    mut query_camera: Query&lt;&amp;mut Projection, With&lt;MyCameraMarker&gt;&gt;,
+) {
+    // assume perspective. do nothing if orthographic.
+    let Projection::Perspective(persp) = query_camera.single_mut().into_inner() else {
+        return;
+    };
+    // zoom in
+    persp.fov /= 1.25;
+    // zoom out
+    persp.fov *= 1.25;
+}</code></pre>
+<p>If the camera does not move, decreasing the FOV makes everything appear closer
+and increasing it makes everything appear more distant:</p>
+<p><img src="../img/camera-3d-fov-zoom.png" alt="Side-by-side comparison of a &quot;zoomed in&quot; (small FOV) and a &quot;zoomed out&quot; (large FOV) 3D scene" /></p>
+<p>Contrast this with moving the camera itself (using the
+<a href="/fundamentals/transforms.html">transform</a>) closer or further away, while keeping the FOV the
+same:</p>
+<p><img src="../img/camera-3d-position.png" alt="Side-by-side comparison of a camera positioned nearer to vs. further away from a 3D scene" /></p>
+<p>In some applications (such as 3D editors), moving the camera might be preferable,
+instead of changing the FOV.</p>
+<p>聚焦,就是改变透视投影的FOV值.
+如果相机不移动,则减小 FOV 会使一切看起来更近,而增加 FOV 会使一切看起来更远.
+bevy的透视聚焦和真实相机的焦距是一个效果.</p>
+<p>真实相机聚焦是因为现实距离限制,但在软件中,距离不再是限制,有时移动比聚焦的效果会更好.</p>
+<h3 id="orthographic-projections"><a class="header" href="#orthographic-projections">Orthographic Projections</a></h3>
+<p>An Orthographic projection makes everything always look the same size,
+regardless of the distance from the camera. It can feel like if 3D was squashed
+down into 2D.</p>
+<p>Orthographic is useful for applications such as CAD and engineering, where you
+want to accurately represent the dimensions of an object. Some games (notably
+simulation games) might use orthographic as an artistic choice.</p>
+<p>Orthographic can feel confusing and unintuitive to some people, because it does
+not create any sense of 3D space. You cannot tell how far away anything is. It
+creates a perfectly "flat" look. When displayed from a top-down diagonal angle,
+this artistic style is sometimes referred to as "isometric".</p>
+<p>You should set the <a href="https://docs.rs/bevy/0.12.0/bevy/render/camera/enum.ScalingMode.html"><code>ScalingMode</code></a> according to how you want
+to handle window size / resolution.</p>
+<pre><code class="language-rust no_run noplayground">use bevy::render::camera::ScalingMode;
+
+commands.spawn((
+    Camera3dBundle {
+        projection: OrthographicProjection {
+            // For this example, let's make the screen/window height
+            // correspond to 16.0 world units.
+            scaling_mode: ScalingMode::FixedVertical(16.0),
+            ..default()
+        }.into(),
+        // the distance doesn't really matter for orthographic,
+        // it should look the same (though it might affect
+        // shadows and clipping / culling)
+        transform: Transform::from_xyz(10.0, 12.0, 16.0)
+            .looking_at(Vec3::ZERO, Vec3::Y),
+        ..default()
+    },
+    MyCameraMarker,
+));</code></pre>
+<p><img src="../img/camera-3d-orthographic.png" alt="Visualization of a 3D scene with orthographic projection" /></p>
+<h4 id="zooming-1"><a class="header" href="#zooming-1">Zooming</a></h4>
+<p>To "zoom", change the orthographic projection's scale. The scale determines
+how much of the scene is visible.</p>
+<pre><code class="language-rust no_run noplayground">fn zoom_orthographic(
+    mut query_camera: Query&lt;&amp;mut Projection, With&lt;MyCameraMarker&gt;&gt;,
+) {
+    // assume orthographic. do nothing if perspective.
+    let Projection::Orthographic(ortho) = query_camera.single_mut().into_inner() else {
+        return;
+    };
+    // zoom in
+    ortho.scale /= 1.25;
+    // zoom out
+    ortho.scale *= 1.25;
+}</code></pre>
+<p><img src="../img/camera-3d-orthographic-zoom.png" alt="Side-by-side comparison of different orthographic projection scale in 3D" /></p>
+<p>正交投影下,不管距离如何,东西看起来都是一样大.可以准备表示对象尺寸.
+非常适合CAD领域(精确测量/工程图纸/零件设计等).</p>
+<p>正交投影对于某些人来说可能令人困惑且不直观,因为它不会产生任何 3D 空间感.
+您无法分辨任何事物的距离.它会产生完美的平面外观.
+当从上到下的对角线角度显示时,这种艺术风格有时被称为等距.</p>
+<p>和在2d相机时一样,需要制定缩放模式ScalingMode,或通过scale进行缩放.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../3d.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../3d/gltf.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../3d.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../3d/gltf.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../nagbar.js"></script>
+
+
+    </div>
+    </body>
+</html>

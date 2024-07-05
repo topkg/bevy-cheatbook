@@ -1,0 +1,467 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>HDR and Tonemapping - Unofficial Bevy Cheat Book</title>
+
+
+        <!-- Custom HTML head -->
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../nagbar.css">
+        <link rel="stylesheet" href="../sidebar.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="../overview.html">Chapter Overview</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../builtins.html">List of Bevy Builtins</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded "><a href="../tutorial.html"><strong aria-hidden="true">1.</strong> Bevy Tutorials</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tutorial/guide.html"><strong aria-hidden="true">1.1.</strong> Guided Tour</a></li></ol></li><li class="chapter-item expanded "><a href="../cookbook.html"><strong aria-hidden="true">2.</strong> Bevy Cookbook</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../cookbook/print-framerate.html"><strong aria-hidden="true">2.1.</strong> Show Framerate</a></li><li class="chapter-item expanded "><a href="../cookbook/cursor2world.html"><strong aria-hidden="true">2.2.</strong> Convert cursor to world coordinates</a></li><li class="chapter-item expanded "><a href="../cookbook/custom-projection.html"><strong aria-hidden="true">2.3.</strong> Custom Camera Projection</a></li><li class="chapter-item expanded "><a href="../cookbook/pan-orbit-camera.html"><strong aria-hidden="true">2.4.</strong> 3D Pan+Orbit Camera</a></li><li class="chapter-item expanded "><a href="../cookbook/print-resources.html"><strong aria-hidden="true">2.5.</strong> List All Resource Types</a></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded "><a href="../setup.html"><strong aria-hidden="true">3.</strong> Bevy Setup Tips</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup/getting-started.html"><strong aria-hidden="true">3.1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../setup/editor.html"><strong aria-hidden="true">3.2.</strong> Text Editor / IDE</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup/editor/vscode.html"><strong aria-hidden="true">3.2.1.</strong> Visual Studio Code</a></li><li class="chapter-item expanded "><a href="../setup/editor/jetbrains.html"><strong aria-hidden="true">3.2.2.</strong> JetBrains (RustRover, IntelliJ, CLion)</a></li><li class="chapter-item expanded "><a href="../setup/editor/kak.html"><strong aria-hidden="true">3.2.3.</strong> Kakoune</a></li><li class="chapter-item expanded "><a href="../setup/editor/vim.html"><strong aria-hidden="true">3.2.4.</strong> Vim</a></li><li class="chapter-item expanded "><a href="../setup/editor/emacs.html"><strong aria-hidden="true">3.2.5.</strong> Emacs</a></li></ol></li><li class="chapter-item expanded "><a href="../setup/bevy-config.html"><strong aria-hidden="true">3.3.</strong> Customizing Bevy (features, modularity)</a></li><li class="chapter-item expanded "><a href="../setup/unofficial-plugins.html"><strong aria-hidden="true">3.4.</strong> Community Plugin Ecosystem</a></li><li class="chapter-item expanded "><a href="../setup/bevy-tools.html"><strong aria-hidden="true">3.5.</strong> Dev Tools and Editors for Bevy</a></li><li class="chapter-item expanded "><a href="../setup/perf.html"><strong aria-hidden="true">3.6.</strong> Performance Tunables</a></li><li class="chapter-item expanded "><a href="../setup/bevy-git.html"><strong aria-hidden="true">3.7.</strong> Using bleeding-edge Bevy (main)</a></li></ol></li><li class="chapter-item expanded "><a href="../pitfalls.html"><strong aria-hidden="true">4.</strong> Common Pitfalls</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../pitfalls/build-errors.html"><strong aria-hidden="true">4.1.</strong> Strange compile errors from Bevy or dependencies</a></li><li class="chapter-item expanded "><a href="../pitfalls/performance.html"><strong aria-hidden="true">4.2.</strong> Slow Performance</a></li><li class="chapter-item expanded "><a href="../pitfalls/into-system.html"><strong aria-hidden="true">4.3.</strong> Error adding function as system</a></li><li class="chapter-item expanded "><a href="../pitfalls/3d-not-rendering.html"><strong aria-hidden="true">4.4.</strong> 3D objects not displaying</a></li><li class="chapter-item expanded "><a href="../pitfalls/split-borrows.html"><strong aria-hidden="true">4.5.</strong> Borrow multiple fields from struct</a></li><li class="chapter-item expanded "><a href="../pitfalls/time.html"><strong aria-hidden="true">4.6.</strong> Jittering Time (choppy movement/animation)</a></li><li class="chapter-item expanded "><a href="../pitfalls/uv-coordinates.html"><strong aria-hidden="true">4.7.</strong> Textures/Images are flipped</a></li></ol></li><li class="chapter-item expanded "><a href="../fundamentals.html"><strong aria-hidden="true">5.</strong> Game Engine Fundamentals</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../fundamentals/coords.html"><strong aria-hidden="true">5.1.</strong> Coordinate System</a></li><li class="chapter-item expanded "><a href="../fundamentals/transforms.html"><strong aria-hidden="true">5.2.</strong> Transforms</a></li><li class="chapter-item expanded "><a href="../fundamentals/visibility.html"><strong aria-hidden="true">5.3.</strong> Visibility</a></li><li class="chapter-item expanded "><a href="../fundamentals/time.html"><strong aria-hidden="true">5.4.</strong> Time and Timers</a></li><li class="chapter-item expanded "><a href="../fundamentals/log.html"><strong aria-hidden="true">5.5.</strong> Logging, Console Messages</a></li><li class="chapter-item expanded "><a href="../fundamentals/hierarchy.html"><strong aria-hidden="true">5.6.</strong> Parent/Child Hierarchies</a></li><li class="chapter-item expanded "><a href="../fundamentals/fixed-timestep.html"><strong aria-hidden="true">5.7.</strong> Fixed Timestep</a></li><li class="chapter-item expanded "><a href="../fundamentals/gizmos.html"><strong aria-hidden="true">5.8.</strong> Gizmos</a></li></ol></li><li class="chapter-item expanded "><a href="../graphics.html"><strong aria-hidden="true">6.</strong> General Graphics Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../graphics/camera.html"><strong aria-hidden="true">6.1.</strong> Cameras</a></li><li class="chapter-item expanded "><a href="../graphics/hdr-tonemap.html" class="active"><strong aria-hidden="true">6.2.</strong> HDR and Tonemapping</a></li><li class="chapter-item expanded "><a href="../graphics/bloom.html"><strong aria-hidden="true">6.3.</strong> Bloom</a></li></ol></li><li class="chapter-item expanded "><a href="../2d.html"><strong aria-hidden="true">7.</strong> Working with 2D</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../2d/camera.html"><strong aria-hidden="true">7.1.</strong> 2D Camera Setup</a></li><li class="chapter-item expanded "><a href="../2d/sprites.html"><strong aria-hidden="true">7.2.</strong> Sprites and Atlases</a></li></ol></li><li class="chapter-item expanded "><a href="../3d.html"><strong aria-hidden="true">8.</strong> Working with 3D</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3d/camera.html"><strong aria-hidden="true">8.1.</strong> 3D Camera Setup</a></li><li class="chapter-item expanded "><a href="../3d/gltf.html"><strong aria-hidden="true">8.2.</strong> 3D Models and Scenes (GLTF)</a></li></ol></li><li class="chapter-item expanded "><a href="../input.html"><strong aria-hidden="true">9.</strong> Input Handling</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../input/keyboard.html"><strong aria-hidden="true">9.1.</strong> Keyboard</a></li><li class="chapter-item expanded "><a href="../input/mouse.html"><strong aria-hidden="true">9.2.</strong> Mouse</a></li><li class="chapter-item expanded "><a href="../input/gamepad.html"><strong aria-hidden="true">9.3.</strong> Gamepad (Controller, Joystick)</a></li><li class="chapter-item expanded "><a href="../input/touch.html"><strong aria-hidden="true">9.4.</strong> Touchscreen</a></li><li class="chapter-item expanded "><a href="../input/gesture.html"><strong aria-hidden="true">9.5.</strong> Gestures</a></li><li class="chapter-item expanded "><a href="../input/dnd.html"><strong aria-hidden="true">9.6.</strong> Drag-and-Drop (Files)</a></li><li class="chapter-item expanded "><a href="../input/ime.html"><strong aria-hidden="true">9.7.</strong> IME (Advanced Text)</a></li></ol></li><li class="chapter-item expanded "><a href="../window.html"><strong aria-hidden="true">10.</strong> Window Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../window/props.html"><strong aria-hidden="true">10.1.</strong> Window Properties</a></li><li class="chapter-item expanded "><a href="../window/clear-color.html"><strong aria-hidden="true">10.2.</strong> Change the Background Color</a></li><li class="chapter-item expanded "><a href="../window/mouse-grab.html"><strong aria-hidden="true">10.3.</strong> Grab/Capture the Mouse Cursor</a></li><li class="chapter-item expanded "><a href="../window/icon.html"><strong aria-hidden="true">10.4.</strong> Set the Window Icon</a></li></ol></li><li class="chapter-item expanded "><a href="../assets.html"><strong aria-hidden="true">11.</strong> Asset Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../assets/handles.html"><strong aria-hidden="true">11.1.</strong> Handles</a></li><li class="chapter-item expanded "><a href="../assets/assetserver.html"><strong aria-hidden="true">11.2.</strong> Load Assets from Files</a></li><li class="chapter-item expanded "><a href="../assets/data.html"><strong aria-hidden="true">11.3.</strong> Access the Asset Data</a></li><li class="chapter-item expanded "><a href="../assets/assetevent.html"><strong aria-hidden="true">11.4.</strong> React to Changes with Asset Events</a></li><li class="chapter-item expanded "><a href="../assets/ready.html"><strong aria-hidden="true">11.5.</strong> Track Loading Progress</a></li><li class="chapter-item expanded "><a href="../assets/hot-reload.html"><strong aria-hidden="true">11.6.</strong> Hot-Reloading Assets</a></li><li class="chapter-item expanded "><a href="../assets/processing.html"><strong aria-hidden="true">11.7.</strong> Processing Assets</a></li></ol></li><li class="chapter-item expanded "><a href="../audio.html"><strong aria-hidden="true">12.</strong> Audio</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../audio/basic.html"><strong aria-hidden="true">12.1.</strong> Playing Sounds</a></li><li class="chapter-item expanded "><a href="../audio/spatial.html"><strong aria-hidden="true">12.2.</strong> Spatial Audio</a></li><li class="chapter-item expanded "><a href="../audio/custom.html"><strong aria-hidden="true">12.3.</strong> Custom Audio Streams</a></li></ol></li><li class="chapter-item expanded "><a href="../ui.html"><strong aria-hidden="true">13.</strong> Bevy UI Framework</a></li><li class="chapter-item expanded "><a href="../programming.html"><strong aria-hidden="true">14.</strong> Bevy Core Programming Framework</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../programming/ecs-intro.html"><strong aria-hidden="true">14.1.</strong> Intro to ECS</a></li><li class="chapter-item expanded "><a href="../programming/intro-data.html"><strong aria-hidden="true">14.2.</strong> Intro: Your Data</a></li><li class="chapter-item expanded "><a href="../programming/intro-code.html"><strong aria-hidden="true">14.3.</strong> Intro: Your Code</a></li><li class="chapter-item expanded "><a href="../programming/app-builder.html"><strong aria-hidden="true">14.4.</strong> The App</a></li><li class="chapter-item expanded "><a href="../programming/systems.html"><strong aria-hidden="true">14.5.</strong> Systems</a></li><li class="chapter-item expanded "><a href="../programming/res.html"><strong aria-hidden="true">14.6.</strong> Resources</a></li><li class="chapter-item expanded "><a href="../programming/ec.html"><strong aria-hidden="true">14.7.</strong> Entities, Components</a></li><li class="chapter-item expanded "><a href="../programming/bundle.html"><strong aria-hidden="true">14.8.</strong> Bundles</a></li><li class="chapter-item expanded "><a href="../programming/queries.html"><strong aria-hidden="true">14.9.</strong> Queries</a></li><li class="chapter-item expanded "><a href="../programming/commands.html"><strong aria-hidden="true">14.10.</strong> Commands</a></li><li class="chapter-item expanded "><a href="../programming/events.html"><strong aria-hidden="true">14.11.</strong> Events</a></li><li class="chapter-item expanded "><a href="../programming/plugins.html"><strong aria-hidden="true">14.12.</strong> Plugins</a></li><li class="chapter-item expanded "><a href="../programming/local.html"><strong aria-hidden="true">14.13.</strong> Local Resources</a></li><li class="chapter-item expanded "><a href="../programming/exclusive.html"><strong aria-hidden="true">14.14.</strong> Exclusive Systems</a></li><li class="chapter-item expanded "><a href="../programming/world.html"><strong aria-hidden="true">14.15.</strong> Direct ECS World Access</a></li><li class="chapter-item expanded "><a href="../programming/schedules.html"><strong aria-hidden="true">14.16.</strong> Schedules</a></li><li class="chapter-item expanded "><a href="../programming/system-order.html"><strong aria-hidden="true">14.17.</strong> System Order of Execution</a></li><li class="chapter-item expanded "><a href="../programming/run-conditions.html"><strong aria-hidden="true">14.18.</strong> Run Conditions</a></li><li class="chapter-item expanded "><a href="../programming/system-sets.html"><strong aria-hidden="true">14.19.</strong> System Sets</a></li><li class="chapter-item expanded "><a href="../programming/states.html"><strong aria-hidden="true">14.20.</strong> States</a></li><li class="chapter-item expanded "><a href="../programming/change-detection.html"><strong aria-hidden="true">14.21.</strong> Change Detection</a></li><li class="chapter-item expanded "><a href="../programming/one-shot-systems.html"><strong aria-hidden="true">14.22.</strong> One-Shot Systems</a></li><li class="chapter-item expanded "><a href="../programming/par-iter.html"><strong aria-hidden="true">14.23.</strong> Internal Parallelism</a></li><li class="chapter-item expanded "><a href="../programming/system-piping.html"><strong aria-hidden="true">14.24.</strong> System Piping</a></li><li class="chapter-item expanded "><a href="../programming/paramset.html"><strong aria-hidden="true">14.25.</strong> ParamSet</a></li><li class="chapter-item expanded "><a href="../programming/non-send.html"><strong aria-hidden="true">14.26.</strong> Non-Send</a></li></ol></li><li class="chapter-item expanded "><a href="../gpu.html"><strong aria-hidden="true">15.</strong> Bevy Render (GPU) Framework</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../gpu/intro.html"><strong aria-hidden="true">15.1.</strong> Render Architecture Overview</a></li><li class="chapter-item expanded "><a href="../gpu/stages.html"><strong aria-hidden="true">15.2.</strong> Render Stages</a></li></ol></li><li class="chapter-item expanded "><a href="../patterns.html"><strong aria-hidden="true">16.</strong> Programming Patterns</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../patterns/generic-systems.html"><strong aria-hidden="true">16.1.</strong> Generic Systems</a></li><li class="chapter-item expanded "><a href="../patterns/component-storage.html"><strong aria-hidden="true">16.2.</strong> Component Storage (Table/Sparse-Set)</a></li><li class="chapter-item expanded "><a href="../patterns/manual-event-clear.html"><strong aria-hidden="true">16.3.</strong> Manual Event Clearing</a></li><li class="chapter-item expanded "><a href="../patterns/system-tests.html"><strong aria-hidden="true">16.4.</strong> Writing Tests for Systems</a></li></ol></li><li class="chapter-item expanded "><a href="../platforms.html"><strong aria-hidden="true">17.</strong> Bevy on Different Platforms</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../platforms/linux.html"><strong aria-hidden="true">17.1.</strong> Linux Desktop</a></li><li class="chapter-item expanded "><a href="../platforms/macos.html"><strong aria-hidden="true">17.2.</strong> macOS Desktop</a></li><li class="chapter-item expanded "><a href="../platforms/windows.html"><strong aria-hidden="true">17.3.</strong> Windows Desktop</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../platforms/windows/wsl2.html"><strong aria-hidden="true">17.3.1.</strong> Working in WSL2</a></li></ol></li><li class="chapter-item expanded "><a href="../platforms/wasm.html"><strong aria-hidden="true">17.4.</strong> Browser (WebAssembly)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../platforms/wasm/size-opt.html"><strong aria-hidden="true">17.4.1.</strong> Optimize for Size</a></li><li class="chapter-item expanded "><a href="../platforms/wasm/webpage.html"><strong aria-hidden="true">17.4.2.</strong> Create a Custom Web Page</a></li><li class="chapter-item expanded "><a href="../platforms/wasm/gh-pages.html"><strong aria-hidden="true">17.4.3.</strong> Hosting on GitHub Pages</a></li></ol></li><li class="chapter-item expanded "><a href="../setup/cross.html"><strong aria-hidden="true">17.5.</strong> Cross-Compilation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup/cross/linux-windows.html"><strong aria-hidden="true">17.5.1.</strong> From Linux to Windows</a></li><li class="chapter-item expanded "><a href="../setup/cross/macos-windows.html"><strong aria-hidden="true">17.5.2.</strong> From macOS to Windows</a></li></ol></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../credits.html">Credits</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../contact.html">Contact Me</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../contributing-bevy.html">Contribute to Bevy</a></li><li class="chapter-item expanded affix "><a href="../contributing.html">Contribute to this Book</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Unofficial Bevy Cheat Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/bevy-cheatbook/bevy-cheatbook/issues/new" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <div class="table-wrapper"><table><thead><tr><th><a href="/introduction.html#maintenance-policy">Bevy Version:</a></th><th><a href="https://bevyengine.org/news/bevy-0-12">0.12</a></th><th>(outdated!)</th></tr></thead><tbody>
+</tbody></table>
+</div><p style="text-align: center;">
+As this page is outdated, please refer to Bevy's official migration guides while reading,
+to cover the differences:
+<a href="https://bevyengine.org/learn/migration-guides/0-12-to-0-13/">0.12 to 0.13</a>.
+</p>
+<p style="text-align: center;">
+I apologize for the inconvenience. I will update the page as soon as I find the time.
+</p>
+<hr />
+<p><code>当前双语版本对应的是: 3d540e7, 日期: 2024/06/13, 等双语版本整个翻译完之后,再处理原始仓库的更新</code></p>
+<h1 id="hdr"><a class="header" href="#hdr">HDR</a></h1>
+<p>HDR (High Dynamic Range) refers to the ability of the game engine to handle
+very bright lights or colors. Bevy's rendering is HDR internally. This means
+you can have objects with colors that go above <code>1.0</code>, very bright lights,
+or bright emissive materials. All of this is supported for both 3D and 2D.</p>
+<p>This is not to be confused with HDR display output, which is the ability to
+produce a HDR image to be displayed by a modern monitor or TV with HDR
+capabilities. Bevy has no support for this yet.</p>
+<p>The internal HDR image has to be converted down to SDR (Standard Dynamic
+Range) before it can be displayed on the screen. This process is called
+<a href="/graphics/hdr-tonemap.html#tonemapping">Tonemapping</a>. Bevy supports different algorithms that can
+result in a different look. It is an artistic choice what tonemapping
+algorithm to use for your game.</p>
+<p>HDR(高动态范围)是指游戏引擎处理非常明亮的灯光或颜色的能力.
+bevy内部渲染支持hdr,也就是说对象的颜色可调节到1.0之上,非常亮的那种,
+灯光/发光材质均如此.2d/3d均支持.</p>
+<p>这里的hdr不是hdr显示输出(生成 HDR 图像并由具有 HDR 功能的现代显示器或电视显示的能力),
+bevy还不支持hdr显示输出.</p>
+<p>在屏幕显示之前,内部的hdr会转换称标准动态范围(sdr)这个处理过程成为<code>色调映射</code>.
+bevy支持多种<code>色调映射</code>算法,看起来都不一样,选哪一种需要尝试一二.</p>
+<h2 id="camera-hdr-configuration"><a class="header" href="#camera-hdr-configuration">Camera HDR configuration</a></h2>
+<p>There is a per-camera toggle that lets you decide whether you want Bevy to
+preserve the HDR data internally, to make it possible for subsequent passes
+(such as postprocessing effects) to use it.</p>
+<pre><code class="language-rust no_run noplayground">commands.spawn((
+    Camera3dBundle {
+        camera: Camera {
+            hdr: true,
+            ..default()
+        },
+        ..default()
+    },
+));</code></pre>
+<p>If it is enabled, Bevy's intermediate textures will be in HDR format. The
+shaders output HDR values and Bevy will store them, so they can be used in later
+rendering passes. This allows you to enable effects like <a href="/graphics/bloom.html">Bloom</a>,
+that make use of the HDR data. <a href="/graphics/hdr-tonemap.html#tonemapping">Tonemapping</a> will happen as a
+post-processing step, after the HDR data is no longer needed for anything.</p>
+<p>If it is disabled, the shaders are expected to output standard RGB colors in
+the 0.0 to 1.0 range. <a href="/graphics/hdr-tonemap.html#tonemapping">Tonemapping</a> happens in the shader. The
+HDR information is not preserved. Effects that require HDR data, like Bloom,
+will not work.</p>
+<p>It is disabled by default, because this results in better performance and
+reduced VRAM usage for applications with simple graphics that do not need it.</p>
+<p>If you have both HDR and MSAA enabled, it is possible you might encounter
+issues. There might be visual artifacts in some cases. It is also unsupported on
+Web/WASM, crashing at runtime. Disable MSAA if you experience any such issues.</p>
+<p>相机的hdr配置.如果启用,中间的纹理将启用hdr格式,着色器输出dhr值,由bevy存储,
+并进行后续的渲染操作.bloom特效就使用到了这些hdr数据.
+当后续操作不再使用hdr数据时,色调映射就会将hdr转换为sdr,作为后处理的一部分.</p>
+<p>如果不启用hdr,着色器输出的颜色就是[0.0,1.0],色调映射在着色器就完成了.
+bevy也不会存储hdr数据,依赖hdr数据的特效(eg:bloom盛开的效果)就不起作用.</p>
+<p>hdr默认是disabled的.因为简单一点的程序并不需要,且可以减少内存使用,性能也高一点.
+追求高质量效果的,可以添加上dhr.</p>
+<p>hdr和msaa(多重抗锯齿)同时使用会导致问题(视觉残影);
+hdr+msaa还不支持wasm/web(这两个平台会导致panic),
+如果出现异常,建议disable msaa.</p>
+<h2 id="tonemapping"><a class="header" href="#tonemapping">Tonemapping</a></h2>
+<p>Tonemapping is the step of the rendering process where the colors of pixels are
+converted from their in-engine intermediate repesentation into the final values
+as they should be displayed on-screen.</p>
+<p>This is very important with HDR applications, as in that case the image can
+contain very bright pixels (above 1.0) which need to be remapped into a range
+that can be displayed.</p>
+<p>Tonemapping is enabled by default. Bevy allows you to configure it via the
+(<a href="https://docs.rs/bevy/0.12.0/bevy/core_pipeline/tonemapping/enum.Tonemapping.html"><code>Tonemapping</code></a>) component, per-camera. Disabling it is not
+recommended, unless you know you only have very simple graphics that don't need
+it. It can make your graphics look incorrect.</p>
+<pre><code class="language-rust no_run noplayground">use bevy::core_pipeline::tonemapping::Tonemapping;
+
+commands.spawn((
+    Camera3dBundle {
+        // no tonemapping
+        tonemapping: Tonemapping::None,
+        ..default()
+    },
+));
+commands.spawn((
+    Camera3dBundle {
+        // this is the default:
+        tonemapping: Tonemapping::TonyMcMapface,
+        ..default()
+    },
+));
+commands.spawn((
+    Camera3dBundle {
+        // another common choice:
+        tonemapping: Tonemapping::ReinhardLuminance,
+        ..default()
+    },
+));</code></pre>
+<p>Bevy supports many different tonemapping algorithms. Each of them results in a
+different look, affecting colors and brightness. It can be an artistic choice. You
+can decide what algorithm looks best for your game. Bevy's default is TonyMcMapface,
+which, despite the silly name, provides very good results for a wide variety of
+graphics styles. See the (<a href="https://docs.rs/bevy/0.12.0/bevy/core_pipeline/tonemapping/enum.Tonemapping.html"><code>Tonemapping</code></a>) documentation for
+an explanation of each of the available choices.</p>
+<p>Some tonemapping algorithms (incl. the default TonyMcMapface) require the
+<code>tonemapping_luts</code> <a href="/setup/bevy-config.html">cargo feature</a>. It is enabled by default. Be
+sure to re-enable it if you disable default features and you need it. Enabling
+it also enables the <code>ktx2</code> and <code>zstd</code> features, because it works by embedding
+special data in KTX2 format into your game, which is used during tonemapping.</p>
+<p>The following tonemapping algorithms <em>DO NOT</em> require the special data from
+<code>tonemapping_luts</code>:</p>
+<ul>
+<li>Reinhard</li>
+<li>ReinhardLuminance</li>
+<li>AcesFitted</li>
+<li>SomewhatBoringDisplayTransform</li>
+</ul>
+<p>The following tonemapping algorithms <em>require</em> the special data from <code>tonemapping_luts</code>:</p>
+<ul>
+<li>AgX</li>
+<li>TonyMcMapface</li>
+<li>BlenderFilmic</li>
+</ul>
+<p>If you want to make a smaller game binary (might be important for Web games),
+you could reduce bloat by changing the default tonemapping to something
+simpler and disabling the <a href="/setup/bevy-config.html">cargo features</a>.</p>
+<p>色调映射是渲染过程中其中一个步骤,
+负责将bevy引擎的像素颜色(中间表示形式)转换为屏幕最终渲染的状态.</p>
+<p>对于hdr来说,色调映射尤为重要,因为hdr的颜色都太亮了,必须重新映射为sdr才能显示.
+色调映射默认已经开启了,bevy通过Tonemapping组件来配置色调映射,
+每个相机都可以配置,不推荐disable,除非我们的图形非常简单.</p>
+<p>bevy支持多重色调映射算法,不同的算法对颜色和亮度的影响不同.按需选择.
+默认是<code>TonyMcMapface</code>. 部分算法依赖<code>tonemapping_luts</code>功能,这个功能是默认开启的.
+如果禁用了DefaultPlugins,记得re-enable这个功能.这个功能还启用了ktx2/zstd的支持,
+因为它的工作原理是将KTX2格式的特殊数据嵌入到游戏中,在色调映射过程中使用.</p>
+<p>依赖<code>tonemapping_luts</code>的算法包括:默认的<code>TonyMcMapface</code>,以及<code>Agx</code>和<code>BlenderFilmic</code>.
+如果对程序大小特别敏感的,可以换成其他算法,然后禁用<code>tonemapping_luts</code>功能.</p>
+<hr />
+<p>色调映射是一个着色器,尝试将线性输入刺激映射到给定相机实体的感知均匀的图像中.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum Tonemapping {
+    None,
+    Reinhard,
+    ReinhardLuminance,
+    AcesFitted,
+    AgX,
+    SomewhatBoringDisplayTransform,
+    TonyMcMapface,
+    BlenderFilmic,
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="color-grading"><a class="header" href="#color-grading">Color Grading</a></h2>
+<p>Color Grading is a manipulation of the overall look of the image.</p>
+<p>Together with tonemapping, this affects the "tone"/"mood" of the final image.</p>
+<p>This is also how you can implement a "retina" effect, where the camera
+dynamically adapts to very dark (such as inside a cave) and very bright
+(such as in daylight) scenes, by adjusting exposure/gamma.</p>
+<p>You can also adjust color saturation. Heavily desaturating the image can
+result in a greyscale or muted appearance, which can be a great artistic
+choice for apocalyptic or horror games.</p>
+<p>You can configure these parameters via the <a href="https://docs.rs/bevy/0.12.0/bevy/render/view/struct.ColorGrading.html"><code>ColorGrading</code></a>
+component:</p>
+<pre><code class="language-rust no_run noplayground">use bevy::render::view::ColorGrading;
+
+commands.spawn((
+    Camera3dBundle {
+        color_grading: ColorGrading {
+            exposure: 0.0,
+            gamma: 1.0,
+            pre_saturation: 1.0,
+            post_saturation: 1.0,
+        },
+        ..default()
+    },
+));</code></pre>
+<p>颜色分级是对图像整体外观的处理,常配合色调映射一起使用.</p>
+<p>这也是实现“视网膜”效果的方法,
+其中相机通过调整曝光/伽玛动态适应非常黑暗(例如在洞穴内)和非常明亮(例如在日光下)的场景.</p>
+<p>还可以调整颜色饱和度.严重降低图像的饱和度可能会导致灰度或柔和的外观,
+这对于世界末日或恐怖游戏来说是一个很好的艺术选择.</p>
+<p>通过ColorGrading组件来配置颜色分级的参数.</p>
+<hr />
+<p>Retina 效果指的是苹果公司在其设备上使用的一种高分辨率显示技术,
+目的是使屏幕上的像素密度达到或超过人眼在正常视距下无法分辨的程度,
+从而提供更清晰/更细腻的显示效果.</p>
+<p>Retina 显示技术本身并不直接涉及自动调节曝光(exposure)或伽马(gamma)值.
+True Tone 显示:这种技术使用多个传感器来监测周围环境光线的颜色和亮度,
+然后自动调整显示屏的白平衡和色温,使屏幕颜色看起来更自然.</p>
+<h2 id="deband-dithering"><a class="header" href="#deband-dithering">Deband Dithering</a></h2>
+<p>Deband dithering helps color gradients or other areas with subtle changes in
+color to appear higher-quality, without a "color banding" effect.</p>
+<p>It is enabled by default, and can be disabled per-camera.</p>
+<pre><code class="language-rust no_run noplayground">use bevy::core_pipeline::tonemapping::DebandDither;
+
+commands.spawn((
+    Camera3dBundle {
+        dither: DebandDither::Disabled,
+        ..default()
+    },
+));</code></pre>
+<p>Here is an example image without dithering (top) and with dithering (bottom).
+Pay attention to the quality/smoothness of the green color gradient on the
+ground plane. In games with photorealistic graphics, similar situations can
+arise in the sky, in dark rooms, or lights glowing with a bloom effect.</p>
+<p><img src="../img/dithering.png" alt="Visual comparison of a scene simple cube on a flat green plane, with dithering disabled/enabled." /></p>
+<p>去色带抖动有助于颜色渐变或其他颜色发生细微变化的区域显得更高质量,而不会出现“色带”效果.</p>
+<p>去色带抖动是通过组件DebandDither来配置的.</p>
+<p>上图是这是没有抖动（顶部）和有抖动（底部）的示例图像.
+请注意地面上的绿色渐变的质量/平滑度.
+在具有逼真图形的游戏中,天空/黑暗的房间或具有绽放效果的灯光中也会出现类似的情况.</p>
+<hr />
+<p>Deband 和 Dithering 是图像处理中的两个技术,用于不同的目的.</p>
+<p>Debanding 是一种减少或消除图像中颜色条纹（banding）现象的技术.
+颜色条纹是指在颜色渐变区域中,由于颜色深度不足而产生的明显色带.
+这种现象通常出现在具有平滑渐变的区域,如天空/阴影或渐变背景中.</p>
+<p>Debanding 技术通过在图像中引入微小的颜色变化,打破这些明显的色带,
+从而使颜色过渡看起来更加平滑和自然.</p>
+<p>Dithering 是一种通过引入伪随机噪声来模拟更多颜色和灰度级别的技术,
+特别是在颜色深度较低的情况下.
+Dithering 的目的是通过在相邻像素间引入细微的颜色变化,
+使得整体效果看起来更加平滑,减少颜色量化引起的视觉伪影.</p>
+<p>在一些场景中,debanding 和 dithering 可以结合使用.
+首先,应用 debanding 技术消除明显的颜色条纹,
+然后通过 dithering 技术进一步平滑颜色过渡,模拟更多的颜色和灰度级别.</p>
+<p>总结</p>
+<p>Debanding:用于减少或消除图像中的颜色条纹现象,使颜色过渡更加平滑.<br />
+Dithering:通过引入伪随机噪声模拟更多颜色和灰度级别,减少颜色量化引起的伪影.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../graphics/camera.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../graphics/bloom.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../graphics/camera.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../graphics/bloom.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../nagbar.js"></script>
+
+
+    </div>
+    </body>
+</html>

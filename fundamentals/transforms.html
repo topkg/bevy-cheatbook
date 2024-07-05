@@ -1,0 +1,451 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Transforms - Unofficial Bevy Cheat Book</title>
+
+
+        <!-- Custom HTML head -->
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../nagbar.css">
+        <link rel="stylesheet" href="../sidebar.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="../overview.html">Chapter Overview</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../builtins.html">List of Bevy Builtins</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded "><a href="../tutorial.html"><strong aria-hidden="true">1.</strong> Bevy Tutorials</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tutorial/guide.html"><strong aria-hidden="true">1.1.</strong> Guided Tour</a></li></ol></li><li class="chapter-item expanded "><a href="../cookbook.html"><strong aria-hidden="true">2.</strong> Bevy Cookbook</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../cookbook/print-framerate.html"><strong aria-hidden="true">2.1.</strong> Show Framerate</a></li><li class="chapter-item expanded "><a href="../cookbook/cursor2world.html"><strong aria-hidden="true">2.2.</strong> Convert cursor to world coordinates</a></li><li class="chapter-item expanded "><a href="../cookbook/custom-projection.html"><strong aria-hidden="true">2.3.</strong> Custom Camera Projection</a></li><li class="chapter-item expanded "><a href="../cookbook/pan-orbit-camera.html"><strong aria-hidden="true">2.4.</strong> 3D Pan+Orbit Camera</a></li><li class="chapter-item expanded "><a href="../cookbook/print-resources.html"><strong aria-hidden="true">2.5.</strong> List All Resource Types</a></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded "><a href="../setup.html"><strong aria-hidden="true">3.</strong> Bevy Setup Tips</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup/getting-started.html"><strong aria-hidden="true">3.1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../setup/editor.html"><strong aria-hidden="true">3.2.</strong> Text Editor / IDE</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup/editor/vscode.html"><strong aria-hidden="true">3.2.1.</strong> Visual Studio Code</a></li><li class="chapter-item expanded "><a href="../setup/editor/jetbrains.html"><strong aria-hidden="true">3.2.2.</strong> JetBrains (RustRover, IntelliJ, CLion)</a></li><li class="chapter-item expanded "><a href="../setup/editor/kak.html"><strong aria-hidden="true">3.2.3.</strong> Kakoune</a></li><li class="chapter-item expanded "><a href="../setup/editor/vim.html"><strong aria-hidden="true">3.2.4.</strong> Vim</a></li><li class="chapter-item expanded "><a href="../setup/editor/emacs.html"><strong aria-hidden="true">3.2.5.</strong> Emacs</a></li></ol></li><li class="chapter-item expanded "><a href="../setup/bevy-config.html"><strong aria-hidden="true">3.3.</strong> Customizing Bevy (features, modularity)</a></li><li class="chapter-item expanded "><a href="../setup/unofficial-plugins.html"><strong aria-hidden="true">3.4.</strong> Community Plugin Ecosystem</a></li><li class="chapter-item expanded "><a href="../setup/bevy-tools.html"><strong aria-hidden="true">3.5.</strong> Dev Tools and Editors for Bevy</a></li><li class="chapter-item expanded "><a href="../setup/perf.html"><strong aria-hidden="true">3.6.</strong> Performance Tunables</a></li><li class="chapter-item expanded "><a href="../setup/bevy-git.html"><strong aria-hidden="true">3.7.</strong> Using bleeding-edge Bevy (main)</a></li></ol></li><li class="chapter-item expanded "><a href="../pitfalls.html"><strong aria-hidden="true">4.</strong> Common Pitfalls</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../pitfalls/build-errors.html"><strong aria-hidden="true">4.1.</strong> Strange compile errors from Bevy or dependencies</a></li><li class="chapter-item expanded "><a href="../pitfalls/performance.html"><strong aria-hidden="true">4.2.</strong> Slow Performance</a></li><li class="chapter-item expanded "><a href="../pitfalls/into-system.html"><strong aria-hidden="true">4.3.</strong> Error adding function as system</a></li><li class="chapter-item expanded "><a href="../pitfalls/3d-not-rendering.html"><strong aria-hidden="true">4.4.</strong> 3D objects not displaying</a></li><li class="chapter-item expanded "><a href="../pitfalls/split-borrows.html"><strong aria-hidden="true">4.5.</strong> Borrow multiple fields from struct</a></li><li class="chapter-item expanded "><a href="../pitfalls/time.html"><strong aria-hidden="true">4.6.</strong> Jittering Time (choppy movement/animation)</a></li><li class="chapter-item expanded "><a href="../pitfalls/uv-coordinates.html"><strong aria-hidden="true">4.7.</strong> Textures/Images are flipped</a></li></ol></li><li class="chapter-item expanded "><a href="../fundamentals.html"><strong aria-hidden="true">5.</strong> Game Engine Fundamentals</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../fundamentals/coords.html"><strong aria-hidden="true">5.1.</strong> Coordinate System</a></li><li class="chapter-item expanded "><a href="../fundamentals/transforms.html" class="active"><strong aria-hidden="true">5.2.</strong> Transforms</a></li><li class="chapter-item expanded "><a href="../fundamentals/visibility.html"><strong aria-hidden="true">5.3.</strong> Visibility</a></li><li class="chapter-item expanded "><a href="../fundamentals/time.html"><strong aria-hidden="true">5.4.</strong> Time and Timers</a></li><li class="chapter-item expanded "><a href="../fundamentals/log.html"><strong aria-hidden="true">5.5.</strong> Logging, Console Messages</a></li><li class="chapter-item expanded "><a href="../fundamentals/hierarchy.html"><strong aria-hidden="true">5.6.</strong> Parent/Child Hierarchies</a></li><li class="chapter-item expanded "><a href="../fundamentals/fixed-timestep.html"><strong aria-hidden="true">5.7.</strong> Fixed Timestep</a></li><li class="chapter-item expanded "><a href="../fundamentals/gizmos.html"><strong aria-hidden="true">5.8.</strong> Gizmos</a></li></ol></li><li class="chapter-item expanded "><a href="../graphics.html"><strong aria-hidden="true">6.</strong> General Graphics Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../graphics/camera.html"><strong aria-hidden="true">6.1.</strong> Cameras</a></li><li class="chapter-item expanded "><a href="../graphics/hdr-tonemap.html"><strong aria-hidden="true">6.2.</strong> HDR and Tonemapping</a></li><li class="chapter-item expanded "><a href="../graphics/bloom.html"><strong aria-hidden="true">6.3.</strong> Bloom</a></li></ol></li><li class="chapter-item expanded "><a href="../2d.html"><strong aria-hidden="true">7.</strong> Working with 2D</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../2d/camera.html"><strong aria-hidden="true">7.1.</strong> 2D Camera Setup</a></li><li class="chapter-item expanded "><a href="../2d/sprites.html"><strong aria-hidden="true">7.2.</strong> Sprites and Atlases</a></li></ol></li><li class="chapter-item expanded "><a href="../3d.html"><strong aria-hidden="true">8.</strong> Working with 3D</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3d/camera.html"><strong aria-hidden="true">8.1.</strong> 3D Camera Setup</a></li><li class="chapter-item expanded "><a href="../3d/gltf.html"><strong aria-hidden="true">8.2.</strong> 3D Models and Scenes (GLTF)</a></li></ol></li><li class="chapter-item expanded "><a href="../input.html"><strong aria-hidden="true">9.</strong> Input Handling</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../input/keyboard.html"><strong aria-hidden="true">9.1.</strong> Keyboard</a></li><li class="chapter-item expanded "><a href="../input/mouse.html"><strong aria-hidden="true">9.2.</strong> Mouse</a></li><li class="chapter-item expanded "><a href="../input/gamepad.html"><strong aria-hidden="true">9.3.</strong> Gamepad (Controller, Joystick)</a></li><li class="chapter-item expanded "><a href="../input/touch.html"><strong aria-hidden="true">9.4.</strong> Touchscreen</a></li><li class="chapter-item expanded "><a href="../input/gesture.html"><strong aria-hidden="true">9.5.</strong> Gestures</a></li><li class="chapter-item expanded "><a href="../input/dnd.html"><strong aria-hidden="true">9.6.</strong> Drag-and-Drop (Files)</a></li><li class="chapter-item expanded "><a href="../input/ime.html"><strong aria-hidden="true">9.7.</strong> IME (Advanced Text)</a></li></ol></li><li class="chapter-item expanded "><a href="../window.html"><strong aria-hidden="true">10.</strong> Window Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../window/props.html"><strong aria-hidden="true">10.1.</strong> Window Properties</a></li><li class="chapter-item expanded "><a href="../window/clear-color.html"><strong aria-hidden="true">10.2.</strong> Change the Background Color</a></li><li class="chapter-item expanded "><a href="../window/mouse-grab.html"><strong aria-hidden="true">10.3.</strong> Grab/Capture the Mouse Cursor</a></li><li class="chapter-item expanded "><a href="../window/icon.html"><strong aria-hidden="true">10.4.</strong> Set the Window Icon</a></li></ol></li><li class="chapter-item expanded "><a href="../assets.html"><strong aria-hidden="true">11.</strong> Asset Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../assets/handles.html"><strong aria-hidden="true">11.1.</strong> Handles</a></li><li class="chapter-item expanded "><a href="../assets/assetserver.html"><strong aria-hidden="true">11.2.</strong> Load Assets from Files</a></li><li class="chapter-item expanded "><a href="../assets/data.html"><strong aria-hidden="true">11.3.</strong> Access the Asset Data</a></li><li class="chapter-item expanded "><a href="../assets/assetevent.html"><strong aria-hidden="true">11.4.</strong> React to Changes with Asset Events</a></li><li class="chapter-item expanded "><a href="../assets/ready.html"><strong aria-hidden="true">11.5.</strong> Track Loading Progress</a></li><li class="chapter-item expanded "><a href="../assets/hot-reload.html"><strong aria-hidden="true">11.6.</strong> Hot-Reloading Assets</a></li><li class="chapter-item expanded "><a href="../assets/processing.html"><strong aria-hidden="true">11.7.</strong> Processing Assets</a></li></ol></li><li class="chapter-item expanded "><a href="../audio.html"><strong aria-hidden="true">12.</strong> Audio</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../audio/basic.html"><strong aria-hidden="true">12.1.</strong> Playing Sounds</a></li><li class="chapter-item expanded "><a href="../audio/spatial.html"><strong aria-hidden="true">12.2.</strong> Spatial Audio</a></li><li class="chapter-item expanded "><a href="../audio/custom.html"><strong aria-hidden="true">12.3.</strong> Custom Audio Streams</a></li></ol></li><li class="chapter-item expanded "><a href="../ui.html"><strong aria-hidden="true">13.</strong> Bevy UI Framework</a></li><li class="chapter-item expanded "><a href="../programming.html"><strong aria-hidden="true">14.</strong> Bevy Core Programming Framework</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../programming/ecs-intro.html"><strong aria-hidden="true">14.1.</strong> Intro to ECS</a></li><li class="chapter-item expanded "><a href="../programming/intro-data.html"><strong aria-hidden="true">14.2.</strong> Intro: Your Data</a></li><li class="chapter-item expanded "><a href="../programming/intro-code.html"><strong aria-hidden="true">14.3.</strong> Intro: Your Code</a></li><li class="chapter-item expanded "><a href="../programming/app-builder.html"><strong aria-hidden="true">14.4.</strong> The App</a></li><li class="chapter-item expanded "><a href="../programming/systems.html"><strong aria-hidden="true">14.5.</strong> Systems</a></li><li class="chapter-item expanded "><a href="../programming/res.html"><strong aria-hidden="true">14.6.</strong> Resources</a></li><li class="chapter-item expanded "><a href="../programming/ec.html"><strong aria-hidden="true">14.7.</strong> Entities, Components</a></li><li class="chapter-item expanded "><a href="../programming/bundle.html"><strong aria-hidden="true">14.8.</strong> Bundles</a></li><li class="chapter-item expanded "><a href="../programming/queries.html"><strong aria-hidden="true">14.9.</strong> Queries</a></li><li class="chapter-item expanded "><a href="../programming/commands.html"><strong aria-hidden="true">14.10.</strong> Commands</a></li><li class="chapter-item expanded "><a href="../programming/events.html"><strong aria-hidden="true">14.11.</strong> Events</a></li><li class="chapter-item expanded "><a href="../programming/plugins.html"><strong aria-hidden="true">14.12.</strong> Plugins</a></li><li class="chapter-item expanded "><a href="../programming/local.html"><strong aria-hidden="true">14.13.</strong> Local Resources</a></li><li class="chapter-item expanded "><a href="../programming/exclusive.html"><strong aria-hidden="true">14.14.</strong> Exclusive Systems</a></li><li class="chapter-item expanded "><a href="../programming/world.html"><strong aria-hidden="true">14.15.</strong> Direct ECS World Access</a></li><li class="chapter-item expanded "><a href="../programming/schedules.html"><strong aria-hidden="true">14.16.</strong> Schedules</a></li><li class="chapter-item expanded "><a href="../programming/system-order.html"><strong aria-hidden="true">14.17.</strong> System Order of Execution</a></li><li class="chapter-item expanded "><a href="../programming/run-conditions.html"><strong aria-hidden="true">14.18.</strong> Run Conditions</a></li><li class="chapter-item expanded "><a href="../programming/system-sets.html"><strong aria-hidden="true">14.19.</strong> System Sets</a></li><li class="chapter-item expanded "><a href="../programming/states.html"><strong aria-hidden="true">14.20.</strong> States</a></li><li class="chapter-item expanded "><a href="../programming/change-detection.html"><strong aria-hidden="true">14.21.</strong> Change Detection</a></li><li class="chapter-item expanded "><a href="../programming/one-shot-systems.html"><strong aria-hidden="true">14.22.</strong> One-Shot Systems</a></li><li class="chapter-item expanded "><a href="../programming/par-iter.html"><strong aria-hidden="true">14.23.</strong> Internal Parallelism</a></li><li class="chapter-item expanded "><a href="../programming/system-piping.html"><strong aria-hidden="true">14.24.</strong> System Piping</a></li><li class="chapter-item expanded "><a href="../programming/paramset.html"><strong aria-hidden="true">14.25.</strong> ParamSet</a></li><li class="chapter-item expanded "><a href="../programming/non-send.html"><strong aria-hidden="true">14.26.</strong> Non-Send</a></li></ol></li><li class="chapter-item expanded "><a href="../gpu.html"><strong aria-hidden="true">15.</strong> Bevy Render (GPU) Framework</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../gpu/intro.html"><strong aria-hidden="true">15.1.</strong> Render Architecture Overview</a></li><li class="chapter-item expanded "><a href="../gpu/stages.html"><strong aria-hidden="true">15.2.</strong> Render Stages</a></li></ol></li><li class="chapter-item expanded "><a href="../patterns.html"><strong aria-hidden="true">16.</strong> Programming Patterns</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../patterns/generic-systems.html"><strong aria-hidden="true">16.1.</strong> Generic Systems</a></li><li class="chapter-item expanded "><a href="../patterns/component-storage.html"><strong aria-hidden="true">16.2.</strong> Component Storage (Table/Sparse-Set)</a></li><li class="chapter-item expanded "><a href="../patterns/manual-event-clear.html"><strong aria-hidden="true">16.3.</strong> Manual Event Clearing</a></li><li class="chapter-item expanded "><a href="../patterns/system-tests.html"><strong aria-hidden="true">16.4.</strong> Writing Tests for Systems</a></li></ol></li><li class="chapter-item expanded "><a href="../platforms.html"><strong aria-hidden="true">17.</strong> Bevy on Different Platforms</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../platforms/linux.html"><strong aria-hidden="true">17.1.</strong> Linux Desktop</a></li><li class="chapter-item expanded "><a href="../platforms/macos.html"><strong aria-hidden="true">17.2.</strong> macOS Desktop</a></li><li class="chapter-item expanded "><a href="../platforms/windows.html"><strong aria-hidden="true">17.3.</strong> Windows Desktop</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../platforms/windows/wsl2.html"><strong aria-hidden="true">17.3.1.</strong> Working in WSL2</a></li></ol></li><li class="chapter-item expanded "><a href="../platforms/wasm.html"><strong aria-hidden="true">17.4.</strong> Browser (WebAssembly)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../platforms/wasm/size-opt.html"><strong aria-hidden="true">17.4.1.</strong> Optimize for Size</a></li><li class="chapter-item expanded "><a href="../platforms/wasm/webpage.html"><strong aria-hidden="true">17.4.2.</strong> Create a Custom Web Page</a></li><li class="chapter-item expanded "><a href="../platforms/wasm/gh-pages.html"><strong aria-hidden="true">17.4.3.</strong> Hosting on GitHub Pages</a></li></ol></li><li class="chapter-item expanded "><a href="../setup/cross.html"><strong aria-hidden="true">17.5.</strong> Cross-Compilation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup/cross/linux-windows.html"><strong aria-hidden="true">17.5.1.</strong> From Linux to Windows</a></li><li class="chapter-item expanded "><a href="../setup/cross/macos-windows.html"><strong aria-hidden="true">17.5.2.</strong> From macOS to Windows</a></li></ol></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../credits.html">Credits</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../contact.html">Contact Me</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../contributing-bevy.html">Contribute to Bevy</a></li><li class="chapter-item expanded affix "><a href="../contributing.html">Contribute to this Book</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Unofficial Bevy Cheat Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/bevy-cheatbook/bevy-cheatbook/issues/new" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <div class="table-wrapper"><table><thead><tr><th><a href="/introduction.html#maintenance-policy">Bevy Version:</a></th><th><a href="https://bevyengine.org/news/bevy-0-13">0.13</a></th><th>(current)</th></tr></thead><tbody>
+</tbody></table>
+</div>
+<p><code>当前双语版本对应的是: 3d540e7, 日期: 2024/06/13, 等双语版本整个翻译完之后,再处理原始仓库的更新</code></p>
+<h1 id="transforms"><a class="header" href="#transforms">Transforms</a></h1>
+<p>Relevant official examples:
+<a href="https://github.com/bevyengine/bevy/blob/v0.13.0/examples/transforms/transform.rs"><code>transform</code></a>,
+<a href="https://github.com/bevyengine/bevy/blob/v0.13.0/examples/transforms/translation.rs"><code>translation</code></a>,
+<a href="https://github.com/bevyengine/bevy/blob/v0.13.0/examples/2d/rotation.rs"><code>rotation</code></a>,
+<a href="https://github.com/bevyengine/bevy/blob/v0.13.0/examples/transforms/3d_rotation.rs"><code>3d_rotation</code></a>,
+<a href="https://github.com/bevyengine/bevy/blob/v0.13.0/examples/transforms/scale.rs"><code>scale</code></a>,
+<a href="https://github.com/bevyengine/bevy/blob/v0.13.0/examples/2d/move_sprite.rs"><code>move_sprite</code></a>,
+<a href="https://github.com/bevyengine/bevy/blob/v0.13.0/examples/3d/parenting.rs"><code>parenting</code></a>,
+anything that spawns 2D or 3D objects.</p>
+<hr />
+<p>First, a quick definition, if you are new to game development:</p>
+<p>A Transform is what allows you to place an object in the game world. It
+is a combination of the object's "translation" (position/coordinates),
+"rotation", and "scale" (size adjustment).</p>
+<p>You move objects around by modifying the translation, rotate them by modifying
+the rotation, and make them larger or smaller by modifying the scale.</p>
+<pre><code class="language-rust no_run noplayground">// To simply position something at specific coordinates
+let xf_pos567 = Transform::from_xyz(5.0, 6.0, 7.0);
+
+// To scale an object, making it twice as big in all dimensions
+let xf_scale = Transform::from_scale(Vec3::splat(2.0));
+
+// To rotate an object in 2D (Z-axis rotation) by 30°
+// (angles are in radians! must convert from degrees!)
+let xf_rot2d = Transform::from_rotation(Quat::from_rotation_z((30.0_f32).to_radians()));
+
+// 3D rotations can be complicated; explore the methods available on `Quat`
+
+// Simple 3D rotation by Euler-angles (X, Y, Z)
+let xf_rot2d = Transform::from_rotation(Quat::from_euler(
+    // YXZ order corresponds to the common
+    // "yaw"/"pitch"/"roll" convention
+    EulerRot::YXZ,
+    (20.0_f32).to_radians(),
+    (10.0_f32).to_radians(),
+    (30.0_f32).to_radians(),
+));
+
+// Everything:
+let xf = Transform::from_xyz(1.0, 2.0, 3.0)
+    .with_scale(Vec3::new(0.5, 0.5, 1.0))
+    .with_rotation(Quat::from_rotation_y(0.125 * std::f32::consts::PI));</code></pre>
+<p>变换的定义是:在游戏世界中,将一个对象如何放置.
+她由对象的位置/坐标/旋转/缩放的一个组合.</p>
+<p>在英文中,transform是变换,意义更广,涵盖了对物体位置、旋转和缩放等属性的综合操作。
+translation也是变换,但更多的是表示平移(仅仅是位置移动),不涉及旋转和缩放.</p>
+<h2 id="transform-components"><a class="header" href="#transform-components">Transform Components</a></h2>
+<p>In Bevy, transforms are represented by <strong>two</strong> <a href="/programming/ec.html#components">components</a>:
+<a href="https://docs.rs/bevy/0.13.0/bevy/transform/components/struct.Transform.html"><code>Transform</code></a> and <a href="https://docs.rs/bevy/0.13.0/bevy/transform/components/struct.GlobalTransform.html"><code>GlobalTransform</code></a>.</p>
+<p>Any <a href="/programming/ecs-intro.html">Entity</a> that represents an object in the game world
+needs to have both. All of Bevy's <a href="/builtins.html#bundles">built-in bundle types</a>
+include them.</p>
+<p>If you are creating a custom entity without using those <a href="/programming/bundle.html">bundles</a>,
+you can use one of the following to ensure you don't miss them:</p>
+<ul>
+<li><a href="https://docs.rs/bevy/0.13.0/bevy/render/prelude/struct.SpatialBundle.html"><code>SpatialBundle</code></a> for transforms + <a href="/fundamentals/visibility.html">visibility</a></li>
+<li><a href="https://docs.rs/bevy/0.13.0/bevy/transform/struct.TransformBundle.html"><code>TransformBundle</code></a> for just the transforms</li>
+</ul>
+<pre><code class="language-rust no_run noplayground">fn spawn_special_entity(
+    mut commands: Commands,
+) {
+    // create an entity that does not use one of the common Bevy bundles,
+    // but still needs transforms and visibility
+    commands.spawn((
+        ComponentA,
+        ComponentB,
+        SpatialBundle {
+            transform: Transform::from_scale(Vec3::splat(3.0)),
+            visibility: Visibility::Hidden,
+            ..Default::default()
+        },
+    ));
+}</code></pre>
+<p>在bevy中,变换有两个基础组件<code>Transform</code>和<code>GlobalTransform</code>,
+两者组合还有空间Bunlde,变换Bundle.</p>
+<p>world中的任何实体都需要这两个基础组件,实体构造时不能缺.</p>
+<h3 id="transform"><a class="header" href="#transform"><code>Transform</code></a></h3>
+<p><a href="https://docs.rs/bevy/0.13.0/bevy/transform/components/struct.Transform.html"><code>Transform</code></a> is what you typically work with. It is a <code>struct</code> containing the
+translation, rotation, and scale. To read or manipulate these values, access it
+from your <a href="/programming/systems.html">systems</a> using a <a href="/programming/queries.html">query</a>.</p>
+<p>If the entity has a <a href="/fundamentals/hierarchy.html">parent</a>, the <a href="https://docs.rs/bevy/0.13.0/bevy/transform/components/struct.Transform.html"><code>Transform</code></a> component is
+relative to the parent. This means that the child object will move/rotate/scale
+along with the parent.</p>
+<pre><code class="language-rust no_run noplayground">fn inflate_balloons(
+    mut query: Query&lt;&amp;mut Transform, With&lt;Balloon&gt;&gt;,
+    keyboard: Res&lt;ButtonInput&lt;KeyCode&gt;&gt;,
+) {
+    // every time the Spacebar is pressed,
+    // make all the balloons in the game bigger by 25%
+    if keyboard.just_pressed(KeyCode::Space) {
+        for mut transform in &amp;mut query {
+            transform.scale *= 1.25;
+        }
+    }
+}
+
+fn throwable_fly(
+    time: Res&lt;Time&gt;,
+    mut query: Query&lt;&amp;mut Transform, With&lt;ThrowableProjectile&gt;&gt;,
+) {
+    // every frame, make our projectiles fly across the screen and spin
+    for mut transform in &amp;mut query {
+        // do not forget to multiply by the time delta!
+        // this is required to move at the same speed regardless of frame rate!
+        transform.translation.x += 100.0 * time.delta_seconds();
+        transform.rotate_z(2.0 * time.delta_seconds());
+    }
+}</code></pre>
+<p>通常使用Transform就够了,这个结构体里包含了移动/旋转/缩放.
+如果实体有继承关系,则Transform是基于父实体的.</p>
+<h3 id="globaltransform"><a class="header" href="#globaltransform"><code>GlobalTransform</code></a></h3>
+<p><a href="https://docs.rs/bevy/0.13.0/bevy/transform/components/struct.GlobalTransform.html"><code>GlobalTransform</code></a> represents the absolute global position in the world.</p>
+<p>If the entity does not have a <a href="/fundamentals/hierarchy.html">parent</a>, then this will match the
+<a href="https://docs.rs/bevy/0.13.0/bevy/transform/components/struct.Transform.html"><code>Transform</code></a>.</p>
+<p>The value of <a href="https://docs.rs/bevy/0.13.0/bevy/transform/components/struct.GlobalTransform.html"><code>GlobalTransform</code></a> is calculated/managed internally by Bevy
+(<a href="#transform-propagation">"transform propagation"</a>).</p>
+<p>Unlike <a href="https://docs.rs/bevy/0.13.0/bevy/transform/components/struct.Transform.html"><code>Transform</code></a>, the translation/rotation/scale are not accessible
+directly. The data is stored in an optimized way (using <a href="https://docs.rs/bevy/0.13.0/bevy/math/struct.Affine3A.html"><code>Affine3A</code></a>) and it is
+possible to have complex transformations in a hierarchy that cannot be
+represented as a simple transform. For example, a combination of rotation and
+scale across multiple parents, resulting in shearing.</p>
+<p>If you want to try to convert a <a href="https://docs.rs/bevy/0.13.0/bevy/transform/components/struct.GlobalTransform.html"><code>GlobalTransform</code></a> back into a workable
+translation/rotation/scale representation, you can try the methods:</p>
+<ul>
+<li><code>.translation()</code></li>
+<li><code>.to_scale_rotation_translation()</code> (may be invalid)</li>
+<li><code>.compute_transform()</code> (may be invalid)</li>
+</ul>
+<p>GlobalTransform 是针对world世界的绝对位置. 值的计算和管理直接由bevy内部管理,
+这也是正常的,毕竟bevy是跨多个平台,自身就是要维护不同平台的不一致,
+基于world的正好交给bevy管理.而Transform则是为了简化开发而独立出来的.</p>
+<p>GlobalTransform的移动/旋转/缩放不是简单的改值,处理起来也很麻烦,
+多个顶级父对象之前还存在遮挡,计算也颇为麻烦,优化也是采用<code>Affine3A</code>技术.</p>
+<h2 id="transform-propagation"><a class="header" href="#transform-propagation">Transform Propagation</a></h2>
+<p>The two components are synchronized by a bevy-internal system (the "transform
+propagation system"), which runs in the <a href="https://docs.rs/bevy/0.13.0/bevy/app/struct.PostUpdate.html"><code>PostUpdate</code></a> <a href="/programming/schedules.html">schedule</a>.</p>
+<p>Beware: When you mutate the <a href="https://docs.rs/bevy/0.13.0/bevy/transform/components/struct.Transform.html"><code>Transform</code></a>, the <a href="https://docs.rs/bevy/0.13.0/bevy/transform/components/struct.GlobalTransform.html"><code>GlobalTransform</code></a> is not
+updated immediately. They will be out-of-sync until the transform propagation
+system runs.</p>
+<p>If you need to work with <a href="https://docs.rs/bevy/0.13.0/bevy/transform/components/struct.GlobalTransform.html"><code>GlobalTransform</code></a> directly, you should <a href="/programming/app-builder.html">add</a>
+your <a href="/programming/systems.html">system</a> to the <a href="https://docs.rs/bevy/0.13.0/bevy/app/struct.PostUpdate.html"><code>PostUpdate</code></a> <a href="/programming/schedules.html">schedule</a> and
+<a href="/programming/system-order.html">order it after</a> <a href="https://docs.rs/bevy/0.13.0/bevy/transform/enum.TransformSystem.html"><code>TransformSystem::TransformPropagate</code></a>.</p>
+<pre><code class="language-rust no_run noplayground">/// Print the up-to-date global coordinates of the player
+fn debug_globaltransform(
+    query: Query&lt;&amp;GlobalTransform, With&lt;Player&gt;&gt;,
+) {
+    let gxf = query.single();
+    debug!("Player at: {:?}", gxf.translation());
+}</code></pre>
+<pre><code class="language-rust no_run noplayground">// the label to use for ordering
+use bevy::transform::TransformSystem;
+
+app.add_systems(PostUpdate,
+    debug_globaltransform
+        // we want to read the GlobalTransform after
+        // it has been updated by Bevy for this frame
+        .after(TransformSystem::TransformPropagate)
+);</code></pre>
+<p>变换传播,这两个基础组件在bevy内部system中调用,时机是PostUpdate调度中.
+通过Transform修改值后,GlobalTransform并不会立马更新,而是等变换传播执行完才进行同步.</p>
+<p>如果要直接操作GlobalTransform,需要在PostUpdate调度中添加system,
+并将system的顺序放在变换传播(TransformSystem::TransformPropagate)后面.</p>
+<h2 id="transformhelper"><a class="header" href="#transformhelper"><code>TransformHelper</code></a></h2>
+<p>If you need to get an up-to-date <a href="https://docs.rs/bevy/0.13.0/bevy/transform/components/struct.GlobalTransform.html"><code>GlobalTransform</code></a> in a <a href="/programming/systems.html">system</a>
+that has to run before transform propagation, you can use the special
+<a href="https://docs.rs/bevy/0.13.0/bevy/transform/helper/struct.TransformHelper.html"><code>TransformHelper</code></a> system parameter.</p>
+<p>It allows you to compute a specific entity's <a href="https://docs.rs/bevy/0.13.0/bevy/transform/components/struct.GlobalTransform.html"><code>GlobalTransform</code></a> immediately, on
+demand.</p>
+<p>An example of where this could be useful might be a system to make a camera
+follow an entity on-screen. You need to update the camera's <a href="https://docs.rs/bevy/0.13.0/bevy/transform/components/struct.Transform.html"><code>Transform</code></a> (which
+means you have to do it before Bevy's transform propagation, so it can account
+for the camera's new transform), but you also need to know the current
+up-to-date position of the entity you are following.</p>
+<pre><code class="language-rust no_run noplayground">fn camera_look_follow(
+    q_target: Query&lt;Entity, With&lt;MySpecialMarker&gt;&gt;,
+    mut transform_params: ParamSet&lt;(
+        TransformHelper,
+        Query&lt;&amp;mut Transform, With&lt;MyGameCamera&gt;&gt;,
+    )&gt;,
+) {
+    // get the Entity ID we want to target
+    let e_target = q_target.single();
+    // compute its actual current GlobalTransform
+    // (could be Err if entity doesn't have transforms)
+    let Ok(global) = transform_params.p0().compute_global_transform(e_target) else {
+        return;
+    };
+    // get camera transform and make it look at the global translation
+    transform_params.p1().single_mut().look_at(global.translation(), Vec3::Y);
+}</code></pre>
+<p>Internally, <a href="https://docs.rs/bevy/0.13.0/bevy/transform/helper/struct.TransformHelper.html"><code>TransformHelper</code></a> behaves like two read-only <a href="/programming/queries.html">queries</a>.
+It needs access to the <a href="https://docs.rs/bevy/0.13.0/bevy/hierarchy/struct.Parent.html"><code>Parent</code></a> and <a href="https://docs.rs/bevy/0.13.0/bevy/transform/components/struct.Transform.html"><code>Transform</code></a> components to do its job. It
+would conflict with our other <code>&amp;mut Transform</code> query. That's why we have to use
+a <a href="/programming/paramset.html">param set</a> in the example above.</p>
+<p>Note: if you over-use <a href="https://docs.rs/bevy/0.13.0/bevy/transform/helper/struct.TransformHelper.html"><code>TransformHelper</code></a>, it could become a performance issue.
+It calculates the global transform for you, but it does not update the data
+stored in the entity's <a href="https://docs.rs/bevy/0.13.0/bevy/transform/components/struct.GlobalTransform.html"><code>GlobalTransform</code></a>. Bevy will still do the same
+computation again later, during transform propagation. It leads to repetitive
+work. If your system can run after transform propagation, so it can just read
+the value after Bevy updates it, you should prefer to do that instead of using
+<a href="https://docs.rs/bevy/0.13.0/bevy/transform/helper/struct.TransformHelper.html"><code>TransformHelper</code></a>.</p>
+<p>如果要在变换传播之前获取最新的GlobalTransform值,需要借助TransformHelper system参数.</p>
+<p>一个常用的场景是:相机要跟随屏幕上的实体,就需要更新相机的Transform,
+而且这个操作要在变换传播之前处理完.</p>
+<p>代码如上图所示,使用了system参数: ParamSet/TransformHelper.</p>
+<p>TransformHelper的行为类似两个只读query,分别访问Parent和Transform组件.
+因为已经有了一个camera的Transform,直接使用两个query会导致冲突,
+所以使用ParamSet来避免冲突.</p>
+<p>TransformHelper过度使用会有性能问题,因为只计算,不更新GlobalTransform的数据,
+在变换传播时,bevy也是要进行同样的计算.这样就存在重复计算.
+如果是在传播变换之后获取GlobalTransform,直接读就行,不需要TransformHelper,
+这样性能会更高.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../fundamentals/coords.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../fundamentals/visibility.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../fundamentals/coords.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../fundamentals/visibility.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../nagbar.js"></script>
+
+
+    </div>
+    </body>
+</html>

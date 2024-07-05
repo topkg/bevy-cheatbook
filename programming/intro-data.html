@@ -1,0 +1,502 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Intro: Your Data - Unofficial Bevy Cheat Book</title>
+
+
+        <!-- Custom HTML head -->
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../nagbar.css">
+        <link rel="stylesheet" href="../sidebar.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="../overview.html">Chapter Overview</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../builtins.html">List of Bevy Builtins</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded "><a href="../tutorial.html"><strong aria-hidden="true">1.</strong> Bevy Tutorials</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tutorial/guide.html"><strong aria-hidden="true">1.1.</strong> Guided Tour</a></li></ol></li><li class="chapter-item expanded "><a href="../cookbook.html"><strong aria-hidden="true">2.</strong> Bevy Cookbook</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../cookbook/print-framerate.html"><strong aria-hidden="true">2.1.</strong> Show Framerate</a></li><li class="chapter-item expanded "><a href="../cookbook/cursor2world.html"><strong aria-hidden="true">2.2.</strong> Convert cursor to world coordinates</a></li><li class="chapter-item expanded "><a href="../cookbook/custom-projection.html"><strong aria-hidden="true">2.3.</strong> Custom Camera Projection</a></li><li class="chapter-item expanded "><a href="../cookbook/pan-orbit-camera.html"><strong aria-hidden="true">2.4.</strong> 3D Pan+Orbit Camera</a></li><li class="chapter-item expanded "><a href="../cookbook/print-resources.html"><strong aria-hidden="true">2.5.</strong> List All Resource Types</a></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded "><a href="../setup.html"><strong aria-hidden="true">3.</strong> Bevy Setup Tips</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup/getting-started.html"><strong aria-hidden="true">3.1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../setup/editor.html"><strong aria-hidden="true">3.2.</strong> Text Editor / IDE</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup/editor/vscode.html"><strong aria-hidden="true">3.2.1.</strong> Visual Studio Code</a></li><li class="chapter-item expanded "><a href="../setup/editor/jetbrains.html"><strong aria-hidden="true">3.2.2.</strong> JetBrains (RustRover, IntelliJ, CLion)</a></li><li class="chapter-item expanded "><a href="../setup/editor/kak.html"><strong aria-hidden="true">3.2.3.</strong> Kakoune</a></li><li class="chapter-item expanded "><a href="../setup/editor/vim.html"><strong aria-hidden="true">3.2.4.</strong> Vim</a></li><li class="chapter-item expanded "><a href="../setup/editor/emacs.html"><strong aria-hidden="true">3.2.5.</strong> Emacs</a></li></ol></li><li class="chapter-item expanded "><a href="../setup/bevy-config.html"><strong aria-hidden="true">3.3.</strong> Customizing Bevy (features, modularity)</a></li><li class="chapter-item expanded "><a href="../setup/unofficial-plugins.html"><strong aria-hidden="true">3.4.</strong> Community Plugin Ecosystem</a></li><li class="chapter-item expanded "><a href="../setup/bevy-tools.html"><strong aria-hidden="true">3.5.</strong> Dev Tools and Editors for Bevy</a></li><li class="chapter-item expanded "><a href="../setup/perf.html"><strong aria-hidden="true">3.6.</strong> Performance Tunables</a></li><li class="chapter-item expanded "><a href="../setup/bevy-git.html"><strong aria-hidden="true">3.7.</strong> Using bleeding-edge Bevy (main)</a></li></ol></li><li class="chapter-item expanded "><a href="../pitfalls.html"><strong aria-hidden="true">4.</strong> Common Pitfalls</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../pitfalls/build-errors.html"><strong aria-hidden="true">4.1.</strong> Strange compile errors from Bevy or dependencies</a></li><li class="chapter-item expanded "><a href="../pitfalls/performance.html"><strong aria-hidden="true">4.2.</strong> Slow Performance</a></li><li class="chapter-item expanded "><a href="../pitfalls/into-system.html"><strong aria-hidden="true">4.3.</strong> Error adding function as system</a></li><li class="chapter-item expanded "><a href="../pitfalls/3d-not-rendering.html"><strong aria-hidden="true">4.4.</strong> 3D objects not displaying</a></li><li class="chapter-item expanded "><a href="../pitfalls/split-borrows.html"><strong aria-hidden="true">4.5.</strong> Borrow multiple fields from struct</a></li><li class="chapter-item expanded "><a href="../pitfalls/time.html"><strong aria-hidden="true">4.6.</strong> Jittering Time (choppy movement/animation)</a></li><li class="chapter-item expanded "><a href="../pitfalls/uv-coordinates.html"><strong aria-hidden="true">4.7.</strong> Textures/Images are flipped</a></li></ol></li><li class="chapter-item expanded "><a href="../fundamentals.html"><strong aria-hidden="true">5.</strong> Game Engine Fundamentals</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../fundamentals/coords.html"><strong aria-hidden="true">5.1.</strong> Coordinate System</a></li><li class="chapter-item expanded "><a href="../fundamentals/transforms.html"><strong aria-hidden="true">5.2.</strong> Transforms</a></li><li class="chapter-item expanded "><a href="../fundamentals/visibility.html"><strong aria-hidden="true">5.3.</strong> Visibility</a></li><li class="chapter-item expanded "><a href="../fundamentals/time.html"><strong aria-hidden="true">5.4.</strong> Time and Timers</a></li><li class="chapter-item expanded "><a href="../fundamentals/log.html"><strong aria-hidden="true">5.5.</strong> Logging, Console Messages</a></li><li class="chapter-item expanded "><a href="../fundamentals/hierarchy.html"><strong aria-hidden="true">5.6.</strong> Parent/Child Hierarchies</a></li><li class="chapter-item expanded "><a href="../fundamentals/fixed-timestep.html"><strong aria-hidden="true">5.7.</strong> Fixed Timestep</a></li><li class="chapter-item expanded "><a href="../fundamentals/gizmos.html"><strong aria-hidden="true">5.8.</strong> Gizmos</a></li></ol></li><li class="chapter-item expanded "><a href="../graphics.html"><strong aria-hidden="true">6.</strong> General Graphics Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../graphics/camera.html"><strong aria-hidden="true">6.1.</strong> Cameras</a></li><li class="chapter-item expanded "><a href="../graphics/hdr-tonemap.html"><strong aria-hidden="true">6.2.</strong> HDR and Tonemapping</a></li><li class="chapter-item expanded "><a href="../graphics/bloom.html"><strong aria-hidden="true">6.3.</strong> Bloom</a></li></ol></li><li class="chapter-item expanded "><a href="../2d.html"><strong aria-hidden="true">7.</strong> Working with 2D</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../2d/camera.html"><strong aria-hidden="true">7.1.</strong> 2D Camera Setup</a></li><li class="chapter-item expanded "><a href="../2d/sprites.html"><strong aria-hidden="true">7.2.</strong> Sprites and Atlases</a></li></ol></li><li class="chapter-item expanded "><a href="../3d.html"><strong aria-hidden="true">8.</strong> Working with 3D</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3d/camera.html"><strong aria-hidden="true">8.1.</strong> 3D Camera Setup</a></li><li class="chapter-item expanded "><a href="../3d/gltf.html"><strong aria-hidden="true">8.2.</strong> 3D Models and Scenes (GLTF)</a></li></ol></li><li class="chapter-item expanded "><a href="../input.html"><strong aria-hidden="true">9.</strong> Input Handling</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../input/keyboard.html"><strong aria-hidden="true">9.1.</strong> Keyboard</a></li><li class="chapter-item expanded "><a href="../input/mouse.html"><strong aria-hidden="true">9.2.</strong> Mouse</a></li><li class="chapter-item expanded "><a href="../input/gamepad.html"><strong aria-hidden="true">9.3.</strong> Gamepad (Controller, Joystick)</a></li><li class="chapter-item expanded "><a href="../input/touch.html"><strong aria-hidden="true">9.4.</strong> Touchscreen</a></li><li class="chapter-item expanded "><a href="../input/gesture.html"><strong aria-hidden="true">9.5.</strong> Gestures</a></li><li class="chapter-item expanded "><a href="../input/dnd.html"><strong aria-hidden="true">9.6.</strong> Drag-and-Drop (Files)</a></li><li class="chapter-item expanded "><a href="../input/ime.html"><strong aria-hidden="true">9.7.</strong> IME (Advanced Text)</a></li></ol></li><li class="chapter-item expanded "><a href="../window.html"><strong aria-hidden="true">10.</strong> Window Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../window/props.html"><strong aria-hidden="true">10.1.</strong> Window Properties</a></li><li class="chapter-item expanded "><a href="../window/clear-color.html"><strong aria-hidden="true">10.2.</strong> Change the Background Color</a></li><li class="chapter-item expanded "><a href="../window/mouse-grab.html"><strong aria-hidden="true">10.3.</strong> Grab/Capture the Mouse Cursor</a></li><li class="chapter-item expanded "><a href="../window/icon.html"><strong aria-hidden="true">10.4.</strong> Set the Window Icon</a></li></ol></li><li class="chapter-item expanded "><a href="../assets.html"><strong aria-hidden="true">11.</strong> Asset Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../assets/handles.html"><strong aria-hidden="true">11.1.</strong> Handles</a></li><li class="chapter-item expanded "><a href="../assets/assetserver.html"><strong aria-hidden="true">11.2.</strong> Load Assets from Files</a></li><li class="chapter-item expanded "><a href="../assets/data.html"><strong aria-hidden="true">11.3.</strong> Access the Asset Data</a></li><li class="chapter-item expanded "><a href="../assets/assetevent.html"><strong aria-hidden="true">11.4.</strong> React to Changes with Asset Events</a></li><li class="chapter-item expanded "><a href="../assets/ready.html"><strong aria-hidden="true">11.5.</strong> Track Loading Progress</a></li><li class="chapter-item expanded "><a href="../assets/hot-reload.html"><strong aria-hidden="true">11.6.</strong> Hot-Reloading Assets</a></li><li class="chapter-item expanded "><a href="../assets/processing.html"><strong aria-hidden="true">11.7.</strong> Processing Assets</a></li></ol></li><li class="chapter-item expanded "><a href="../audio.html"><strong aria-hidden="true">12.</strong> Audio</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../audio/basic.html"><strong aria-hidden="true">12.1.</strong> Playing Sounds</a></li><li class="chapter-item expanded "><a href="../audio/spatial.html"><strong aria-hidden="true">12.2.</strong> Spatial Audio</a></li><li class="chapter-item expanded "><a href="../audio/custom.html"><strong aria-hidden="true">12.3.</strong> Custom Audio Streams</a></li></ol></li><li class="chapter-item expanded "><a href="../ui.html"><strong aria-hidden="true">13.</strong> Bevy UI Framework</a></li><li class="chapter-item expanded "><a href="../programming.html"><strong aria-hidden="true">14.</strong> Bevy Core Programming Framework</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../programming/ecs-intro.html"><strong aria-hidden="true">14.1.</strong> Intro to ECS</a></li><li class="chapter-item expanded "><a href="../programming/intro-data.html" class="active"><strong aria-hidden="true">14.2.</strong> Intro: Your Data</a></li><li class="chapter-item expanded "><a href="../programming/intro-code.html"><strong aria-hidden="true">14.3.</strong> Intro: Your Code</a></li><li class="chapter-item expanded "><a href="../programming/app-builder.html"><strong aria-hidden="true">14.4.</strong> The App</a></li><li class="chapter-item expanded "><a href="../programming/systems.html"><strong aria-hidden="true">14.5.</strong> Systems</a></li><li class="chapter-item expanded "><a href="../programming/res.html"><strong aria-hidden="true">14.6.</strong> Resources</a></li><li class="chapter-item expanded "><a href="../programming/ec.html"><strong aria-hidden="true">14.7.</strong> Entities, Components</a></li><li class="chapter-item expanded "><a href="../programming/bundle.html"><strong aria-hidden="true">14.8.</strong> Bundles</a></li><li class="chapter-item expanded "><a href="../programming/queries.html"><strong aria-hidden="true">14.9.</strong> Queries</a></li><li class="chapter-item expanded "><a href="../programming/commands.html"><strong aria-hidden="true">14.10.</strong> Commands</a></li><li class="chapter-item expanded "><a href="../programming/events.html"><strong aria-hidden="true">14.11.</strong> Events</a></li><li class="chapter-item expanded "><a href="../programming/plugins.html"><strong aria-hidden="true">14.12.</strong> Plugins</a></li><li class="chapter-item expanded "><a href="../programming/local.html"><strong aria-hidden="true">14.13.</strong> Local Resources</a></li><li class="chapter-item expanded "><a href="../programming/exclusive.html"><strong aria-hidden="true">14.14.</strong> Exclusive Systems</a></li><li class="chapter-item expanded "><a href="../programming/world.html"><strong aria-hidden="true">14.15.</strong> Direct ECS World Access</a></li><li class="chapter-item expanded "><a href="../programming/schedules.html"><strong aria-hidden="true">14.16.</strong> Schedules</a></li><li class="chapter-item expanded "><a href="../programming/system-order.html"><strong aria-hidden="true">14.17.</strong> System Order of Execution</a></li><li class="chapter-item expanded "><a href="../programming/run-conditions.html"><strong aria-hidden="true">14.18.</strong> Run Conditions</a></li><li class="chapter-item expanded "><a href="../programming/system-sets.html"><strong aria-hidden="true">14.19.</strong> System Sets</a></li><li class="chapter-item expanded "><a href="../programming/states.html"><strong aria-hidden="true">14.20.</strong> States</a></li><li class="chapter-item expanded "><a href="../programming/change-detection.html"><strong aria-hidden="true">14.21.</strong> Change Detection</a></li><li class="chapter-item expanded "><a href="../programming/one-shot-systems.html"><strong aria-hidden="true">14.22.</strong> One-Shot Systems</a></li><li class="chapter-item expanded "><a href="../programming/par-iter.html"><strong aria-hidden="true">14.23.</strong> Internal Parallelism</a></li><li class="chapter-item expanded "><a href="../programming/system-piping.html"><strong aria-hidden="true">14.24.</strong> System Piping</a></li><li class="chapter-item expanded "><a href="../programming/paramset.html"><strong aria-hidden="true">14.25.</strong> ParamSet</a></li><li class="chapter-item expanded "><a href="../programming/non-send.html"><strong aria-hidden="true">14.26.</strong> Non-Send</a></li></ol></li><li class="chapter-item expanded "><a href="../gpu.html"><strong aria-hidden="true">15.</strong> Bevy Render (GPU) Framework</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../gpu/intro.html"><strong aria-hidden="true">15.1.</strong> Render Architecture Overview</a></li><li class="chapter-item expanded "><a href="../gpu/stages.html"><strong aria-hidden="true">15.2.</strong> Render Stages</a></li></ol></li><li class="chapter-item expanded "><a href="../patterns.html"><strong aria-hidden="true">16.</strong> Programming Patterns</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../patterns/generic-systems.html"><strong aria-hidden="true">16.1.</strong> Generic Systems</a></li><li class="chapter-item expanded "><a href="../patterns/component-storage.html"><strong aria-hidden="true">16.2.</strong> Component Storage (Table/Sparse-Set)</a></li><li class="chapter-item expanded "><a href="../patterns/manual-event-clear.html"><strong aria-hidden="true">16.3.</strong> Manual Event Clearing</a></li><li class="chapter-item expanded "><a href="../patterns/system-tests.html"><strong aria-hidden="true">16.4.</strong> Writing Tests for Systems</a></li></ol></li><li class="chapter-item expanded "><a href="../platforms.html"><strong aria-hidden="true">17.</strong> Bevy on Different Platforms</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../platforms/linux.html"><strong aria-hidden="true">17.1.</strong> Linux Desktop</a></li><li class="chapter-item expanded "><a href="../platforms/macos.html"><strong aria-hidden="true">17.2.</strong> macOS Desktop</a></li><li class="chapter-item expanded "><a href="../platforms/windows.html"><strong aria-hidden="true">17.3.</strong> Windows Desktop</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../platforms/windows/wsl2.html"><strong aria-hidden="true">17.3.1.</strong> Working in WSL2</a></li></ol></li><li class="chapter-item expanded "><a href="../platforms/wasm.html"><strong aria-hidden="true">17.4.</strong> Browser (WebAssembly)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../platforms/wasm/size-opt.html"><strong aria-hidden="true">17.4.1.</strong> Optimize for Size</a></li><li class="chapter-item expanded "><a href="../platforms/wasm/webpage.html"><strong aria-hidden="true">17.4.2.</strong> Create a Custom Web Page</a></li><li class="chapter-item expanded "><a href="../platforms/wasm/gh-pages.html"><strong aria-hidden="true">17.4.3.</strong> Hosting on GitHub Pages</a></li></ol></li><li class="chapter-item expanded "><a href="../setup/cross.html"><strong aria-hidden="true">17.5.</strong> Cross-Compilation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup/cross/linux-windows.html"><strong aria-hidden="true">17.5.1.</strong> From Linux to Windows</a></li><li class="chapter-item expanded "><a href="../setup/cross/macos-windows.html"><strong aria-hidden="true">17.5.2.</strong> From macOS to Windows</a></li></ol></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../credits.html">Credits</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../contact.html">Contact Me</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../contributing-bevy.html">Contribute to Bevy</a></li><li class="chapter-item expanded affix "><a href="../contributing.html">Contribute to this Book</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Unofficial Bevy Cheat Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/bevy-cheatbook/bevy-cheatbook/issues/new" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <div class="table-wrapper"><table><thead><tr><th><a href="/introduction.html#maintenance-policy">Bevy Version:</a></th><th>0.14</th><th>(upcoming / release candidate)</th></tr></thead><tbody>
+</tbody></table>
+</div>
+<p><code>当前双语版本对应的是: 3d540e7, 日期: 2024/06/13, 等双语版本整个翻译完之后,再处理原始仓库的更新</code></p>
+<h1 id="intro-your-data"><a class="header" href="#intro-your-data">Intro: Your Data</a></h1>
+<p>This page is an overview, to give you an idea of the big picture of how Bevy
+works. Click on the various links to be taken to dedicated pages where you can
+learn more about each concept.</p>
+<p>这里只是简介,详细内容还需要点击链接进一步查看.</p>
+<hr />
+<p>As mentioned in <a href="/programming/ecs-intro.html">the ECS Intro</a>, Bevy stores all your data for
+you and allows you easy and flexible access to whatever you need, wherever you
+need it.</p>
+<p>The ECS's data structure is called the <a href="https://docs.rs/bevy/0.14.0-rc.2/bevy/ecs/world/struct.World.html"><code>World</code></a>. That is what
+stores and manages all of the data. For advanced scenarios, is possible to
+have <a href="/programming/sub-apps.html">multiple worlds</a>, and then each one will behave as
+its own separate ECS instance. However, normally, you just work with the
+main World that Bevy sets up for your <a href="/programming/app-builder.html">App</a>.</p>
+<p>You can represent your data in two different ways:
+<a href="#entities--components">Entities/Components</a>, and <a href="#resources">Resources</a>.</p>
+<p>ECS的数据全部存在一个叫world的实例中,world管理和维护了所有的数据,
+对于部分高级场景,可能会存在多个world,每个world都是自己独立的ECS实例,
+通常app只有一个world,关心主world即可.</p>
+<p>数据只能依附于组件或资源出现.资源就是一个中特殊的组件<code>单例组件</code>,
+一个游戏中50%以上都是<code>单例组件</code>,这种特殊的组件在bevy中有个新名词:资源.</p>
+<h2 id="entities--components"><a class="header" href="#entities--components">Entities / Components</a></h2>
+<p>Conceptually, you can think of it by analogy with tables, like in a database or
+spreadsheet. Your different data types (<a href="/programming/ec.html#components">Components</a>) are like
+the "columns" of a table, and there can be arbitrarily many "rows"
+(<a href="/programming/ec.html#entities">Entities</a>) containing values / instances of various components.
+The <a href="https://docs.rs/bevy/0.14.0-rc.2/bevy/ecs/entity/struct.Entity.html"><code>Entity</code></a> ID is like the row number. It's an integer index
+that lets you find specific component values.</p>
+<p>Component types that are empty <code>struct</code>s (contain no data) are called <a href="/programming/ec.html#marker-components">marker
+components</a>. They are useful as "tags" to identify
+specific entities, or enable certain behaviors. For example, you could use them
+to identify the player entity, to mark enemies that are currently chasing the
+player, to select entities to be despawned at the end of the level, etc.</p>
+<p>Here is an illustration to help you visualize the logical structure. The
+checkmarks show what component types are present on each entity. Empty cells
+mean that the component is not present. In this example, we have a player,
+a camera, and several enemies.</p>
+<div class="table-wrapper"><table><thead><tr><th><a href="https://docs.rs/bevy/0.14.0-rc.2/bevy/ecs/entity/struct.Entity.html"><code>Entity</code></a> (ID)</th><th><a href="https://docs.rs/bevy/0.14.0-rc.2/bevy/transform/components/struct.Transform.html"><code>Transform</code></a></th><th><code>Player</code></th><th><code>Enemy</code></th><th><a href="https://docs.rs/bevy/0.14.0-rc.2/bevy/render/camera/struct.Camera.html"><code>Camera</code></a></th><th><code>Health</code></th><th>...</th></tr></thead><tbody>
+<tr><td>...</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>107</td><td>✓ <code>&lt;translation&gt;</code> <code>&lt;rotation&gt;</code> <code>&lt;scale&gt;</code></td><td>✓</td><td></td><td></td><td>✓ <code>50.0</code></td><td></td></tr>
+<tr><td>108</td><td>✓ <code>&lt;translation&gt;</code> <code>&lt;rotation&gt;</code> <code>&lt;scale&gt;</code></td><td></td><td>✓</td><td></td><td>✓ <code>25.0</code></td><td></td></tr>
+<tr><td>109</td><td>✓ <code>&lt;translation&gt;</code> <code>&lt;rotation&gt;</code> <code>&lt;scale&gt;</code></td><td></td><td></td><td>✓ <code>&lt;camera data&gt;</code></td><td></td><td></td></tr>
+<tr><td>110</td><td>✓ <code>&lt;translation&gt;</code> <code>&lt;rotation&gt;</code> <code>&lt;scale&gt;</code></td><td></td><td>✓</td><td></td><td>✓ <code>10.0</code></td><td></td></tr>
+<tr><td>111</td><td>✓ <code>&lt;translation&gt;</code> <code>&lt;rotation&gt;</code> <code>&lt;scale&gt;</code></td><td></td><td>✓</td><td></td><td>✓ <code>25.0</code></td><td></td></tr>
+<tr><td>...</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</tbody></table>
+</div>
+<p>Representing things this way gives you flexibility. For example, you could
+create a <code>Health</code> component for your game. You could then have many entities
+representing different things in your game, such as the player, NPCs, or
+monsters, all of which can have a <code>Health</code> value (as well as other relevant
+components).</p>
+<p>The typical and obvious pattern is to use entities to represent "objects in the
+game/scene", such as the camera, the player, enemies, lights, props, UI
+elements, and other things. However, you are not limited to that. The ECS is a
+general-purpose data structure. You can create entities and components to store
+any data. For example, you could create an entity to store a bunch of settings
+or configuration parameters, or other abstract things.</p>
+<p>Data stored using Entities and Components is accessed using
+<a href="/programming/queries.html">queries</a>. For example, if you want to implement a new game
+mechanic, write a <a href="/programming/systems.html">system</a> (just a Rust function that takes
+special parameters), specify what component types you want to access, and do
+your thing. You can either iterate through all entities that match your query,
+or access the data of a specific one (using the <a href="https://docs.rs/bevy/0.14.0-rc.2/bevy/ecs/entity/struct.Entity.html"><code>Entity</code></a> ID).</p>
+<pre><code class="language-rust no_run noplayground">#[derive(Component)]
+struct Xp(u32);
+
+#[derive(Component)]
+struct Health {
+    current: u32,
+    max: u32,
+}
+
+fn level_up(
+    // We want to access the Xp and Health data:
+    mut query: Query&lt;(&amp;mut Xp, &amp;mut Health)&gt;,
+) {
+    // process all relevant entities
+    for (mut xp, mut health) in query.iter_mut() {
+        if xp.0 &gt; 1000 {
+            xp.0 -= 1000;
+            health.max += 25;
+            health.current = health.max;
+        }
+    }
+}</code></pre>
+<p>Bevy can automatically keep track of what data your <a href="/programming/systems.html">systems</a> have
+access to and <a href="/programming/system-order.html">run them in parallel</a> on multiple CPU
+cores. This way, you get multithreading with no extra effort from you!</p>
+<p>What if you want to create or remove entities and components, not just access
+existing data? That requires special consideration. Bevy cannot change the
+memory layout while other systems might be running. These operations can be
+buffered/deferred using <a href="/programming/commands.html">Commands</a>. Bevy will apply them later
+when it is safe to do so. You can also get <a href="/programming/world.html">direct World access</a>
+using <a href="/programming/exclusive.html">exclusive systems</a>, if you want to perform such
+operations immediately.</p>
+<p><a href="/programming/bundle.html">Bundles</a> serve as "templates" for common sets of components, to
+help you when you spawn new entities, so you don't accidentally forget anything.</p>
+<pre><code class="language-rust no_run noplayground">/// Marker for the player
+#[derive(Component)]
+struct Player;
+
+/// Bundle to make it easy to spawn the player entity
+/// with all the correct components:
+#[derive(Bundle)]
+struct PlayerBundle {
+    // 非常经典的自己定义Bundle
+    marker: Player,
+    health: Health,
+    xp: Xp,
+    // including all the components from another bundle
+    sprite: SpriteBundle,
+}
+
+fn spawn_player(
+    // needed for safely creating/removing data in the ECS World
+    // (anything done via Commands will be applied later)
+    mut commands: Commands,
+    // needed for loading assets
+    asset_server: Res&lt;AssetServer&gt;,
+) {
+    // create a new entity with whatever components we want
+    commands.spawn(PlayerBundle {
+        marker: Player,
+        health: Health {
+            current: 100,
+            max: 125,
+        },
+        xp: Xp(0),
+        sprite: SpriteBundle {
+            texture: asset_server.load("player.png"),
+            transform: Transform::from_xyz(25.0, 50.0, 0.0),
+            // use the default values for all other components in the bundle
+            ..Default::default()
+        },
+    });
+
+    // Call .id() if you want to store the Entity ID of your new entity
+    let my_entity = commands.spawn((/* ... */)).id();
+}</code></pre>
+<p>这里没有太多高深的理论,只是形象化描述了实体和组件的关系,
+如果想要了解为啥ECS性能高,为啥要这样设计数据结构的,可以查看ECS的几种实现.</p>
+<p>抛开设计只看表现形式,实体/组件就像一个表格(或数据库的表),
+不同的列是不同类型的数据(组件),可以有任意多行,每一行就是一个实体,
+实体的ID就是行号(这是一个形象化的比喻,很多ECS的Entity设计就是一个唯一整形,
+自增主键ID正好满足这个条件).</p>
+<p>如果组件类型是空结构体(没有具体的值),那么这种组件称为<code>标记组件</code>.
+标记特殊实体,启用特定的system,这非常有用.</p>
+<p>上图中在一个表中表示了不同类型的实体(具体bevy实现是不是这样,需要分析源码再说).</p>
+<p>一般是用实体来表示游戏/场景中出现的对象,eg:相机/敌人/光线/界面,但可以表示更多,
+使用ECS并没有什么限制.</p>
+<p>数据存储在实体/组件中,访问方式是query,在增量开发中,新增一个游戏机制,
+在实现system时只需要通过query将符合条件的实体找出来,并应用新机制即可,
+这点可以让多人并行协作,是一个很大的突破.
+出了通过query-遍历实体,还可以直接通过实体ID来访问数据.</p>
+<p>bevy通过调度机制+system的顺序机制,尽量保证每个cpu核上都跑着system,
+这样的好处是开发者友好,开发者不必再自己维护多线程了.</p>
+<p>system运行时,bevy不能修改内存布局,如果要增删实体或组件,该怎么办?
+通过Commands进行延时处理,这样就可以保证安全了.
+当然如果要立马生效,也可以直接通过world直接访问数据和独占system来实现.</p>
+<p>bevy提供了很多Bundle来辅助构造实体.</p>
+<h3 id="comparison-with-object-oriented-programming"><a class="header" href="#comparison-with-object-oriented-programming">Comparison with Object-Oriented Programming</a></h3>
+<p>Object-Oriented programming teaches you to think of everything as "objects",
+where each object is an instance of a "class". The class specifies the data
+and functionality for all objects of that type, in one place. Every object
+of that class has the same data (with different values) and the same
+associated functionality.</p>
+<p>This is the opposite of the ECS mentality. In ECS, any <a href="/programming/ec.html#entities">entity</a> can
+have any data (any combination of <a href="/programming/ec.html#components">components</a>). The purpose of
+entities is to identify that data. Your <a href="/programming/systems.html">systems</a> are loose pieces
+of functionality that can operate on any data. They can easily find what they
+are looking for, and implement the desired behavior.</p>
+<p>If you are an object-oriented programmer, you might be tempted to define a big
+monolithic <code>struct Player</code> containing all the fields / properties of the player.
+In Bevy, this is considered bad practice, because doing it that way can make it
+more difficult to work with your data and limit performance. Instead, you should
+make things granular, when different pieces of data may be accessed independently.</p>
+<p>For example, represent the player in your game as an entity, composed of
+separate component types (separate <code>struct</code>s) for things like the health, XP, or
+whatever is relevant to your game. You can also attach standard Bevy components
+like <a href="https://docs.rs/bevy/0.14.0-rc.2/bevy/transform/components/struct.Transform.html"><code>Transform</code></a> (<a href="/fundamentals/transforms.html">transforms explained</a>) to it.</p>
+<p>Then, each piece of functionality (each <a href="/programming/systems.html">system</a>) can just
+<a href="/programming/queries.html">query</a> for the data it needs. Common functionality (like a
+health/damage system) can be applied to any entity with the matching components,
+regardless of whether that's the player or something else in the game.</p>
+<p>If you have functionality that should only be applied to the player entity,
+you can use a <a href="/programming/ec.html#marker-components">marker component</a> (like <code>struct Player;</code>)
+to narrow down your query (using a <a href="/programming/queries.html#query-filters">query filter</a> like
+<code>With&lt;Player&gt;</code>).</p>
+<p>However, if some data always makes sense to be accessed together, then you
+should put it in a single <code>struct</code>. For example, Bevy's <a href="https://docs.rs/bevy/0.14.0-rc.2/bevy/transform/components/struct.Transform.html"><code>Transform</code></a>.
+With these types, the fields are not likely to be useful independently.</p>
+<p>oo和反oo虽然是两种思想,但最终的目的都是一个:解决问题,达成目标,降低开发和维护成本.
+oo是继承体系,ecs是组合思想.</p>
+<p>oo是对象拥有数据,并拥有某些行为; ecs是数据和行为分离,每个system都是一个小的功能点,
+组合不同的system同样可以实现逻辑,因为system都是碎片化的小功能点,她只关注自己的需求,
+如果是oo的行为,会看到很多当前逻辑不需要的数据,整体的实现看要看整个继承体系
+(这点在前几个版本不是问题), 但在后期维护的成本看,这会是个大问题.</p>
+<p>ecs推荐小颗粒度的组件,这样方便复用.其实编成范式一直在演变,
+oo如日中天时出现了ecs,并且<code>组合优于继承</code>基本深入人心了,
+这是从无数个完整的项目生命周期得到的教训.</p>
+<p>如果只想对某几个实体进行处理,便捷的方法是增加一个空的结构体组件充当标记组件,
+同样走query机制.</p>
+<p>如果某些数据一起访问时是有意义的,可以考虑放在同一个struct中.</p>
+<h3 id="additional-internal-details"><a class="header" href="#additional-internal-details">Additional Internal Details</a></h3>
+<p>The set / combination of components that a given entity has is called the
+entity's Archetype. Bevy keeps track of that internally, to organize the
+data in RAM. Entities of the same Archetype have their data stored together
+in contiguous arrays, which allows the CPU to access and cache it efficiently.</p>
+<p>If you add/remove component types on existing entities, you are changing
+the Archetype, which may require Bevy to move previously-existing data to
+a different location.</p>
+<p><a href="/patterns/component-storage.html">Learn more about Bevy's component storage.</a></p>
+<p>Bevy will reuse Entity IDs. The <a href="https://docs.rs/bevy/0.14.0-rc.2/bevy/ecs/entity/struct.Entity.html"><code>Entity</code></a> type is actually
+two integers: the ID and a "generation". After you despawn some entities,
+their IDs can be reused for newly-spawned entities, but Bevy will increase
+the generation value.</p>
+<p>在bevy中,实体拥有的组件列表成为原型,bevy内部会跟踪所有原型,
+在内存中组织这些数据.(这是因为ECS为了迎合CPU的io特性,转换设计的,
+只有要访问的数据是连续存放的,那么cpu在io时一次就可以读到未来几次需要的数据,
+减少cpu的io次数,就是性能巨大提升的关键),同一个原型的实体时连续存放的,
+方便cpu的缓存可以快速命中.</p>
+<p>实体可以被销毁,但实体的id时可以复用的,一个实体内部由两个id表示:
+一个是实体ID,一个是复用次数(也可以成为版本,代数,都是一个意思).
+这里面还隐藏了一个关键技术:实体id复用机制.go语言有个arche也是ecs库,
+实体的实现和bevy是一样的,底层有个链表来跟踪所有可复用的实体id,
+不知道bevy是不是同样的实现.</p>
+<h2 id="resources"><a class="header" href="#resources">Resources</a></h2>
+<p>If there is only one global instance (singleton) of something, and it is
+standalone (not associated with other data), create a <a href="/programming/res.html">Resource</a>.</p>
+<p>For example, you could create a resource to store your game's graphics
+settings, or an interface to a non-Bevy library.</p>
+<p>This is a simple way of storing data, when you know you don't need the
+flexibility of Entities/Components.</p>
+<pre><code class="language-rust no_run noplayground">#[derive(Resource)]
+struct GameSettings {
+    current_level: u32,
+    difficulty: u32,
+    max_time_seconds: u32,
+}
+
+fn setup_game(mut commands: Commands) {
+    // Add the GameSettings resource to the ECS
+    // (if one already exists, it will be overwritten)
+    commands.insert_resource(GameSettings {
+        current_level: 1,
+        difficulty: 100,
+        max_time_seconds: 60,
+    });
+}
+
+fn spawn_extra_enemies(
+    mut commands: Commands,
+    // we can easily access our resource from any system
+    game_settings: Res&lt;GameSettings&gt;,
+) {
+    if game_settings.difficulty &gt; 50 {
+        commands.spawn((
+            // ...
+        ));
+    }
+}
+</code></pre>
+<p>单例组件:资源.一个游戏,大部分都是资源,少部分灵活的才是组件.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../programming/ecs-intro.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../programming/intro-code.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../programming/ecs-intro.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../programming/intro-code.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../nagbar.js"></script>
+
+
+    </div>
+    </body>
+</html>

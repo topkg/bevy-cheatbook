@@ -1,0 +1,552 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>States - Unofficial Bevy Cheat Book</title>
+
+
+        <!-- Custom HTML head -->
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../nagbar.css">
+        <link rel="stylesheet" href="../sidebar.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="../overview.html">Chapter Overview</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../builtins.html">List of Bevy Builtins</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded "><a href="../tutorial.html"><strong aria-hidden="true">1.</strong> Bevy Tutorials</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tutorial/guide.html"><strong aria-hidden="true">1.1.</strong> Guided Tour</a></li></ol></li><li class="chapter-item expanded "><a href="../cookbook.html"><strong aria-hidden="true">2.</strong> Bevy Cookbook</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../cookbook/print-framerate.html"><strong aria-hidden="true">2.1.</strong> Show Framerate</a></li><li class="chapter-item expanded "><a href="../cookbook/cursor2world.html"><strong aria-hidden="true">2.2.</strong> Convert cursor to world coordinates</a></li><li class="chapter-item expanded "><a href="../cookbook/custom-projection.html"><strong aria-hidden="true">2.3.</strong> Custom Camera Projection</a></li><li class="chapter-item expanded "><a href="../cookbook/pan-orbit-camera.html"><strong aria-hidden="true">2.4.</strong> 3D Pan+Orbit Camera</a></li><li class="chapter-item expanded "><a href="../cookbook/print-resources.html"><strong aria-hidden="true">2.5.</strong> List All Resource Types</a></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded "><a href="../setup.html"><strong aria-hidden="true">3.</strong> Bevy Setup Tips</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup/getting-started.html"><strong aria-hidden="true">3.1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../setup/editor.html"><strong aria-hidden="true">3.2.</strong> Text Editor / IDE</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup/editor/vscode.html"><strong aria-hidden="true">3.2.1.</strong> Visual Studio Code</a></li><li class="chapter-item expanded "><a href="../setup/editor/jetbrains.html"><strong aria-hidden="true">3.2.2.</strong> JetBrains (RustRover, IntelliJ, CLion)</a></li><li class="chapter-item expanded "><a href="../setup/editor/kak.html"><strong aria-hidden="true">3.2.3.</strong> Kakoune</a></li><li class="chapter-item expanded "><a href="../setup/editor/vim.html"><strong aria-hidden="true">3.2.4.</strong> Vim</a></li><li class="chapter-item expanded "><a href="../setup/editor/emacs.html"><strong aria-hidden="true">3.2.5.</strong> Emacs</a></li></ol></li><li class="chapter-item expanded "><a href="../setup/bevy-config.html"><strong aria-hidden="true">3.3.</strong> Customizing Bevy (features, modularity)</a></li><li class="chapter-item expanded "><a href="../setup/unofficial-plugins.html"><strong aria-hidden="true">3.4.</strong> Community Plugin Ecosystem</a></li><li class="chapter-item expanded "><a href="../setup/bevy-tools.html"><strong aria-hidden="true">3.5.</strong> Dev Tools and Editors for Bevy</a></li><li class="chapter-item expanded "><a href="../setup/perf.html"><strong aria-hidden="true">3.6.</strong> Performance Tunables</a></li><li class="chapter-item expanded "><a href="../setup/bevy-git.html"><strong aria-hidden="true">3.7.</strong> Using bleeding-edge Bevy (main)</a></li></ol></li><li class="chapter-item expanded "><a href="../pitfalls.html"><strong aria-hidden="true">4.</strong> Common Pitfalls</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../pitfalls/build-errors.html"><strong aria-hidden="true">4.1.</strong> Strange compile errors from Bevy or dependencies</a></li><li class="chapter-item expanded "><a href="../pitfalls/performance.html"><strong aria-hidden="true">4.2.</strong> Slow Performance</a></li><li class="chapter-item expanded "><a href="../pitfalls/into-system.html"><strong aria-hidden="true">4.3.</strong> Error adding function as system</a></li><li class="chapter-item expanded "><a href="../pitfalls/3d-not-rendering.html"><strong aria-hidden="true">4.4.</strong> 3D objects not displaying</a></li><li class="chapter-item expanded "><a href="../pitfalls/split-borrows.html"><strong aria-hidden="true">4.5.</strong> Borrow multiple fields from struct</a></li><li class="chapter-item expanded "><a href="../pitfalls/time.html"><strong aria-hidden="true">4.6.</strong> Jittering Time (choppy movement/animation)</a></li><li class="chapter-item expanded "><a href="../pitfalls/uv-coordinates.html"><strong aria-hidden="true">4.7.</strong> Textures/Images are flipped</a></li></ol></li><li class="chapter-item expanded "><a href="../fundamentals.html"><strong aria-hidden="true">5.</strong> Game Engine Fundamentals</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../fundamentals/coords.html"><strong aria-hidden="true">5.1.</strong> Coordinate System</a></li><li class="chapter-item expanded "><a href="../fundamentals/transforms.html"><strong aria-hidden="true">5.2.</strong> Transforms</a></li><li class="chapter-item expanded "><a href="../fundamentals/visibility.html"><strong aria-hidden="true">5.3.</strong> Visibility</a></li><li class="chapter-item expanded "><a href="../fundamentals/time.html"><strong aria-hidden="true">5.4.</strong> Time and Timers</a></li><li class="chapter-item expanded "><a href="../fundamentals/log.html"><strong aria-hidden="true">5.5.</strong> Logging, Console Messages</a></li><li class="chapter-item expanded "><a href="../fundamentals/hierarchy.html"><strong aria-hidden="true">5.6.</strong> Parent/Child Hierarchies</a></li><li class="chapter-item expanded "><a href="../fundamentals/fixed-timestep.html"><strong aria-hidden="true">5.7.</strong> Fixed Timestep</a></li><li class="chapter-item expanded "><a href="../fundamentals/gizmos.html"><strong aria-hidden="true">5.8.</strong> Gizmos</a></li></ol></li><li class="chapter-item expanded "><a href="../graphics.html"><strong aria-hidden="true">6.</strong> General Graphics Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../graphics/camera.html"><strong aria-hidden="true">6.1.</strong> Cameras</a></li><li class="chapter-item expanded "><a href="../graphics/hdr-tonemap.html"><strong aria-hidden="true">6.2.</strong> HDR and Tonemapping</a></li><li class="chapter-item expanded "><a href="../graphics/bloom.html"><strong aria-hidden="true">6.3.</strong> Bloom</a></li></ol></li><li class="chapter-item expanded "><a href="../2d.html"><strong aria-hidden="true">7.</strong> Working with 2D</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../2d/camera.html"><strong aria-hidden="true">7.1.</strong> 2D Camera Setup</a></li><li class="chapter-item expanded "><a href="../2d/sprites.html"><strong aria-hidden="true">7.2.</strong> Sprites and Atlases</a></li></ol></li><li class="chapter-item expanded "><a href="../3d.html"><strong aria-hidden="true">8.</strong> Working with 3D</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3d/camera.html"><strong aria-hidden="true">8.1.</strong> 3D Camera Setup</a></li><li class="chapter-item expanded "><a href="../3d/gltf.html"><strong aria-hidden="true">8.2.</strong> 3D Models and Scenes (GLTF)</a></li></ol></li><li class="chapter-item expanded "><a href="../input.html"><strong aria-hidden="true">9.</strong> Input Handling</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../input/keyboard.html"><strong aria-hidden="true">9.1.</strong> Keyboard</a></li><li class="chapter-item expanded "><a href="../input/mouse.html"><strong aria-hidden="true">9.2.</strong> Mouse</a></li><li class="chapter-item expanded "><a href="../input/gamepad.html"><strong aria-hidden="true">9.3.</strong> Gamepad (Controller, Joystick)</a></li><li class="chapter-item expanded "><a href="../input/touch.html"><strong aria-hidden="true">9.4.</strong> Touchscreen</a></li><li class="chapter-item expanded "><a href="../input/gesture.html"><strong aria-hidden="true">9.5.</strong> Gestures</a></li><li class="chapter-item expanded "><a href="../input/dnd.html"><strong aria-hidden="true">9.6.</strong> Drag-and-Drop (Files)</a></li><li class="chapter-item expanded "><a href="../input/ime.html"><strong aria-hidden="true">9.7.</strong> IME (Advanced Text)</a></li></ol></li><li class="chapter-item expanded "><a href="../window.html"><strong aria-hidden="true">10.</strong> Window Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../window/props.html"><strong aria-hidden="true">10.1.</strong> Window Properties</a></li><li class="chapter-item expanded "><a href="../window/clear-color.html"><strong aria-hidden="true">10.2.</strong> Change the Background Color</a></li><li class="chapter-item expanded "><a href="../window/mouse-grab.html"><strong aria-hidden="true">10.3.</strong> Grab/Capture the Mouse Cursor</a></li><li class="chapter-item expanded "><a href="../window/icon.html"><strong aria-hidden="true">10.4.</strong> Set the Window Icon</a></li></ol></li><li class="chapter-item expanded "><a href="../assets.html"><strong aria-hidden="true">11.</strong> Asset Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../assets/handles.html"><strong aria-hidden="true">11.1.</strong> Handles</a></li><li class="chapter-item expanded "><a href="../assets/assetserver.html"><strong aria-hidden="true">11.2.</strong> Load Assets from Files</a></li><li class="chapter-item expanded "><a href="../assets/data.html"><strong aria-hidden="true">11.3.</strong> Access the Asset Data</a></li><li class="chapter-item expanded "><a href="../assets/assetevent.html"><strong aria-hidden="true">11.4.</strong> React to Changes with Asset Events</a></li><li class="chapter-item expanded "><a href="../assets/ready.html"><strong aria-hidden="true">11.5.</strong> Track Loading Progress</a></li><li class="chapter-item expanded "><a href="../assets/hot-reload.html"><strong aria-hidden="true">11.6.</strong> Hot-Reloading Assets</a></li><li class="chapter-item expanded "><a href="../assets/processing.html"><strong aria-hidden="true">11.7.</strong> Processing Assets</a></li></ol></li><li class="chapter-item expanded "><a href="../audio.html"><strong aria-hidden="true">12.</strong> Audio</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../audio/basic.html"><strong aria-hidden="true">12.1.</strong> Playing Sounds</a></li><li class="chapter-item expanded "><a href="../audio/spatial.html"><strong aria-hidden="true">12.2.</strong> Spatial Audio</a></li><li class="chapter-item expanded "><a href="../audio/custom.html"><strong aria-hidden="true">12.3.</strong> Custom Audio Streams</a></li></ol></li><li class="chapter-item expanded "><a href="../ui.html"><strong aria-hidden="true">13.</strong> Bevy UI Framework</a></li><li class="chapter-item expanded "><a href="../programming.html"><strong aria-hidden="true">14.</strong> Bevy Core Programming Framework</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../programming/ecs-intro.html"><strong aria-hidden="true">14.1.</strong> Intro to ECS</a></li><li class="chapter-item expanded "><a href="../programming/intro-data.html"><strong aria-hidden="true">14.2.</strong> Intro: Your Data</a></li><li class="chapter-item expanded "><a href="../programming/intro-code.html"><strong aria-hidden="true">14.3.</strong> Intro: Your Code</a></li><li class="chapter-item expanded "><a href="../programming/app-builder.html"><strong aria-hidden="true">14.4.</strong> The App</a></li><li class="chapter-item expanded "><a href="../programming/systems.html"><strong aria-hidden="true">14.5.</strong> Systems</a></li><li class="chapter-item expanded "><a href="../programming/res.html"><strong aria-hidden="true">14.6.</strong> Resources</a></li><li class="chapter-item expanded "><a href="../programming/ec.html"><strong aria-hidden="true">14.7.</strong> Entities, Components</a></li><li class="chapter-item expanded "><a href="../programming/bundle.html"><strong aria-hidden="true">14.8.</strong> Bundles</a></li><li class="chapter-item expanded "><a href="../programming/queries.html"><strong aria-hidden="true">14.9.</strong> Queries</a></li><li class="chapter-item expanded "><a href="../programming/commands.html"><strong aria-hidden="true">14.10.</strong> Commands</a></li><li class="chapter-item expanded "><a href="../programming/events.html"><strong aria-hidden="true">14.11.</strong> Events</a></li><li class="chapter-item expanded "><a href="../programming/plugins.html"><strong aria-hidden="true">14.12.</strong> Plugins</a></li><li class="chapter-item expanded "><a href="../programming/local.html"><strong aria-hidden="true">14.13.</strong> Local Resources</a></li><li class="chapter-item expanded "><a href="../programming/exclusive.html"><strong aria-hidden="true">14.14.</strong> Exclusive Systems</a></li><li class="chapter-item expanded "><a href="../programming/world.html"><strong aria-hidden="true">14.15.</strong> Direct ECS World Access</a></li><li class="chapter-item expanded "><a href="../programming/schedules.html"><strong aria-hidden="true">14.16.</strong> Schedules</a></li><li class="chapter-item expanded "><a href="../programming/system-order.html"><strong aria-hidden="true">14.17.</strong> System Order of Execution</a></li><li class="chapter-item expanded "><a href="../programming/run-conditions.html"><strong aria-hidden="true">14.18.</strong> Run Conditions</a></li><li class="chapter-item expanded "><a href="../programming/system-sets.html"><strong aria-hidden="true">14.19.</strong> System Sets</a></li><li class="chapter-item expanded "><a href="../programming/states.html" class="active"><strong aria-hidden="true">14.20.</strong> States</a></li><li class="chapter-item expanded "><a href="../programming/change-detection.html"><strong aria-hidden="true">14.21.</strong> Change Detection</a></li><li class="chapter-item expanded "><a href="../programming/one-shot-systems.html"><strong aria-hidden="true">14.22.</strong> One-Shot Systems</a></li><li class="chapter-item expanded "><a href="../programming/par-iter.html"><strong aria-hidden="true">14.23.</strong> Internal Parallelism</a></li><li class="chapter-item expanded "><a href="../programming/system-piping.html"><strong aria-hidden="true">14.24.</strong> System Piping</a></li><li class="chapter-item expanded "><a href="../programming/paramset.html"><strong aria-hidden="true">14.25.</strong> ParamSet</a></li><li class="chapter-item expanded "><a href="../programming/non-send.html"><strong aria-hidden="true">14.26.</strong> Non-Send</a></li></ol></li><li class="chapter-item expanded "><a href="../gpu.html"><strong aria-hidden="true">15.</strong> Bevy Render (GPU) Framework</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../gpu/intro.html"><strong aria-hidden="true">15.1.</strong> Render Architecture Overview</a></li><li class="chapter-item expanded "><a href="../gpu/stages.html"><strong aria-hidden="true">15.2.</strong> Render Stages</a></li></ol></li><li class="chapter-item expanded "><a href="../patterns.html"><strong aria-hidden="true">16.</strong> Programming Patterns</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../patterns/generic-systems.html"><strong aria-hidden="true">16.1.</strong> Generic Systems</a></li><li class="chapter-item expanded "><a href="../patterns/component-storage.html"><strong aria-hidden="true">16.2.</strong> Component Storage (Table/Sparse-Set)</a></li><li class="chapter-item expanded "><a href="../patterns/manual-event-clear.html"><strong aria-hidden="true">16.3.</strong> Manual Event Clearing</a></li><li class="chapter-item expanded "><a href="../patterns/system-tests.html"><strong aria-hidden="true">16.4.</strong> Writing Tests for Systems</a></li></ol></li><li class="chapter-item expanded "><a href="../platforms.html"><strong aria-hidden="true">17.</strong> Bevy on Different Platforms</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../platforms/linux.html"><strong aria-hidden="true">17.1.</strong> Linux Desktop</a></li><li class="chapter-item expanded "><a href="../platforms/macos.html"><strong aria-hidden="true">17.2.</strong> macOS Desktop</a></li><li class="chapter-item expanded "><a href="../platforms/windows.html"><strong aria-hidden="true">17.3.</strong> Windows Desktop</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../platforms/windows/wsl2.html"><strong aria-hidden="true">17.3.1.</strong> Working in WSL2</a></li></ol></li><li class="chapter-item expanded "><a href="../platforms/wasm.html"><strong aria-hidden="true">17.4.</strong> Browser (WebAssembly)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../platforms/wasm/size-opt.html"><strong aria-hidden="true">17.4.1.</strong> Optimize for Size</a></li><li class="chapter-item expanded "><a href="../platforms/wasm/webpage.html"><strong aria-hidden="true">17.4.2.</strong> Create a Custom Web Page</a></li><li class="chapter-item expanded "><a href="../platforms/wasm/gh-pages.html"><strong aria-hidden="true">17.4.3.</strong> Hosting on GitHub Pages</a></li></ol></li><li class="chapter-item expanded "><a href="../setup/cross.html"><strong aria-hidden="true">17.5.</strong> Cross-Compilation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../setup/cross/linux-windows.html"><strong aria-hidden="true">17.5.1.</strong> From Linux to Windows</a></li><li class="chapter-item expanded "><a href="../setup/cross/macos-windows.html"><strong aria-hidden="true">17.5.2.</strong> From macOS to Windows</a></li></ol></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../credits.html">Credits</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../contact.html">Contact Me</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../contributing-bevy.html">Contribute to Bevy</a></li><li class="chapter-item expanded affix "><a href="../contributing.html">Contribute to this Book</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Unofficial Bevy Cheat Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/bevy-cheatbook/bevy-cheatbook/issues/new" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <div class="table-wrapper"><table><thead><tr><th><a href="/introduction.html#maintenance-policy">Bevy Version:</a></th><th><a href="https://bevyengine.org/news/bevy-0-13">0.13</a></th><th>(current)</th></tr></thead><tbody>
+</tbody></table>
+</div>
+<p><code>当前双语版本对应的是: 3d540e7, 日期: 2024/06/13, 等双语版本整个翻译完之后,再处理原始仓库的更新</code></p>
+<h1 id="states"><a class="header" href="#states">States</a></h1>
+<p>Relevant official examples:
+<a href="https://github.com/bevyengine/bevy/blob/v0.13.0/examples/ecs/state.rs"><code>state</code></a>.</p>
+<hr />
+<p>States allow you to structure the runtime "flow" of your app.</p>
+<p>This is how you can implement things like:</p>
+<ul>
+<li>A menu screen or a loading screen</li>
+<li>Pausing / unpausing the game</li>
+<li>Different game modes</li>
+<li>…</li>
+</ul>
+<p>In every state, you can have different <a href="/programming/systems.html">systems</a> running. You
+can also add setup and cleanup systems to run when entering or exiting a state.</p>
+<hr />
+<p>To use states, first define an <code>enum</code> type. You need to derive
+<a href="https://docs.rs/bevy/0.13.0/bevy/ecs/schedule/trait.States.html"><code>States</code></a> + an assortment of required standard Rust traits:</p>
+<pre><code class="language-rust no_run noplayground">#[derive(States, Debug, Clone, PartialEq, Eq, Hash)]
+enum MyAppState {
+    LoadingScreen,
+    MainMenu,
+    InGame,
+}
+
+#[derive(States, Default, Debug, Clone, PartialEq, Eq, Hash)]
+enum MyGameModeState {
+    #[default]
+    NotInGame,
+    Singleplayer,
+    Multiplayer,
+}
+
+#[derive(States, Default, Debug, Clone, PartialEq, Eq, Hash)]
+enum MyPausedState {
+    #[default]
+    Paused,
+    Running,
+}</code></pre>
+<p>Note: you can have multiple orthogonal states! Create multiple types
+if you want to track multiple things independently!</p>
+<p>You then need to register the state type(s) in the <a href="/programming/app-builder.html">app builder</a>:</p>
+<pre><code class="language-rust no_run noplayground">// Specify the initial value:
+app.insert_state(MyAppState::LoadingScreen);
+
+// Or use the default (if the type impls Default):
+app.init_state::&lt;MyGameModeState&gt;();
+app.init_state::&lt;MyPausedState&gt;();</code></pre>
+<p>在Bevy游戏引擎中,States是一个关键概念,用于管理游戏的不同阶段或模式.
+例如,一个游戏可能有主菜单/游戏进行中/暂停等不同状态.
+Bevy中的状态管理系统允许开发者在这些不同状态之间进行切换,
+并定义在每个状态下应执行哪些系统和逻辑.</p>
+<p>每个状态都可以划分不同的system进行运行(这个很容易办到,
+只需要在system入口判断是不是匹配的状态即可,不匹配就结束).</p>
+<p>状态需要由enum定义,指定实现了States特型.</p>
+<p>可以使用多个正交状态,可完成更加丰富的需求.
+状态需要在app中注册.</p>
+<h2 id="running-different-systems-for-different-states"><a class="header" href="#running-different-systems-for-different-states">Running Different Systems for Different States</a></h2>
+<p>If you want some <a href="/programming/systems.html">systems</a> to only run in specific states,
+Bevy offers an <a href="https://docs.rs/bevy/0.13.0/bevy/ecs/schedule/common_conditions/fn.in_state.html"><code>in_state</code></a> <a href="/programming/run-criteria.html">run condition</a>. Add it
+to your systems. You probably want to create <a href="/programming/system-sets.html">system sets</a>
+to help you group many systems and control them at once.</p>
+<pre><code class="language-rust no_run noplayground">// configure some system sets to help us manage our systems
+// (note: it is per-schedule, so we also need it for FixedUpdate
+// if we plan to use fixed timestep)
+app.configure_sets(Update, (
+    MyMainMenuSet
+        .run_if(in_state(MyAppState::MainMenu)),
+    MyGameplaySet
+        // note: you can check for a combination of different states
+        .run_if(in_state(MyAppState::InGame))
+        .run_if(in_state(MyPausedState::Running)),
+));
+app.configure_sets(FixedUpdate, (
+    // configure the same set here, so we can use it in both
+    // FixedUpdate and Update
+    MyGameplaySet
+        .run_if(in_state(MyAppState::InGame))
+        .run_if(in_state(MyPausedState::Running)),
+    // configure a bunch of different sets only for FixedUpdate
+    MySingleplayerSet
+        // inherit configuration from MyGameplaySet and add extras
+        .in_set(MyGameplaySet)
+        .run_if(in_state(MyGameModeState::Singleplayer)),
+    MyMultiplayerSet
+        .in_set(MyGameplaySet)
+        .run_if(in_state(MyGameModeState::Multiplayer)),
+));
+
+// now we can easily add our different systems
+app.add_systems(Update, (
+    update_loading_progress_bar
+        .run_if(in_state(MyAppState::LoadingScreen)),
+    (
+        handle_main_menu_ui_input,
+        play_main_menu_sounds,
+    ).in_set(MyMainMenuSet),
+    (
+        camera_movement,
+        play_game_music,
+    ).in_set(MyGameplaySet),
+));
+app.add_systems(FixedUpdate, (
+    (
+        player_movement,
+        enemy_ai,
+    ).in_set(MySingleplayerSet),
+    (
+        player_net_sync,
+        enemy_net_sync,
+    ).in_set(MyMultiplayerSet),
+));
+
+// of course, if we need some global (state-independent)
+// setup to run on app startup, we can still use Startup as usual
+app.add_systems(Startup, (
+    load_settings,
+    setup_window_icon,
+));</code></pre>
+<p>Bevy also creates special <a href="https://docs.rs/bevy/0.13.0/bevy/ecs/schedule/struct.OnEnter.html"><code>OnEnter</code></a>, <a href="https://docs.rs/bevy/0.13.0/bevy/ecs/schedule/struct.OnExit.html"><code>OnExit</code></a>,
+and <a href="https://docs.rs/bevy/0.13.0/bevy/ecs/schedule/struct.OnTransition.html"><code>OnTransition</code></a> <a href="/programming/schedules.html">schedules</a> for each
+possible value of your state type. Use them to perform setup and cleanup for
+specific states. Any systems you add to them will run once every time the state
+is changed to/from the respective values.</p>
+<pre><code class="language-rust no_run noplayground">// do the respective setup and cleanup on state transitions
+app.add_systems(OnEnter(MyAppState::LoadingScreen), (
+    start_load_assets,
+    spawn_progress_bar,
+));
+app.add_systems(OnExit(MyAppState::LoadingScreen), (
+    despawn_loading_screen,
+));
+app.add_systems(OnEnter(MyAppState::MainMenu), (
+    setup_main_menu_ui,
+    setup_main_menu_camera,
+));
+app.add_systems(OnExit(MyAppState::MainMenu), (
+    despawn_main_menu,
+));
+app.add_systems(OnEnter(MyAppState::InGame), (
+    spawn_game_map,
+    setup_game_camera,
+    spawn_enemies,
+));
+app.add_systems(OnEnter(MyGameModeState::Singleplayer), (
+    setup_singleplayer,
+));
+app.add_systems(OnEnter(MyGameModeState::Multiplayer), (
+    setup_multiplayer,
+));
+// ...</code></pre>
+<p>哪些system在哪些状态下运行,出了上面提到的简单方法,还可以使用运行条件实现.
+bevy提供了一个<code>in_state</code>的运行条件.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn in_state&lt;S: States&gt;(state: S) -&gt; impl FnMut(Option&lt;Res&lt;State&lt;S&gt;&gt;&gt;) -&gt; bool + Clone {
+    move |current_state: Option&lt;Res&lt;State&lt;S&gt;&gt;&gt;| match current_state {
+        Some(current_state) =&gt; *current_state == state,
+        None =&gt; false,
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>看上面的源码,实现原理和上面提到的简单方法是一样的,这里是运行条件实现的.</p>
+<p>对比看上面的例子, system集合和状态结合,威力非常巨大.</p>
+<p>OnEnter/OnExit/OnTransition, 是状态进入/退出/改变时的调度.
+利用这几个调度可以跟踪状态的切换.</p>
+<h3 id="with-plugins"><a class="header" href="#with-plugins">With Plugins</a></h3>
+<p>This can also be useful with <a href="/programming/plugins.html">Plugins</a>. You can set up all the state
+types for your project in one place, and then your different plugins can just add
+their systems to the relevant states.</p>
+<p>You can also make plugins that are configurable, so that it is possible to specify
+what state they should add their systems to:</p>
+<pre><code class="language-rust no_run noplayground">pub struct MyPlugin&lt;S: States&gt; {
+    pub state: S,
+}
+
+impl&lt;S: States&gt; Plugin for MyPlugin&lt;S&gt; {
+    fn build(&amp;self, app: &amp;mut App) {
+        app.add_systems(Update, (
+            my_plugin_system1,
+            my_plugin_system2,
+            // ...
+        ).run_if(in_state(self.state.clone())));
+    }
+}</code></pre>
+<p>Now you can configure the plugin when adding it to the app:</p>
+<pre><code class="language-rust no_run noplayground">app.add_plugins(MyPlugin {
+    state: MyAppState::InGame,
+});</code></pre>
+<p>When you are just using <a href="/programming/plugins.html">plugins</a> to help with internal
+organization of your project, and you know what systems should go into each
+state, you probably don't need to bother with making the plugin configurable
+as shown above. Just hardcode the states / add things to the correct states
+directly.</p>
+<p>插件也可以根据状态来分类,eg:插件中添加的system只绑定到某几个状态.
+如果只用插件来组织项目,在插件中对状态进行硬编码会更加简单.
+这里的硬编码是相对于上面的例子来说的(上面的例子是通过参数传递状态).</p>
+<p>总的来说,组织项目的有:</p>
+<ul>
+<li>插件</li>
+<li>调度</li>
+<li>system 集合</li>
+<li>状态</li>
+</ul>
+<h2 id="controlling-states"><a class="header" href="#controlling-states">Controlling States</a></h2>
+<p>Inside of systems, you can check the current state using the
+<a href="https://docs.rs/bevy/0.13.0/bevy/ecs/schedule/struct.State.html"><code>State&lt;T&gt;</code></a> <a href="/programming/res.html">resource</a>:</p>
+<pre><code class="language-rust no_run noplayground">fn debug_current_gamemode_state(state: Res&lt;State&lt;MyGameModeState&gt;&gt;) {
+    eprintln!("Current state: {:?}", state.get());
+}</code></pre>
+<p>To change to another state, you can use the <a href="https://docs.rs/bevy/0.13.0/bevy/ecs/schedule/struct.NextState.html"><code>NextState&lt;T&gt;</code></a>:</p>
+<pre><code class="language-rust no_run noplayground">fn toggle_pause_game(
+    state: Res&lt;State&lt;MyPausedState&gt;&gt;,
+    mut next_state: ResMut&lt;NextState&lt;MyPausedState&gt;&gt;,
+) {
+    match state.get() {
+        MyPausedState::Paused =&gt; next_state.set(MyPausedState::Running),
+        MyPausedState::Running =&gt; next_state.set(MyPausedState::Paused),
+    }
+}
+
+// if you have multiple states that must be set correctly,
+// don't forget to manage them all
+fn new_game_multiplayer(
+    mut next_app: ResMut&lt;NextState&lt;MyAppState&gt;&gt;,
+    mut next_mode: ResMut&lt;NextState&lt;MyGameModeState&gt;&gt;,
+) {
+    next_app.set(MyAppState::InGame);
+    next_mode.set(MyGameModeState::Multiplayer);
+}</code></pre>
+<p>This will queue up state transitions to be performed during the next frame
+update cycle.</p>
+<p>状态在运行逻辑中会变化,也就是说system中会改变状态.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub trait States: 'static + Send + Sync + Clone + PartialEq + Eq + Hash + Debug {
+    const DEPENDENCY_DEPTH: usize = 1usize;
+}
+
+#[derive(Resource, Debug)]
+#[cfg_attr(
+    feature = "bevy_reflect",
+    derive(bevy_reflect::Reflect),
+    reflect(Resource)
+)]
+pub struct State&lt;S: States&gt;(pub(crate) S);
+<span class="boring">}</span></code></pre></pre>
+<p>对状态的控制:</p>
+<ul>
+<li><code>Res&lt;State&lt;MyGameModeState&gt;&gt;.get()</code>获取状态</li>
+<li><code>ResMut&lt;NextState&lt;MyPausedState&gt;&gt;.set()</code>设置状态</li>
+</ul>
+<p>对状态的变更,会放在队列中,在下帧的更新循环(StateTransition调度)中进行更新.</p>
+<h2 id="state-transitions"><a class="header" href="#state-transitions">State Transitions</a></h2>
+<p>Every frame update, a <a href="/programming/schedules.html">schedule</a> called
+<a href="https://docs.rs/bevy/0.13.0/bevy/app/struct.StateTransition.html"><code>StateTransition</code></a> runs. There, Bevy will check if
+any new state is queued up in <a href="https://docs.rs/bevy/0.13.0/bevy/ecs/schedule/struct.NextState.html"><code>NextState&lt;T&gt;</code></a> and perform
+the transition for you.</p>
+<p>The transition involves several steps:</p>
+<ul>
+<li>A <a href="https://docs.rs/bevy/0.13.0/bevy/ecs/schedule/struct.StateTransitionEvent.html"><code>StateTransitionEvent</code></a> <a href="/programming/events.html">event</a> is sent.</li>
+<li>The <a href="https://docs.rs/bevy/0.13.0/bevy/ecs/schedule/struct.OnExit.html"><code>OnExit(old_state)</code></a> <a href="/programming/schedules.html">schedule</a> is run.</li>
+<li>The <a href="https://docs.rs/bevy/0.13.0/bevy/ecs/schedule/struct.OnTransition.html"><code>OnTransition { from: old_state, to: new_state }</code></a> <a href="/programming/schedules.html">schedule</a> is run.</li>
+<li>The <a href="https://docs.rs/bevy/0.13.0/bevy/ecs/schedule/struct.OnEnter.html"><code>OnEnter(new_state)</code></a> <a href="/programming/schedules.html">schedule</a> is run.</li>
+</ul>
+<p><a href="https://docs.rs/bevy/0.13.0/bevy/ecs/schedule/struct.StateTransitionEvent.html"><code>StateTransitionEvent</code></a> is useful in any <a href="/programming/systems.html">systems</a> that run
+regardless of state, but want to know if a transition has occurred. You can use
+it to detect state transitions.</p>
+<p>The <a href="https://docs.rs/bevy/0.13.0/bevy/app/struct.StateTransition.html"><code>StateTransition</code></a> <a href="/programming/schedules.html">schedule</a> runs after <a href="https://docs.rs/bevy/0.13.0/bevy/app/struct.PreUpdate.html"><code>PreUpdate</code></a> (which
+contains Bevy engine internals), but before <a href="https://docs.rs/bevy/0.13.0/bevy/app/struct.FixedMain.html"><code>FixedMain</code></a> (<a href="/fundamentals/fixed-timestep.html">fixed
+timestep</a>) and <a href="https://docs.rs/bevy/0.13.0/bevy/app/struct.Update.html"><code>Update</code></a>, where your game's
+<a href="/programming/systems.html">systems</a> usually live.</p>
+<p>Therefore, state transitions happen before your game logic for the current frame.</p>
+<p>If doing state transitions once per frame is not enough for you, you can add
+additional transition points, by adding Bevy's <a href="https://docs.rs/bevy/0.13.0/bevy/ecs/schedule/fn.apply_state_transition.html"><code>apply_state_transition</code></a>
+<a href="/programming/systems.html">system</a> wherever you like.</p>
+<pre><code class="language-rust no_run noplayground">// Example: also do state transitions for MyPausedState
+// before MyGameplaySet on each fixed timestep run
+app.add_systems(
+    FixedUpdate,
+    apply_state_transition::&lt;MyPausedState&gt;
+        .before(MyGameplaySet)
+);</code></pre>
+<p>状态变更: 在当前帧的StateTransition中执行上帧<code>NextState&lt;T&gt;</code>的状态变更,具体为:</p>
+<ul>
+<li>发送StateTransitionEvent事件</li>
+<li>OnExit(旧状态)调度运行</li>
+<li>OnTransition(from:旧状态,to:新状态)调度执行</li>
+<li>OnEnter(新状态)调度运行</li>
+</ul>
+<p>StateTransition调度在PreUpdate之后执行(PreUpdate是bevy内部引擎包含的),
+在FixedMain和Update之前.因此状态变更是在当前帧逻辑之前发生的.</p>
+<p>如果每帧发生一次状态变更还不够,可以使用<code>apply_state_transition</code> system
+添加变更点.</p>
+<h2 id="known-pitfalls"><a class="header" href="#known-pitfalls">Known Pitfalls</a></h2>
+<h3 id="system-set-configuration-is-per-schedule"><a class="header" href="#system-set-configuration-is-per-schedule">System set configuration is per-schedule!</a></h3>
+<p>This is the same general caveat that applies any time you configure <a href="/programming/system-sets.html">system sets</a>.</p>
+<p>Note that <code>app.configure_sets()</code> is <em>per-<a href="/programming/schedules.html">schedule</a>!</em> If you configure some sets
+in one <a href="/programming/schedules.html">schedule</a>, that configuration does not carry over to other schedules.</p>
+<p>Because states are so schedule-heavy, you have to be especially careful. Don't assume
+that just because you configured a set, you can use it anywhere.</p>
+<p>For example, your sets from <a href="https://docs.rs/bevy/0.13.0/bevy/app/struct.Update.html"><code>Update</code></a> and <a href="https://docs.rs/bevy/0.13.0/bevy/app/struct.FixedUpdate.html"><code>FixedUpdate</code></a> will not work in
+<a href="https://docs.rs/bevy/0.13.0/bevy/ecs/schedule/struct.OnEnter.html"><code>OnEnter</code></a>/<a href="https://docs.rs/bevy/0.13.0/bevy/ecs/schedule/struct.OnExit.html"><code>OnExit</code></a> for your various state transitions.</p>
+<p>system集合要对每个调度都做配置,少了配置就会出问题.</p>
+<h3 id="events"><a class="header" href="#events">Events</a></h3>
+<p>This is the same general caveat that applies to any <a href="/programming/systems.html">systems</a> with
+<a href="/programming/run-criteria.html">run conditions</a> that want to receive <a href="/programming/events.html">events</a>.</p>
+<p>When receiving <a href="/programming/events.html">events</a> in systems that don't run all the time, such
+as during a pause state, you will miss any events that are sent while when
+the receiving systems are not running!</p>
+<p>To mitigate this, you could implement a <a href="/patterns/manual-event-clear.html">custom cleanup
+strategy</a>, to manually manage the lifetime of the relevant
+event types.</p>
+<p>接收事件+运行条件,会导致漏事件,解决方法是自定义事件清理策略,
+手动维护相关事件的生命周期.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../programming/system-sets.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../programming/change-detection.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../programming/system-sets.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../programming/change-detection.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../nagbar.js"></script>
+
+
+    </div>
+    </body>
+</html>
