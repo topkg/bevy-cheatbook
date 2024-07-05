@@ -16,6 +16,8 @@ distribution. [See instructions in official Bevy repo.][bevy::linux-dependencies
 
 [See here if you also want to build Windows EXEs from Linux][cross::linux-windows].
 
+linux桌面是bevy支持最好的.不同的发行版本只需要安装一些必要的以来就可以愉快玩耍了.
+
 ## GPU Drivers
 
 Bevy apps need support for the Vulkan graphics API to run best. There is a
@@ -37,6 +39,13 @@ a package called `vulkan-tools` on most distributions):
 ```sh
 vulkaninfo
 ```
+
+bevy对vulkan图形api支持的最好.(vulkan是一个组织维护的标准,wgpu/等多个标准都是她维护的).
+其次是OpenGl ES3, 这个是性能和功能上比vulkan差了一截.
+
+一般只要安装好驱动,基本没啥大问题.
+如果app运行报错说没有找到兼容的GPU,一般是vulkan驱动没有正确安装.
+重新安装vulkan驱动.使用`vulkaninfo`命令来检查vulkan的运行状态.
 
 ## X11 and Wayland
 
@@ -77,3 +86,8 @@ export WINIT_UNIX_BACKEND=wayland
 ```
 
 (to require the use of Wayland)
+
+x11和wayland是linux的桌面后端,x11几十年了,稳定; wayland是新标准,更加现代化和高效.
+bevy默认是支持x11的,因为使用x11的多.
+
+如果两个都启用了,那么使用环境变量来选择桌面后端,如上面的例子.
