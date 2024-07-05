@@ -11,28 +11,24 @@ use bevy::ecs::event::Events;
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
-
         // add the `Events<T>` resource manually
         // these events will not have automatic cleanup
-        .init_resource::<Events<MySpecialEvent>>()
-
+        .init_resource::<Events<MySpecialEvent>>() // 初始化资源,入参为事件
         // this is a regular event type with automatic cleanup
         .add_event::<MyRegularEvent>()
-
         // add the cleanup systems
-        .add_system(my_event_manager::<MySpecialEvent>)
+        .add_system(my_event_manager::<MySpecialEvent>) // 事件处理
         .run();
 }
 
 /// Custom cleanup strategy for events
 ///
 /// Generic to allow using for any custom event type
-fn my_event_manager<T: 'static + Send + Sync>(
-    mut events: ResMut<Events<T>>,
-) {
+fn my_event_manager<T: 'static + Send + Sync>(mut events: ResMut<Events<T>>) {
     // TODO: implement your custom logic
     // for deciding when to clear the events
 
+    // 下面是事件处理
     // clear all events like this:
     events.clear();
 

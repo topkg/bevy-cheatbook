@@ -37,6 +37,23 @@ over your event type) for the default cleanup strategy)
 You must then clear the events at your discretion. If you don't do this often
 enough, your events might pile up and waste memory.
 
+手动清理事件,事件队列会定时清理,所以不用担心内存泄漏.
+
+bevy是默认每帧都清理事件,单因为执行顺序,可能部分事件会跨两帧.
+要处理事件就必须在下帧结束之前处理.
+
+同理,处理事件最好每帧都执行,但很多场景下并不是每帧都执行检测.
+ - 固定时间戳
+ - system在检测逻辑之前提前返回了
+ - system只在特定state运行
+ - system有运行条件
+
+在上面的场景中,需要手动控制事件的清理.bevy提供了便捷的方法:
+在app中用初始化资源代替添加事件,参数为资源(具体类型是事件),
+bevy识别到后,知道遇到这个事件就丢到对应的资源中.
+
+之后需要手动清理事件,不然就会出现内存泄漏.
+
 ## Example
 
 We can create [generic systems][cb::system-generic] for this. Implement
